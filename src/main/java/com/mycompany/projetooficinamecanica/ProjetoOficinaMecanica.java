@@ -13,6 +13,6 @@ public class ProjetoOficinaMecanica {
         Cliente.carregarClientes();
         
         //testes
-        Menu.menuCadastrarUsuario();
+        Menu.menuLogin();
     }
 }

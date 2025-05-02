@@ -8,10 +8,7 @@ public class Gerente extends Funcionario{
     
     Gerente(String nome, String cpf, String login, String senha){
         super(nome, cpf, login, senha);
+        this.cargo = "Gerente";
     }
-    
-    @Override
-    public String getCargo(){
-        return "Gerente";
-    }
+   
 }

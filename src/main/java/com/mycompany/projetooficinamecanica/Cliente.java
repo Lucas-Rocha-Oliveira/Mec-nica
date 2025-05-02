@@ -51,7 +51,7 @@ public class Cliente extends Pessoa{
     //Subescrição do metodo toString herdado de Pessoa, adicionando Enderço e Telefone.
     @Override 
     public String toString(){
-        return super.toString() + "\nEndereço: " + getEndereco() + "Telefone: " + getTelefone();
+        return super.toString() + "\nEndereço: " + getEndereco() + "\nTelefone: " + getTelefone() + "\n";
     }
     
     //Metodo usado para carregar os clientes do arquivo json para o array.
@@ -59,7 +59,7 @@ public class Cliente extends Pessoa{
         //Cria um objeto do tipo Gson usado para o processo de conversão entre java e json.
         Gson gson = new Gson();
         
-        try(FileReader reader = new FileReader("dados/clientes.json")){
+        try(FileReader reader = new FileReader("data/clientes.json")){
             //Carregamento do aquivo json para o array de clientes.
             listaClientes = gson.fromJson(reader, new TypeToken<List<Cliente>>(){}.getType());
         } catch(IOException e){
@@ -81,19 +81,92 @@ public class Cliente extends Pessoa{
         listaClientes.add(cliente);
     }
     
-    //Metodo usado apra armazenar o array de clientes dentro do jason.
+    //Metodo usado para armazenar o array de clientes dentro do jason.
     public static void salvarClientes(){
         //Cria um objeto Gson usado na convertação de java para json e vice-versa, com 'PrettyPrintin' deixa mais legivel com uma boa formatação.
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         
         //processo abrir o arquivo json para escrita.
-        try(FileWriter writer = new FileWriter("dados/clientes.json")){
+        try(FileWriter writer = new FileWriter("data/clientes.json")){
         //converter a listaClientes em json.
         gson.toJson(listaClientes, writer);
         } catch(IOException e){
             //captura de erros no processo de abertura do arquivo para escrita.
             System.out.println("Erro ao escrever o arquivo json: " + e);
         }
+    }
+    
+    //Metodo responsável por apagar um cliente.
+    public static void removerClientePorCpf(String cpf){
+        boolean removido = listaClientes.removeIf(c -> c.getCpf().equals(cpf));
+        
+        if(removido){
+            System.out.println("Cliente removido com sucesso!");
+            salvarClientes();
+        }else{
+            System.out.println("ERRO - Cliente não encontrado");
+        }
+        
+        
+    }
+    
+    //Metodo responsável por verificar a existencia de um cliente por cpf.
+    public static boolean verificarClientePorCpf(String cpf){
+        for(Cliente u : listaClientes){
+            if(u.getCpf().equals(cpf)){
+                return true;
+            }
+        }
+        System.out.println("Esse cpf não pertence a nenhum cliente.");
+        return false;
+    }
+    
+    //Metodo responsável por editar o nome de um cliente que esta dentro do Array.
+    public static void editarNomeCliente(String cpf, String nome){
+        for(Cliente u : listaClientes){
+            if(u.getCpf().equals(cpf)){
+                u.setNome(nome);
+                break;
+            }
+        }
+        salvarClientes();
+        System.out.println("Nome alterado com sucesso!");
+    }
+    
+    //Metodo responsável por editar o cpf de um cliente que esta dentro do Array.
+    public static void editarCpfCliente(String cpf, String novocpf){
+        for(Cliente u : listaClientes){
+            if(u.getCpf().equals(cpf)){
+                u.setCpf(novocpf);
+                break;
+            }
+        }
+        salvarClientes();
+        System.out.println("Cpf alterado com sucesso!");
+    }
+    
+    //Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+    public static void editarEnderecoCliente(String cpf, String endereco){
+        for(Cliente u : listaClientes){
+            if(u.getCpf().equals(cpf)){
+                u.setEndereco(endereco);
+                break;
+            }
+        }
+        salvarClientes();
+        System.out.println("Endereço alterado com sucesso!");
+    }
+    
+    //Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+    public static void editarTelefoneCliente(String cpf, String telefone){
+        for(Cliente u : listaClientes){
+            if(u.getCpf().equals(cpf)){
+                u.setTelefone(telefone);
+                break;
+            }
+        }
+        salvarClientes();
+        System.out.println("Telefone alterado com sucesso!");
     }
     
 }

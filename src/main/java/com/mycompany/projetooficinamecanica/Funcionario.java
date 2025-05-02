@@ -8,6 +8,7 @@ package com.mycompany.projetooficinamecanica;
 public class Funcionario extends Pessoa{
     String login;
     String senha;
+    String cargo;
     
     Funcionario(){
         super("", "");
@@ -29,7 +30,7 @@ public class Funcionario extends Pessoa{
     
     
     public String getCargo(){
-        return "Funcionário";
+        return this.cargo;
     }
     
     @Override

@@ -57,7 +57,7 @@ public class SistemaLogin {
         //Cria um objeto do tipo Gson usado para converter dados entre JSON e objetos Java.
         Gson gson = new GsonBuilder().setPrettyPrinting().create();//Cria um objeto Gson com 'PrettyPrintin' deixa mais legivel com uma boa formatação.
         
-        //"try" Abre o arquivo para leitura
+        //"try" Abre o arquivo para escrita
         try (FileWriter write = new FileWriter("data/usuarios.json")){
         //Cria um FileWrite para escrever no arquivo usuarios.jason
             gson.toJson(listaUsuarios, write);//Conver a lista de usuarios para Json e escreve noa arquivo.

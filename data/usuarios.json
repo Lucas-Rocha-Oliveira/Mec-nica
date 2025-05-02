@@ -1,20 +1,16 @@
 [
   {
-    "login": "Fabio13",
-    "senha": "batata123",
-    "nome": "Fabio",
-    "cpf": "345.543.367-87"
-  },
-  {
-    "login": "Pati87",
-    "senha": "estrela666",
-    "nome": "Patrícia",
-    "cpf": "445.583.467-77"
-  },
-  {
     "login": "admin",
     "senha": "admin",
-    "nome": "Joao",
-    "cpf": "345"
+    "cargo": "Gerente",
+    "nome": "Ademar",
+    "cpf": "345.678.543-34"
+  },
+  {
+    "login": "pepedro34",
+    "senha": "grt45",
+    "cargo": "Mecanico",
+    "nome": "Pedro",
+    "cpf": "098-456-432"
   }
 ]

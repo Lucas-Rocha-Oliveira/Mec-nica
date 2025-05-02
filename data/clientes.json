@@ -1,0 +1,14 @@
+[
+  {
+    "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
+    "telefone": "(38)9-8887-7654",
+    "nome": "Maria Aparecida",
+    "cpf": "345.456.432-56"
+  },
+  {
+    "endereco": "R.Dom Pedro, Bela Vista, Diamantina-MG",
+    "telefone": "(38)9-9876-9868",
+    "nome": "Cecilia Ferreira Silva",
+    "cpf": "987.234.567-98"
+  }
+]

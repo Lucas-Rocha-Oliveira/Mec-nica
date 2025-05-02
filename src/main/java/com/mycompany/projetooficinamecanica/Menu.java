@@ -57,13 +57,15 @@ public class Menu {
             }
         }
     }
-    
+ 
     //Metodo responsável pelo menu de clientes
     public static void menuClientes(){
         System.out.println("--- Clientes ---");
         System.out.println("1. Listar");
         System.out.println("2. Cadastrar");
-        System.out.print("3. Menu Principal");
+        System.out.println("3. Remover");
+        System.out.println("4. Editar");
+        System.out.println("5. Menu Principal");
         
         int opcao = scanner.nextInt();
         scanner.nextLine();//Captura o resto da ultima leitura
@@ -74,7 +76,9 @@ public class Menu {
                 menuClientes();
             }
             case 2 -> menuCadastrarCliente();
-            case 3 -> menuPrincipal();
+            case 3 -> menuRemoverCliente();
+            case 4 -> menuEditarCliente();
+            case 5 -> menuPrincipal();
         }
     }
     
@@ -100,12 +104,109 @@ public class Menu {
             menuCadastrarCliente();
         }else if (opcao.equals("N")){
             Cliente.salvarClientes();
-            menuPrincipal();
+            menuClientes();
         } else{
             System.out.println("Opção inválida, voltando para o menu principal");
             Cliente.salvarClientes();
-            menuClientes();
+            menuPrincipal();
         }
+    }
+    
+    //Metodo responsável pelo menu de remoção de cliente.
+    public static void menuRemoverCliente(){
+        System.out.println("--- Remover Cliente ---");
+        System.out.print("CPF do cliente: ");
+        String cpf = scanner.nextLine();
+        Cliente.removerClientePorCpf(cpf);
+        System.out.print("Deseja remover outro cliente?[S/N]: ");
+        String opcao = scanner.nextLine().toUpperCase();
+        if(opcao.equals("S")){
+            menuRemoverCliente();
+        }else if(opcao.equals("N")){
+            menuClientes();
+        }else{
+            System.out.println("Opção inávila. Voltando para o menu principal.");
+            menuPrincipal();
+        }
+    }
+    
+    //Metodo responsável pelo menu de edição de dados do cliente.
+    public static void menuEditarCliente(){
+        System.out.println("--- Editar Cliente ---");
+        String cpf = menuVerificarUsuarioPorCpf();
+        menuOpcoesEdicaoCliente(cpf);
+    }
+    
+    public static void menuOpcoesEdicaoCliente(String cpf){
+        System.out.println("1. Nome");
+        System.out.println("2. CPF");
+        System.out.println("3. Endereço");
+        System.out.println("4. Telefone");
+        System.out.println("5. Menu Principal");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();//limpando o resto da ultima leitura.
+        switch(opcao){
+            case 1 -> {
+                System.out.print("Novo Nome: ");
+                String nome = scanner.nextLine();
+                Cliente.editarNomeCliente(cpf, nome);
+                menuContinuidadeEdicaoCliente(cpf);
+            }
+            
+            case 2 -> {
+                System.out.print("Novo cpf: ");
+                String novocpf = scanner.nextLine();
+                Cliente.editarCpfCliente(cpf, novocpf);
+                cpf = novocpf; // Atualiza o valor de referência
+                menuContinuidadeEdicaoCliente(cpf);
+            }
+            
+            case 3 -> {
+                System.out.print("Novo Endereço: ");
+                String endereco = scanner.nextLine();
+                Cliente.editarEnderecoCliente(cpf, endereco);
+                menuContinuidadeEdicaoCliente(cpf);
+            }
+            
+            case 4 -> {
+                System.out.print("Novo Telefone: ");
+                String telefone = scanner.nextLine();
+                Cliente.editarTelefoneCliente(cpf, telefone);
+                menuContinuidadeEdicaoCliente(cpf);
+            }
+            
+            case 5 -> {
+                menuPrincipal();
+            }
+        }
+    }
+    
+    //Metodo responsável por confirmar a continuação de edição do mesmo cliente
+    public static void menuContinuidadeEdicaoCliente(String cpf){
+        System.out.println("Continuar com a edição do cliente atual?[S/N]: ");
+        String opcao = scanner.nextLine().toUpperCase();
+        if(opcao.equals("S")){
+            menuOpcoesEdicaoCliente(cpf);
+        }else{
+            menuEditarCliente();
+        }
+    }
+    
+    //Metodo resposável pelu menu de verificação de usuário.
+    public static String menuVerificarUsuarioPorCpf(){
+        while (true){
+            System.out.print("CPF do cliente: ");
+            String cpf = scanner.nextLine();
+            if(cpf.equals("0")){
+                menuPrincipal();
+            }else{
+                if(Cliente.verificarClientePorCpf(cpf)){
+                    return cpf;
+            } else{
+                System.out.print("Tente de novo ou digite 0 para voltar para o menu principal.");
+              }
+            }
+        } 
     }
     
     //Metodo responsável pelo menu de usuários.
