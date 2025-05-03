@@ -136,6 +136,7 @@ public class Menu {
         menuOpcoesEdicaoCliente(cpf);
     }
     
+    //Metodo responsável pelo menu opções de Edição de cliente.
     public static void menuOpcoesEdicaoCliente(String cpf){
         System.out.println("1. Nome");
         System.out.println("2. CPF");
@@ -182,12 +183,18 @@ public class Menu {
     
     //Metodo responsável por confirmar a continuação de edição do mesmo cliente
     public static void menuContinuidadeEdicaoCliente(String cpf){
-        System.out.println("Continuar com a edição do cliente atual?[S/N]: ");
+        System.out.println("Continuar com a edição do cliente atual?\n"
+                + "S. Sim\nN. Editar outro usuário\n0. Menu principal");
         String opcao = scanner.nextLine().toUpperCase();
         if(opcao.equals("S")){
             menuOpcoesEdicaoCliente(cpf);
-        }else{
+        }else if(opcao.equals("N")){
             menuEditarCliente();
+        }else if(opcao.equals("0")){
+            menuPrincipal();
+        }else{
+            System.out.println("Opção inválida, indo para o menu inicial.");
+            menuPrincipal();
         }
     }
     
@@ -237,12 +244,12 @@ public class Menu {
     
     //Metodo responsável pelo menu de edição de Usuário
     public static void menuEdicaoUsuario(){
-        System.out.print("--- Edição Usuário ---");
+        System.out.println("--- Edição Usuário ---");
         String cpf = menuVerificarUsuario();
         menuOpcoesEdicaoUsuario(cpf);
     }
     
-//Metodo responsável pelo menu de opções de edição do usuário.
+    //Metodo responsável pelo menu de opções de edição do usuário.
     public static void menuOpcoesEdicaoUsuario(String cpf){
         System.out.println("1. Nome");
         System.out.println("2. CPF");
@@ -282,7 +289,7 @@ public class Menu {
                 menuContinuidadeEdicaoUsuario(cpf);
             }
             
-            case 7 -> {
+            case 5 -> {
                 System.out.print("Novo Cargo: ");
                 String cargo = scanner.nextLine();
                 SistemaLogin.alterarCargoUsuarioPorCpf(cpf, cargo);
@@ -297,12 +304,15 @@ public class Menu {
     
     //Metodo responsável pelo menu de continuidade de edição de usuários.
     public static void menuContinuidadeEdicaoUsuario(String cpf){
-        System.out.print("Deseja continuar a editar o usuário atual?[S/N]: ");
+        System.out.print("Deseja continuar a editar o usuário atual?\n"
+                + "S. Sim\nN. Editar outro usuário\n0. Menu Principal");
         String opcao = scanner.nextLine().toUpperCase();
         if(opcao.equals("S")){
             menuOpcoesEdicaoUsuario(cpf);
         }else if(opcao.equals("N")){
             menuEdicaoUsuario();
+        }else if(opcao.equals("0")){
+            menuPrincipal();
         }else{
             System.out.println("Opção inválida, voltando para o menu principal.");
             menuPrincipal();
