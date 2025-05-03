@@ -1,0 +1,44 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-classpath
+'C:/Users/Lucas/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+24
+-sourcepath
+'C:/Users/Lucas/Documents/NetBeansProjects/ProjetoOficinaMecanica/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Lucas/Documents/NetBeansProjects/ProjetoOficinaMecanica/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'ProjetoOficinaMecanica 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'ProjetoOficinaMecanica 1.0-SNAPSHOT API'
+com.mycompany.projetooficinamecanica
+C:\Users\Lucas\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar = 1746073836852
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\src\main\java = 1746071596429
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\allclasses-index.html = 1746303366721
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\allpackages-index.html = 1746303366724
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\element-list = 1746303366639
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\help-doc.html = 1746303366755
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\index-all.html = 1746303366747
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\index.html = 1746303366752
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\member-search-index.js = 1746303366729
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\module-search-index.js = 1746303366725
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\overview-tree.html = 1746303366695
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\package-search-index.js = 1746303366726
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\search.html = 1746303366749
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\tag-search-index.js = 1746303366730
+C:\Users\Lucas\Documents\NetBeansProjects\ProjetoOficinaMecanica\target\reports\apidocs\type-search-index.js = 1746303366728

@@ -23,6 +23,19 @@ public class Funcionario extends Pessoa{
     public String getLogin(){
         return this.login;
     }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+    
     
     public String getSenha(){
         return this.senha;

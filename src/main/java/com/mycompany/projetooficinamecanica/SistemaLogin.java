@@ -67,6 +67,24 @@ public class SistemaLogin {
         }
     }
     
+    //Metodo para remover um usuário do Array.
+    public static void removerUsuarioPorCpf(String cpf){
+        boolean removido = listaUsuarios.removeIf(c -> c.getCpf().equals(cpf));
+        salvarUsuarios();
+        System.out.println("Usuário removido com sucesso.");
+    }
+    
+    //Metodo para verificar a existencia de um usuário, usando como parametro o cpf.
+    public static boolean verificarUsuarioPeloCpf(String cpf){
+        for(Funcionario u : listaUsuarios){
+            if(u.getCpf().equals(cpf)){
+                return true;
+            }
+        }
+        System.out.println("Cpf não pertence a nenhum usuário");
+        return false;
+    }
+    
     //Metodo para verificar as credenciais no momento de login
     public static Funcionario verificarLogin(String login, String senha){
         //for percorrendo o array de usuários verificando as credencias fornecidas.
@@ -79,4 +97,67 @@ public class SistemaLogin {
         System.out.println("Crencias inválidas, tente novamente");
         return null;
     }
+    
+    //Metodo para alterar o nome de um usuário do Array pelo cpf.
+    public static void alterarNomeUsuarioPorCpf(String cpf, String nome){
+        for(Funcionario u : listaUsuarios){
+            if(u.getCpf().equals(cpf)){
+                u.setNome(nome);
+                System.out.println("Nome alterado com sucesso!");
+                salvarUsuarios();
+                break;
+            }
+        }
+    }
+    
+    //Metodo para alterar o cpf de um usuário do Array pelo cpf.
+    public static void alterarCpfUsuarioPorCpf(String cpf, String novocpf){
+        for(Funcionario u : listaUsuarios){
+            if(u.getCpf().equals(cpf)){
+                u.setCpf(novocpf);
+                System.out.println("Cpf alterado com sucesso!");
+                salvarUsuarios();
+                break;
+            }
+        }
+    }
+    
+    //Metodo para alterar o login de um usuário do Array pelo cpf.
+    public static void alterarLoginUsuarioPorCpf(String cpf, String login){
+        for(Funcionario u : listaUsuarios){
+            if(u.getCpf().equals(cpf)){
+                u.setLogin(login);
+                System.out.println("Login alterado com sucesso!");
+                salvarUsuarios();
+                break;
+            }
+        }
+    }
+    
+    //Metodo para alterar o senha de um usuário do Array pelo cpf.
+    public static void alterarSenhaUsuarioPorCpf(String cpf, String senha){
+        for(Funcionario u : listaUsuarios){
+            if(u.getCpf().equals(cpf)){
+                u.setSenha(senha);
+                System.out.println("Senha alterado com sucesso!");
+                salvarUsuarios();
+                break;
+            }
+        }
+    }
+    
+    //Metodo para alterar o senha de um usuário do Array pelo cpf.
+    public static void alterarCargoUsuarioPorCpf(String cpf, String cargo){
+        for(Funcionario u : listaUsuarios){
+            if(u.getCpf().equals(cpf)){
+                u.setCargo(cargo);
+                System.out.println("Cargo alterado com sucesso!");
+                salvarUsuarios();
+                break;
+            }
+        }
+    }
+    
+    
+    
 }

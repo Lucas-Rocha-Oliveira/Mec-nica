@@ -32,7 +32,6 @@ public class Menu {
         menuPrincipal();
     }
     
-    
     //Metodo responsável pelo menu principal
     public static void menuPrincipal(){
         System.out.println("\n--- MENU PRINCIPAL ---");
@@ -214,7 +213,9 @@ public class Menu {
         System.out.println("--- Usuários ---");
         System.out.println("1. Listar");
         System.out.println("2. Cadastrar");
-        System.out.print("3. Menu Principal");
+        System.out.println("3. Remover");
+        System.out.println("4. Editar");
+        System.out.println("5. Menu Principal");
         
         int opcao = scanner.nextInt();
         scanner.nextLine();//Recebe o resto da ultima leitura
@@ -226,7 +227,104 @@ public class Menu {
             }
             case 2 -> menuCadastrarUsuario();
             
-            case 3 -> menuPrincipal();
+            case 3 -> menuRemoverUsuario();
+            
+            case 4 -> menuEdicaoUsuario();
+            
+            case 5 -> menuPrincipal();
+        }
+    }
+    
+    //Metodo responsável pelo menu de edição de Usuário
+    public static void menuEdicaoUsuario(){
+        System.out.print("--- Edição Usuário ---");
+        String cpf = menuVerificarUsuario();
+        menuOpcoesEdicaoUsuario(cpf);
+    }
+    
+//Metodo responsável pelo menu de opções de edição do usuário.
+    public static void menuOpcoesEdicaoUsuario(String cpf){
+        System.out.println("1. Nome");
+        System.out.println("2. CPF");
+        System.out.println("3. Login");
+        System.out.println("4. Senha");
+        System.out.println("5. Cargo");
+        System.out.println("6. Menu Principal");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();//limpando o resto da ultima leitura.
+        switch(opcao){
+            case 1 -> {
+                System.out.print("Novo Nome: ");
+                String nome = scanner.nextLine();
+                SistemaLogin.alterarNomeUsuarioPorCpf(cpf, nome);
+                menuContinuidadeEdicaoCliente(cpf);
+            }
+            
+            case 2 -> {
+                System.out.print("Novo cpf: ");
+                String novocpf = scanner.nextLine();
+                SistemaLogin.alterarCpfUsuarioPorCpf(cpf, novocpf);
+                cpf = novocpf; // Atualiza o valor de referência
+                menuContinuidadeEdicaoUsuario(cpf);
+            }
+            
+            case 3 -> {
+                System.out.print("Novo Login: ");
+                String login = scanner.nextLine();
+                SistemaLogin.alterarLoginUsuarioPorCpf(cpf, login);
+                menuContinuidadeEdicaoUsuario(cpf);
+            }
+            
+            case 4 -> {
+                System.out.print("Novo Senha: ");
+                String senha = scanner.nextLine();
+                SistemaLogin.alterarSenhaUsuarioPorCpf(cpf, senha);
+                menuContinuidadeEdicaoUsuario(cpf);
+            }
+            
+            case 7 -> {
+                System.out.print("Novo Cargo: ");
+                String cargo = scanner.nextLine();
+                SistemaLogin.alterarCargoUsuarioPorCpf(cpf, cargo);
+                menuContinuidadeEdicaoUsuario(cpf);
+            }
+            
+            case 6 -> {
+                menuPrincipal();
+            }
+        }
+    }
+    
+    //Metodo responsável pelo menu de continuidade de edição de usuários.
+    public static void menuContinuidadeEdicaoUsuario(String cpf){
+        System.out.print("Deseja continuar a editar o usuário atual?[S/N]: ");
+        String opcao = scanner.nextLine().toUpperCase();
+        if(opcao.equals("S")){
+            menuOpcoesEdicaoUsuario(cpf);
+        }else if(opcao.equals("N")){
+            menuEdicaoUsuario();
+        }else{
+            System.out.println("Opção inválida, voltando para o menu principal.");
+            menuPrincipal();
+        }
+    }
+    
+    //Metodo responsável pelo menu de remoção de usuário.
+    public static void menuRemoverUsuario(){
+        System.out.println("--- Remove Usuário ---");
+        String cpf = menuVerificarUsuario();
+        SistemaLogin.removerUsuarioPorCpf(cpf);
+    }
+    
+    //Metodo responsável pela menu de verificação de existência do usuário
+    public static String menuVerificarUsuario(){
+        System.out.print("Cpf: ");
+        String cpf = scanner.nextLine();
+        if(SistemaLogin.verificarUsuarioPeloCpf(cpf)){
+            return cpf;
+        }else{
+            System.out.println("Tente novamente.");
+            return menuVerificarUsuario();
         }
     }
     
