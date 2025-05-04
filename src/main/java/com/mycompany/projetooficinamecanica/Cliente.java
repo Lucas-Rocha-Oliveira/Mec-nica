@@ -169,4 +169,14 @@ public class Cliente extends Pessoa{
         System.out.println("Telefone alterado com sucesso!");
     }
     
+    //Metodo responsável por retornar um cliente, como busca o seu cpf.
+    public static Cliente buscarClientePorCpf(String cpf){
+        for(Cliente u : listaClientes){
+            if(u.getCpf().equals(cpf)){
+                return u;
+            }
+        }
+        System.out.println("Cliente não registrado.");
+        return null;
+    }
 }

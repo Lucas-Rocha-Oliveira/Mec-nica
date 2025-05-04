@@ -10,4 +10,15 @@ public class Mecanico extends Funcionario{
         super(nome, cpf, login, senha);
         this.cargo = "Mecanico";
     }
+    
+    public static Mecanico buscarMecanicoPorCPF(String cpf) {
+    for (Funcionario u : SistemaLogin.getListaUsuarios()) {
+        if (u instanceof Mecanico && u.getCpf().equals(cpf)) {
+            return (Mecanico) u; // Retorna o mecânico após fazer o cast
+        }
+    }
+    return null;
+    }
+    
+    
 }

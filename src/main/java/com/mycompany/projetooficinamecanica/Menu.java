@@ -29,32 +29,312 @@ public class Menu {
             }
         }
         
-        menuPrincipal();
+        menuEpecializado();
     }
     
     //Metodo responsável pelo menu principal
     public static void menuPrincipal(){
-        System.out.println("\n--- MENU PRINCIPAL ---");
-        System.out.println("1. Clientes");
-        //Verifica se o usuário que esta logado é um Gerente, se mosta a opção de manipular dados de usuários
-        if(usuarioLogado.getCargo().equals("Gerente")){
-            System.out.println("2. Usuários");
-        }
-        
-        int opcao = scanner.nextInt(); //recebe a entrada do usuario.
-        scanner.nextLine(); //Limpa o "ENTER" da leitura passada.
-        
-        switch (opcao){
-            case 1 -> menuClientes();
+        System.out.println("--- Sistema Oficina Mecânica ---");
+        System.out.println("1. Login");
+        System.out.println("0. Sair");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+        switch(opcao){
+            case 1 -> menuLogin();
             case 2 -> {
-                if(usuarioLogado.getCargo().equals("Gerente")){
-                    menuUsuarios();
-                }else{
-                    System.out.print("Permição negada!");
-                    menuPrincipal();
-                }
+                System.out.println("Encerrando sistema ...");
+                System.exit(0);
+                break;
             }
         }
+    }
+    
+    public static void menuEpecializado(){
+        if(usuarioLogado!=null){
+            if(usuarioLogado.getCargo().equals("Gerente")){
+                menuGerente();
+            }else if(usuarioLogado.getCargo().equals("Mecanico")){
+                menuMecanico();
+            }else if(usuarioLogado.getCargo().equals("Caixa")){
+                menuCaixa();
+            }
+        }
+    }
+    
+    //Metodo responsável pelo menu de gerente
+    public static void menuGerente(){
+        System.out.println("--- Menu Gerente ---");
+        System.out.println("1. Clientes");
+        System.out.println("2. Veiculos");
+        System.out.println("3. Funcionarios");
+        System.out.print("4. Ordens de Serviços");
+        System.out.print("5. Logout");
+        int opcao = scanner.nextInt();
+        switch(opcao){
+            case 1 -> menuClientes();
+            case 2 -> menuVeiculo();
+            case 3 -> menuUsuarios();
+            case 4 -> menuOrdemServico();
+            case 5 -> menuPrincipal();
+        }
+    }
+    
+    //Metodo responsável pelo menu de gerente
+    public static void menuMecanico(){
+        System.out.println("--- Menu Mecânico ---");
+        System.out.println("1. Ver minhas ordens de serviço");
+        System.out.println("2. Atualizar status de ordem");
+        System.out.println("3. Veiculos");
+        System.out.println("4. logout");
+        int opcao = scanner.nextInt();
+        switch(opcao){
+            case 1 -> menuListarOrdensServicosPorCpf(usuarioLogado.getCpf());
+            case 2 -> menuAtualizarOrdemServicoPorMecanico();
+            case 3 -> menuVeiculo();
+            case 4 -> menuPrincipal();
+        }
+    }
+    
+    
+    public static void menuAtualizarOrdemServicoPorMecanico(){
+        System.out.println("--- Atualizar Ordem de Serviço ----");
+        while(true){ 
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            if(OrdemServico.verificarOrdemServico(id, usuarioLogado.getCpf())){
+                System.out.print("Novo Status: ");
+                String novo = scanner.nextLine();
+                OrdemServico.atualizarStatusOrdemPorId(id, novo);
+                System.out.println("Deseja atualizar outra ordem de serviço?[S/N]: ");
+                String opcao = scanner.nextLine().toUpperCase();
+                if(opcao.equals("S")){
+                    menuAtualizarOrdemServicoPorMecanico();
+                }else if(opcao.equals("N")){
+                    menuEpecializado();
+                }else{
+                    System.out.println("Entrada inválida, indo para o menu principal.");
+                    menuEpecializado();
+                }
+            }else{
+                System.out.println("Tente novamente.");
+            }
+        }
+        
+    }
+    
+    //Metodo responsável pelo menu d usuário com cargo Caixa
+    public static void menuCaixa(){
+        System.out.println("--- Menu Caixa ---");
+        System.out.println("1. Clientes");
+        System.out.println("2. Ordem de serviço");
+        System.out.println("3. Veiculos");
+        System.out.println("4. logout");
+        int opcao = scanner.nextInt();
+        switch(opcao){
+            case 1 -> menuClientes();
+            case 2 -> menuOrdemServico();
+            case 3 -> menuVeiculo();
+            case 4 -> menuPrincipal();
+        }
+    }
+    
+    public static void menuListarOrdensServicosPorCpf(String cpf){
+        System.out.println("--- Ordens de serviços ---");
+        System.out.println("--- " + usuarioLogado.getNome() + " ---");
+        OrdemServico.listarOrdensServicosPorCpf(cpf);
+        menuMecanico();
+    }
+    
+    public static void menuOrdemServico(){
+        System.out.print("--- Ordens de serviço ---");
+        System.out.print("1. Criar ordem de serviço");
+        System.out.print("2. Consultar ordens de serviços");
+        System.out.print("3. Atualizar status ordem");
+        int opcao = scanner.nextInt();
+        switch(opcao){
+            case 1 -> menuCriarOrdemServico();
+            case 2 -> {
+                OrdemServico.listarOrdensServico();
+                menuOrdemServico();
+            }
+            case 3 -> menuAtualizarOrdemServico();
+        } 
+    }
+    
+    public static void menuAtualizarOrdemServico(){
+        System.out.println("=== ATUALIZAR STATUS DA ORDEM DE SERVIÇO ===");
+        System.out.print("Digite o ID da ordem de serviço: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer
+        System.out.print("Digite o novo status: ");
+        String novoStatus = scanner.nextLine();
+        OrdemServico.atualizarStatusOrdemPorId(id, novoStatus);
+        System.out.print("Deseja atualizar outra ordem? (S/N): ");
+        String opcao = scanner.nextLine().toUpperCase();
+        if(opcao.equals("S")){
+            menuAtualizarOrdemServico();
+        }else if(opcao.equals("N")){
+            menuEpecializado();
+        }else{
+            System.out.print("Opção inválida, voltando para o menu  principal.");
+            menuEpecializado();
+        }
+    }
+    
+    public static void menuCriarOrdemServico(){
+       // Obter CPF do cliente e validar
+        Cliente cliente = null;
+        while (cliente == null) {
+            System.out.print("Digite o CPF do cliente: ");
+            String cpfCliente = scanner.nextLine();
+            cliente = Cliente.buscarClientePorCpf(cpfCliente); // método que você pode criar na classe Cliente para buscar o cliente pelo CPF
+            if (cliente == null) {
+                System.out.println("Cliente não encontrado. Tente novamente.");
+            }
+        }
+
+        // Obter CPF do mecânico e validar
+        Mecanico mecanico = null;
+        while (mecanico == null) {
+            System.out.print("Digite o CPF do mecânico: ");
+            String cpfMecanico = scanner.nextLine();
+            mecanico = Mecanico.buscarMecanicoPorCPF(cpfMecanico); // método que você pode criar na classe Mecanico para buscar o mecânico pelo CPF
+            if (mecanico == null) {
+                System.out.println("Mecânico não encontrado ou não é mecânico. Tente novamente.");
+            }
+        }
+
+        // Obter descrição do problema
+        System.out.print("Digite a descrição do problema: ");
+        String descricaoProblema = scanner.nextLine();
+
+        // Obter solução (pode ser uma entrada inicial ou deixar em branco)
+        System.out.print("Digite a solução (opcional): ");
+        String solucao = scanner.nextLine();
+
+        // Obter status (ex: "Em andamento", "Concluída")
+        System.out.print("Digite o status da ordem (Ex: Em andamento, Concluída): ");
+        String status = scanner.nextLine();
+
+        // Obter data
+        System.out.print("Digite a data do serviço (dd/MM/yyyy): ");
+        String data = scanner.nextLine();
+
+        // Escolher o veículo para a ordem
+        Veiculo veiculo = null;
+        while (veiculo == null) {
+            System.out.println("Selecione um veículo:");
+            for (int i = 0; i < Veiculo.listaVeiculos.size(); i++) {
+                Veiculo v = Veiculo.listaVeiculos.get(i);
+                System.out.println((i + 1) + ". " + v.getPlaca() + " - " + v.getModelo());
+            }
+            System.out.print("Escolha o número do veículo: ");
+            int veiculoEscolhido = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+            if (veiculoEscolhido > 0 && veiculoEscolhido <= Veiculo.listaVeiculos.size()) {
+                veiculo = Veiculo.listaVeiculos.get(veiculoEscolhido - 1);
+            } else {
+                System.out.println("Veículo inválido, tente novamente.");
+            }
+        }
+
+        // Criando a ordem de serviço
+        OrdemServico ordemServico = new OrdemServico(cliente, mecanico, descricaoProblema, solucao, status, data, veiculo);
+
+        // Chama o método para adicionar a ordem de serviço na lista
+        OrdemServico.criarOrdemDeServico(ordemServico);
+
+        // Exibe os detalhes da ordem criada
+        System.out.println("Ordem de serviço criada com sucesso!");
+        System.out.println(ordemServico); // Exibe os detalhes da ordem criada
+        System.out.print("Deseja criar outra ordem? (S/N): ");
+        String opcao = scanner.nextLine().toUpperCase();
+        if(opcao.equals("S")){
+            menuCriarOrdemServico();
+        }else if(opcao.equals("N")){
+            menuEpecializado();
+        }else{
+            System.out.print("Opção inválida, voltando para o menu  principal.");
+            menuEpecializado();
+        }
+    }
+    
+    public static void menuVeiculo(){
+      System.out.println("--- Veiculos ---");
+      System.out.println("1. Cadastrar veiculo");
+      System.out.println("2. Remover veiculo");
+      System.out.println("3. Listar");
+      System.out.println("4. Menu Principal");
+      int opcao = scanner.nextInt();
+        switch(opcao){
+            case 1 -> menuCadastrarVeiculo();
+            case 2 -> menuRemoverVeiculo();
+            case 3 -> {
+                Veiculo.listarVeiculos();
+                menuVeiculo();
+            }
+            case 4 -> menuEpecializado();
+        }
+    }
+    
+    public static void menuRemoverVeiculo(){
+        System.out.println("--- Remover Veiculo ---");
+        while (true){
+            System.out.print("Placa: ");
+            String placa = scanner.nextLine();
+            if(Veiculo.buscarVeiculoPorPlaca(placa)){
+                Veiculo.removerVeiculoPorPlaca(placa);
+                System.out.print("Deseja remover outro Veículo?[S/N]: ");
+                String opcao = scanner.nextLine().toUpperCase();
+                if(opcao.equals("S")){
+                    menuRemoverVeiculo();
+                }else if(opcao.equals("N")){
+                    menuEpecializado();
+                }else{ 
+                    System.out.println("Entrada inválida, voltando para o menu principal.");
+                    menuEpecializado();
+                }
+            }else{
+                System.out.println("Tente novamente.");
+            }
+        }
+        
+    };
+    
+    public static void menuCadastrarVeiculo(){
+       System.out.println("--- Castrar Veículo ---");
+       System.out.print("Placa: ");
+       String placa = scanner.nextLine();
+       System.out.print("Modelo: ");
+       String modelo = scanner.nextLine();
+       System.out.print("Marca: ");
+       String marca = scanner.nextLine();
+       System.out.print("Cor: ");
+       String cor = scanner.nextLine();
+       System.out.print("Ano: ");
+       int ano = scanner.nextInt();
+       scanner.nextLine();
+       System.out.print("CPF do proprietário: ");
+       String cpf = scanner.nextLine();
+       
+       boolean sucesso = Veiculo.cadastrarVeiculo(placa, modelo, marca, cor, ano, cpf);
+       
+       if(sucesso){
+           System.out.println("Deseja Cadastrar outro veículo?[S/N]");
+           String opcao = scanner.nextLine().toUpperCase();
+           if(opcao.equals("S")){
+               Veiculo.salvarVeiculos();
+               menuCadastrarVeiculo();
+           }else if(opcao.equals("N")){
+               Veiculo.salvarVeiculos();
+               menuEpecializado();
+           }else{
+               System.out.println("Entrada inválida, voltando para o menu pricipal.");
+               Veiculo.salvarVeiculos();
+               menuEpecializado();
+           }
+       }
+       
     }
  
     //Metodo responsável pelo menu de clientes
@@ -77,7 +357,7 @@ public class Menu {
             case 2 -> menuCadastrarCliente();
             case 3 -> menuRemoverCliente();
             case 4 -> menuEditarCliente();
-            case 5 -> menuPrincipal();
+            case 5 -> menuEpecializado();
         }
     }
     
@@ -107,7 +387,7 @@ public class Menu {
         } else{
             System.out.println("Opção inválida, voltando para o menu principal");
             Cliente.salvarClientes();
-            menuPrincipal();
+            menuEpecializado();
         }
     }
     
@@ -125,7 +405,7 @@ public class Menu {
             menuClientes();
         }else{
             System.out.println("Opção inávila. Voltando para o menu principal.");
-            menuPrincipal();
+            menuEpecializado();
         }
     }
     
@@ -176,7 +456,7 @@ public class Menu {
             }
             
             case 5 -> {
-                menuPrincipal();
+                menuEpecializado();
             }
         }
     }
@@ -191,10 +471,10 @@ public class Menu {
         }else if(opcao.equals("N")){
             menuEditarCliente();
         }else if(opcao.equals("0")){
-            menuPrincipal();
+            menuEpecializado();
         }else{
             System.out.println("Opção inválida, indo para o menu inicial.");
-            menuPrincipal();
+            menuEpecializado();
         }
     }
     
@@ -204,7 +484,7 @@ public class Menu {
             System.out.print("CPF do cliente: ");
             String cpf = scanner.nextLine();
             if(cpf.equals("0")){
-                menuPrincipal();
+                menuEpecializado();
             }else{
                 if(Cliente.verificarClientePorCpf(cpf)){
                     return cpf;
@@ -238,7 +518,7 @@ public class Menu {
             
             case 4 -> menuEdicaoUsuario();
             
-            case 5 -> menuPrincipal();
+            case 5 -> menuEpecializado();
         }
     }
     
@@ -264,7 +544,7 @@ public class Menu {
                 System.out.print("Novo Nome: ");
                 String nome = scanner.nextLine();
                 SistemaLogin.alterarNomeUsuarioPorCpf(cpf, nome);
-                menuContinuidadeEdicaoCliente(cpf);
+                menuContinuidadeEdicaoUsuario(cpf);
             }
             
             case 2 -> {
@@ -297,7 +577,7 @@ public class Menu {
             }
             
             case 6 -> {
-                menuPrincipal();
+                menuEpecializado();
             }
         }
     }
@@ -312,10 +592,10 @@ public class Menu {
         }else if(opcao.equals("N")){
             menuEdicaoUsuario();
         }else if(opcao.equals("0")){
-            menuPrincipal();
+            menuEpecializado();
         }else{
             System.out.println("Opção inválida, voltando para o menu principal.");
-            menuPrincipal();
+            menuEpecializado();
         }
     }
     
@@ -349,17 +629,21 @@ public class Menu {
         String login = scanner.nextLine();
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
-        System.out.print("Cargo: ");
-        String cargo = scanner.nextLine();
+        System.out.print("Cargo: \nG. Gerente \nM. Mecânico\nC. Caixa");
+        String cargo = scanner.nextLine().toUpperCase();
         
         switch (cargo){
-            case "Gerente" -> {
+            case "G" -> {
                 Gerente gerenteTemporario = new Gerente(nome, cpf, login, senha);
                 SistemaLogin.adicionarUsuario(gerenteTemporario);
             }
-            case "Mecanico" -> {
+            case "M" -> {
                 Mecanico mecanicoTemporario = new Mecanico(nome, cpf, login, senha);
                 SistemaLogin.adicionarUsuario(mecanicoTemporario);
+            }
+            case "C" -> {
+                Caixa caixaTemporario = new Caixa(nome, cpf, login, senha);
+                SistemaLogin.adicionarUsuario(caixaTemporario);
             }
         }
         
@@ -371,8 +655,6 @@ public class Menu {
         }else if (opcao.equals("N")){
             SistemaLogin.salvarUsuarios();
             menuUsuarios();
-        }
-        
-        
+        } 
     }    
 }

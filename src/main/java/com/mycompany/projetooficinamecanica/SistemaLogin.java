@@ -23,6 +23,10 @@ public class SistemaLogin {
    //static faz o array pertencer a classe e não a um objeto.
    static List<Funcionario> listaUsuarios = new ArrayList<>();
    
+   public static List<Funcionario> getListaUsuarios(){
+        return listaUsuarios;
+    }
+   
     //Metodo usado para adicionar os usuarios dentro do array responsável.
     public static void adicionarUsuario(Funcionario funcionario){
         listaUsuarios.add(funcionario);
@@ -158,6 +162,14 @@ public class SistemaLogin {
         }
     }
     
+    public static Funcionario buscarFuncionarioPorCpf(String cpf) {
+    for (Funcionario u : listaUsuarios) {
+        if (u.getCpf().equals(cpf)) {
+            return u;
+        }
+    }
+    return null;
+}
     
     
 }

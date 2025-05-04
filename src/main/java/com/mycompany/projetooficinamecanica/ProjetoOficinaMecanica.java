@@ -11,8 +11,15 @@ public class ProjetoOficinaMecanica {
         SistemaLogin.carregarUsuarios();
         //Carrega os clientes armazenados no json para o array de clientes
         Cliente.carregarClientes();
+        //Carrega os veiculos armazenados no json para o array de veiculos
+        Veiculo.carregarVeiculos();
+        
+        GerenciamentoIDs.carregarContadorIDs();
+        
+        OrdemServico.carregarOrdensServico();
+        
         
         //testes
-        Menu.menuLogin();
+        Menu.menuPrincipal();
     }
 }
