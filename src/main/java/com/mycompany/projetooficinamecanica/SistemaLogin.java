@@ -19,7 +19,9 @@ import com.google.gson.reflect.TypeToken; // Para converter JSON em List<Funcion
  * Permite manipular dados dos usuários.
  **/
 public class SistemaLogin {
-   //Lista que armazena os usuários.
+   /**Lista que armazena os usuários.
+    * 
+    */
    //static faz o array pertencer a classe e não a um objeto.
    static List<Funcionario> listaUsuarios = new ArrayList<>();
    
@@ -27,58 +29,90 @@ public class SistemaLogin {
         return listaUsuarios;
     }
    
-    //Metodo usado para adicionar os usuarios dentro do array responsável.
+    /**Metodo usado para adicionar os usuarios dentro do array responsável.
+     * 
+     * @param funcionario 
+     */
     public static void adicionarUsuario(Funcionario funcionario){
         listaUsuarios.add(funcionario);
     }
     
-    //Metodo usado para listar os usuários armazenados no array.
+    /**Metodo usado para listar os usuários armazenados no array.
+     * 
+     */
     public static void listarUsuarios(){
-        //for para percorrer o array de usuários.
+        /**for para percorrer o array de usuários.
+         * 
+         */
         for(Funcionario u : listaUsuarios){
             System.out.println(u);
         }
     }
     
-    //Metodo para carregar os usuarios do arquivo json para o array.
+    /**Metodo para carregar os usuarios do arquivo json para o array.
+     * 
+     */
     public static void carregarUsuarios(){
-        //Cria um objeto do tipo Gson usado para converter dados entre JSON e objetos Java.
+        /**Cria um objeto do tipo Gson usado para converter dados entre JSON e objetos Java.
+         * 
+         */
         Gson gson = new Gson();
         
-        //Abre o arquivo para leitura
+        /**Abre o arquivo para leitura
+         * 
+         */
         try(FileReader reader = new FileReader("data/usuarios.json")){
             /**@param reader lê o conteudo do json
             *@return Lista de objeto Funcionario carregados do JSON.
             **/
             listaUsuarios = gson.fromJson(reader, new TypeToken<List<Funcionario>>(){}.getType());
         } catch(IOException e){
-            //Captura erros de saída.
+            /**Captura erros de saída.
+             * 
+             */
             System.out.print("Erro ao carregar os usuários: " + e);
         }}
     
-    //Metodo para salvar o array de usuarios no arquivo json.
+    /*8Metodo para salvar o array de usuarios no arquivo json.
+    
+    */
     public static void salvarUsuarios(){
-        //Cria um objeto do tipo Gson usado para converter dados entre JSON e objetos Java.
+        /**Cria um objeto do tipo Gson usado para converter dados entre JSON e objetos Java.
+         * 
+         */
         Gson gson = new GsonBuilder().setPrettyPrinting().create();//Cria um objeto Gson com 'PrettyPrintin' deixa mais legivel com uma boa formatação.
         
-        //"try" Abre o arquivo para escrita
+        /**"try" Abre o arquivo para escrita
+         * 
+         */
         try (FileWriter write = new FileWriter("data/usuarios.json")){
-        //Cria um FileWrite para escrever no arquivo usuarios.jason
+        /**Cria um FileWrite para escrever no arquivo usuarios.jason
+         * 
+         */
             gson.toJson(listaUsuarios, write);//Conver a lista de usuarios para Json e escreve noa arquivo.
         } catch(IOException e){
-            //Captura erros de saída.
+            /**Captura erros de saída.
+             * 
+             */
             System.out.println("Erro ao salvar usuários: " + e.getMessage());
         }
     }
     
-    //Metodo para remover um usuário do Array.
+    /**Metodo para remover um usuário do Array.
+     * 
+     * @param cpf 
+     */
     public static void removerUsuarioPorCpf(String cpf){
         boolean removido = listaUsuarios.removeIf(c -> c.getCpf().equals(cpf));
         salvarUsuarios();
         System.out.println("Usuário removido com sucesso.");
     }
     
-    //Metodo para verificar a existencia de um usuário, usando como parametro o cpf.
+    /**Metodo para verificar a existencia de um usuário, usando como parametro o cpf.
+     * 
+     * @param cpf
+     * @return 
+     */
     public static boolean verificarUsuarioPeloCpf(String cpf){
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
@@ -89,9 +123,16 @@ public class SistemaLogin {
         return false;
     }
     
-    //Metodo para verificar as credenciais no momento de login
+    /**Metodo para verificar as credenciais no momento de login
+     * 
+     * @param login
+     * @param senha
+     * @return 
+     */
     public static Funcionario verificarLogin(String login, String senha){
-        //for percorrendo o array de usuários verificando as credencias fornecidas.
+        /**for percorrendo o array de usuários verificando as credencias fornecidas.
+         * 
+         */
         for(Funcionario u : listaUsuarios){
             if(u.getLogin().equals(login) && u.getSenha().equals(senha)){
                 System.out.println("Login bem Sucedido!");
@@ -102,7 +143,11 @@ public class SistemaLogin {
         return null;
     }
     
-    //Metodo para alterar o nome de um usuário do Array pelo cpf.
+    /**Metodo para alterar o nome de um usuário do Array pelo cpf.
+     * 
+     * @param cpf
+     * @param nome 
+     */
     public static void alterarNomeUsuarioPorCpf(String cpf, String nome){
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
@@ -114,7 +159,11 @@ public class SistemaLogin {
         }
     }
     
-    //Metodo para alterar o cpf de um usuário do Array pelo cpf.
+    /**Metodo para alterar o cpf de um usuário do Array pelo cpf.
+     * 
+     * @param cpf
+     * @param novocpf 
+     */
     public static void alterarCpfUsuarioPorCpf(String cpf, String novocpf){
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
@@ -126,7 +175,11 @@ public class SistemaLogin {
         }
     }
     
-    //Metodo para alterar o login de um usuário do Array pelo cpf.
+    /**Metodo para alterar o login de um usuário do Array pelo cpf.
+     * 
+     * @param cpf
+     * @param login 
+     */
     public static void alterarLoginUsuarioPorCpf(String cpf, String login){
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
@@ -138,7 +191,11 @@ public class SistemaLogin {
         }
     }
     
-    //Metodo para alterar o senha de um usuário do Array pelo cpf.
+    /**Metodo para alterar o senha de um usuário do Array pelo cpf.
+     * 
+     * @param cpf
+     * @param senha 
+     */
     public static void alterarSenhaUsuarioPorCpf(String cpf, String senha){
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
@@ -150,7 +207,11 @@ public class SistemaLogin {
         }
     }
     
-    //Metodo para alterar o senha de um usuário do Array pelo cpf.
+    /**Metodo para alterar o senha de um usuário do Array pelo cpf.
+     * 
+     * @param cpf
+     * @param cargo 
+     */
     public static void alterarCargoUsuarioPorCpf(String cpf, String cargo){
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){

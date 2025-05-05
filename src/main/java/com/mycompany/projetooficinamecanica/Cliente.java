@@ -14,14 +14,19 @@ import java.io.IOException; // Para lidar com exceções de entrada e saída.
  * @author Lucas
  */
 
-//Classe responsável em gerênciar os clientes do sistema.
+/**Classe responsável em gerênciar os clientes do sistema.
+ * 
+ * @author jvict
+ */
 public class Cliente extends Pessoa{
     String endereco;
     String telefone;
     
     static List<Cliente> listaClientes = new ArrayList<>();
     
-    //Construtor vazio para o funcionamento correto da conversão da instância para json.
+    /**Construtor vazio para o funcionamento correto da conversão da instância para json.
+     * 
+     */
     Cliente(){
         super("","");
     };
@@ -48,55 +53,86 @@ public class Cliente extends Pessoa{
         this.telefone = telefone;
     }
     
-    //Subescrição do metodo toString herdado de Pessoa, adicionando Enderço e Telefone.
+    /**Subescrição do metodo toString herdado de Pessoa, adicionando Enderço e Telefone.
+     * 
+     * @return 
+     */
     @Override 
     public String toString(){
         return super.toString() + "\nEndereço: " + getEndereco() + "\nTelefone: " + getTelefone() + "\n";
     }
     
-    //Metodo usado para carregar os clientes do arquivo json para o array.
+    /**Metodo usado para carregar os clientes do arquivo json para o array.
+     * 
+     */
     public static void carregarClientes(){
-        //Cria um objeto do tipo Gson usado para o processo de conversão entre java e json.
+        /**Cria um objeto do tipo Gson usado para o processo de conversão entre java e json.
+         * 
+         */
         Gson gson = new Gson();
         
         try(FileReader reader = new FileReader("data/clientes.json")){
-            //Carregamento do aquivo json para o array de clientes.
+            /**Carregamento do aquivo json para o array de clientes.
+             * 
+             */
             listaClientes = gson.fromJson(reader, new TypeToken<List<Cliente>>(){}.getType());
         } catch(IOException e){
-            //Captura de erros no processo e ler o arquivo json.
+            /**Captura de erros no processo e ler o arquivo json.
+             * 
+             */
             System.out.println("Erro ao ler o arquivo clients.json: " + e);
         }
         
     };
-    //Metodo suado para listar os clientes armazenados no Array de clientes.
+    /**Metodo suado para listar os clientes armazenados no Array de clientes.
+     * 
+     */
     public static void listarClientes(){
-        //for percorrendo o array de clientes e printando.
+        /**for percorrendo o array de clientes e printando.
+         * 
+         */
         for(Cliente u : listaClientes){
             System.out.print(u);
         }
     }
     
-    //Metodo usado para armazenar um cliente dentro do array de clientes.
+    /**Metodo usado para armazenar um cliente dentro do array de clientes.
+     * 
+     * @param cliente 
+     */
     public static void adicionarCliente(Cliente cliente){
         listaClientes.add(cliente);
     }
     
-    //Metodo usado para armazenar o array de clientes dentro do jason.
+    /**Metodo usado para armazenar o array de clientes dentro do jason.
+     * 
+     */
     public static void salvarClientes(){
-        //Cria um objeto Gson usado na convertação de java para json e vice-versa, com 'PrettyPrintin' deixa mais legivel com uma boa formatação.
+        /**Cria um objeto Gson usado na convertação de java para json e vice-versa, com 'PrettyPrintin' deixa mais legivel com uma boa formatação.
+         * 
+         */
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         
-        //processo abrir o arquivo json para escrita.
+        /**processo abrir o arquivo json para escrita.
+         * 
+         */
         try(FileWriter writer = new FileWriter("data/clientes.json")){
-        //converter a listaClientes em json.
+        /**converter a listaClientes em json.
+         * 
+         */
         gson.toJson(listaClientes, writer);
         } catch(IOException e){
-            //captura de erros no processo de abertura do arquivo para escrita.
+            /**captura de erros no processo de abertura do arquivo para escrita.
+             * 
+             */
             System.out.println("Erro ao escrever o arquivo json: " + e);
         }
     }
     
-    //Metodo responsável por apagar um cliente.
+    /**Metodo responsável por apagar um cliente.
+     * 
+     * @param cpf 
+     */
     public static void removerClientePorCpf(String cpf){
         boolean removido = listaClientes.removeIf(c -> c.getCpf().equals(cpf));
         
@@ -110,7 +146,11 @@ public class Cliente extends Pessoa{
         
     }
     
-    //Metodo responsável por verificar a existencia de um cliente por cpf.
+    /**Metodo responsável por verificar a existencia de um cliente por cpf.
+     * 
+     * @param cpf
+     * @return true se o cliente existir
+     */
     public static boolean verificarClientePorCpf(String cpf){
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
@@ -121,7 +161,11 @@ public class Cliente extends Pessoa{
         return false;
     }
     
-    //Metodo responsável por editar o nome de um cliente que esta dentro do Array.
+    /**Metodo responsável por editar o nome de um cliente que esta dentro do Array.
+     * 
+     * @param cpf
+     * @param nome 
+     */
     public static void editarNomeCliente(String cpf, String nome){
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
@@ -133,7 +177,11 @@ public class Cliente extends Pessoa{
         System.out.println("Nome alterado com sucesso!");
     }
     
-    //Metodo responsável por editar o cpf de um cliente que esta dentro do Array.
+    /**Metodo responsável por editar o cpf de um cliente que esta dentro do Array.
+     * 
+     * @param cpf
+     * @param novocpf 
+     */
     public static void editarCpfCliente(String cpf, String novocpf){
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
@@ -145,7 +193,11 @@ public class Cliente extends Pessoa{
         System.out.println("Cpf alterado com sucesso!");
     }
     
-    //Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+    /**Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+     * 
+     * @param cpf
+     * @param endereco 
+     */
     public static void editarEnderecoCliente(String cpf, String endereco){
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
@@ -157,7 +209,11 @@ public class Cliente extends Pessoa{
         System.out.println("Endereço alterado com sucesso!");
     }
     
-    //Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+    /**Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+     * 
+     * @param cpf
+     * @param telefone 
+     */
     public static void editarTelefoneCliente(String cpf, String telefone){
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
@@ -169,7 +225,12 @@ public class Cliente extends Pessoa{
         System.out.println("Telefone alterado com sucesso!");
     }
     
-    //Metodo responsável por retornar um cliente, como busca o seu cpf.
+    /**Metodo responsável por retornar um cliente, como busca o seu cpf.
+     * 
+     * @param cpf
+     * @return O objeto Cliente correspondente ao CPF, ou null se não for encontrado.
+ */
+
     public static Cliente buscarClientePorCpf(String cpf){
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){

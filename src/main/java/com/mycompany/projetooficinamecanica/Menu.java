@@ -7,13 +7,19 @@ import java.util.Scanner; //Permite ler dados digitados pelo usuário.
  * @author Lucas
  */
 public class Menu {
-    //Criação do objeto do tipo Scanner.
+    /**Criação do objeto do tipo Scanner.
+     * 
+     */
     private static final Scanner scanner = new Scanner(System.in);    
     
-    //Obejto responsável por armazenar o usuario logado no sistema
+    /**Obejto responsável por armazenar o usuario logado no sistema
+     * 
+     */
     public static Funcionario usuarioLogado;
     
-    //Metodo responsável pelo processo de login do usuário no sistema.
+    /**Metodo responsável pelo processo de login do usuário no sistema.
+     * 
+     */
     public static void menuLogin(){
         while (true){
             System.out.println("--- MECÂNICA ---");
@@ -32,7 +38,9 @@ public class Menu {
         menuEpecializado();
     }
     
-    //Metodo responsável pelo menu principal
+    /**Metodo responsável pelo menu principal
+     * 
+     */
     public static void menuPrincipal(){
         System.out.println("--- Sistema Oficina Mecânica ---");
         System.out.println("1. Login");
@@ -61,7 +69,9 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de gerente
+    /**Metodo responsável pelo menu de gerente
+     * 
+     */
     public static void menuGerente(){
         System.out.println("--- Menu Gerente ---");
         System.out.println("1. Clientes");
@@ -79,7 +89,9 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de gerente
+    /**Metodo responsável pelo menu de gerente
+     * 
+     */
     public static void menuMecanico(){
         System.out.println("--- Menu Mecânico ---");
         System.out.println("1. Ver minhas ordens de serviço");
@@ -122,7 +134,9 @@ public class Menu {
         
     }
     
-    //Metodo responsável pelo menu d usuário com cargo Caixa
+    /*8Metodo responsável pelo menu d usuário com cargo Caixa
+    
+    */
     public static void menuCaixa(){
         System.out.println("--- Menu Caixa ---");
         System.out.println("1. Clientes");
@@ -182,7 +196,9 @@ public class Menu {
     }
     
     public static void menuCriarOrdemServico(){
-       // Obter CPF do cliente e validar
+       /** Obter CPF do cliente e validar
+        * 
+        */
         Cliente cliente = null;
         while (cliente == null) {
             System.out.print("Digite o CPF do cliente: ");
@@ -193,7 +209,9 @@ public class Menu {
             }
         }
 
-        // Obter CPF do mecânico e validar
+        /** Obter CPF do mecânico e validar
+         * 
+         */
         Mecanico mecanico = null;
         while (mecanico == null) {
             System.out.print("Digite o CPF do mecânico: ");
@@ -204,23 +222,33 @@ public class Menu {
             }
         }
 
-        // Obter descrição do problema
+        /** Obter descrição do problema
+         * 
+         */
         System.out.print("Digite a descrição do problema: ");
         String descricaoProblema = scanner.nextLine();
 
-        // Obter solução (pode ser uma entrada inicial ou deixar em branco)
+        /** Obter solução (pode ser uma entrada inicial ou deixar em branco)
+         * 
+         */
         System.out.print("Digite a solução (opcional): ");
         String solucao = scanner.nextLine();
 
-        // Obter status (ex: "Em andamento", "Concluída")
+        /** Obter status (ex: "Em andamento", "Concluída")
+         * 
+         */
         System.out.print("Digite o status da ordem (Ex: Em andamento, Concluída): ");
         String status = scanner.nextLine();
 
-        // Obter data
+        /** Obter data
+         * 
+         */
         System.out.print("Digite a data do serviço (dd/MM/yyyy): ");
         String data = scanner.nextLine();
 
-        // Escolher o veículo para a ordem
+        /** Escolher o veículo para a ordem
+         * 
+         */
         Veiculo veiculo = null;
         while (veiculo == null) {
             System.out.println("Selecione um veículo:");
@@ -238,13 +266,19 @@ public class Menu {
             }
         }
 
-        // Criando a ordem de serviço
+        /** Criando a ordem de serviço
+         * 
+         */
         OrdemServico ordemServico = new OrdemServico(cliente, mecanico, descricaoProblema, solucao, status, data, veiculo);
 
-        // Chama o método para adicionar a ordem de serviço na lista
+        /** Chama o método para adicionar a ordem de serviço na lista
+         * 
+         */
         OrdemServico.criarOrdemDeServico(ordemServico);
 
-        // Exibe os detalhes da ordem criada
+        /** Exibe os detalhes da ordem criada
+         * 
+         */
         System.out.println("Ordem de serviço criada com sucesso!");
         System.out.println(ordemServico); // Exibe os detalhes da ordem criada
         System.out.print("Deseja criar outra ordem? (S/N): ");
@@ -337,7 +371,9 @@ public class Menu {
        
     }
  
-    //Metodo responsável pelo menu de clientes
+    /**Metodo responsável pelo menu de clientes
+     * 
+     */
     public static void menuClientes(){
         System.out.println("--- Clientes ---");
         System.out.println("1. Listar");
@@ -361,7 +397,9 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de cadastro de clientes
+    /**Metodo responsável pelo menu de cadastro de clientes
+     * 
+     */
     public static void menuCadastrarCliente(){
         System.out.println("--- Cadastro de cliente ---");
         System.out.print("Nome: ");
@@ -377,7 +415,9 @@ public class Menu {
         Cliente.adicionarCliente(clientePrecadastrado);
         
         System.out.print("Adicionar outro cliente?[S/N]: ");
-        //pega a entrada do usuário e tranforma em maiúsculo.
+        /**pega a entrada do usuário e tranforma em maiúsculo.
+         * 
+         */
         String opcao = scanner.nextLine().toUpperCase();
         if(opcao.equals("S")){
             menuCadastrarCliente();
@@ -391,7 +431,8 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de remoção de cliente.
+    /*8Metodo responsável pelo menu de remoção de cliente.
+    */
     public static void menuRemoverCliente(){
         System.out.println("--- Remover Cliente ---");
         System.out.print("CPF do cliente: ");
@@ -409,14 +450,19 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de edição de dados do cliente.
+    /**Metodo responsável pelo menu de edição de dados do cliente.
+     * 
+     */
     public static void menuEditarCliente(){
         System.out.println("--- Editar Cliente ---");
         String cpf = menuVerificarUsuarioPorCpf();
         menuOpcoesEdicaoCliente(cpf);
     }
     
-    //Metodo responsável pelo menu opções de Edição de cliente.
+    /**Metodo responsável pelo menu opções de Edição de cliente.
+     * 
+     * @param cpf do cliente
+     */
     public static void menuOpcoesEdicaoCliente(String cpf){
         System.out.println("1. Nome");
         System.out.println("2. CPF");
@@ -437,7 +483,10 @@ public class Menu {
                 System.out.print("Novo cpf: ");
                 String novocpf = scanner.nextLine();
                 Cliente.editarCpfCliente(cpf, novocpf);
-                cpf = novocpf; // Atualiza o valor de referência
+                /** atualiza o valor de referÊncia
+                 * 
+                 */
+                cpf = novocpf; 
                 menuContinuidadeEdicaoCliente(cpf);
             }
             
@@ -461,7 +510,10 @@ public class Menu {
         }
     }
     
-    //Metodo responsável por confirmar a continuação de edição do mesmo cliente
+    /**Metodo responsável por confirmar a continuação de edição do mesmo cliente
+     * 
+     * @param cpf 
+     */
     public static void menuContinuidadeEdicaoCliente(String cpf){
         System.out.println("Continuar com a edição do cliente atual?\n"
                 + "S. Sim\nN. Editar outro usuário\n0. Menu principal");
@@ -478,7 +530,10 @@ public class Menu {
         }
     }
     
-    //Metodo resposável pelu menu de verificação de usuário.
+    /**Metodo resposável pelu menu de verificação de usuário.
+     * 
+     * @return 
+     */
     public static String menuVerificarUsuarioPorCpf(){
         while (true){
             System.out.print("CPF do cliente: ");
@@ -495,7 +550,9 @@ public class Menu {
         } 
     }
     
-    //Metodo responsável pelo menu de usuários.
+    /**Metodo responsável pelo menu de usuários.
+     * 
+     */
     public static void menuUsuarios(){
         System.out.println("--- Usuários ---");
         System.out.println("1. Listar");
@@ -522,14 +579,19 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de edição de Usuário
+    /**Metodo responsável pelo menu de edição de Usuário
+     * 
+     */
     public static void menuEdicaoUsuario(){
         System.out.println("--- Edição Usuário ---");
         String cpf = menuVerificarUsuario();
         menuOpcoesEdicaoUsuario(cpf);
     }
     
-    //Metodo responsável pelo menu de opções de edição do usuário.
+    /**Metodo responsável pelo menu de opções de edição do usuário.
+     * 
+     * @param cpf 
+     */
     public static void menuOpcoesEdicaoUsuario(String cpf){
         System.out.println("1. Nome");
         System.out.println("2. CPF");
@@ -582,7 +644,10 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de continuidade de edição de usuários.
+    /**Metodo responsável pelo menu de continuidade de edição de usuários.
+     * 
+     * @param cpf 
+     */
     public static void menuContinuidadeEdicaoUsuario(String cpf){
         System.out.print("Deseja continuar a editar o usuário atual?\n"
                 + "S. Sim\nN. Editar outro usuário\n0. Menu Principal");
@@ -599,14 +664,19 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de remoção de usuário.
+    /**Metodo responsável pelo menu de remoção de usuário.
+     * 
+     */
     public static void menuRemoverUsuario(){
         System.out.println("--- Remove Usuário ---");
         String cpf = menuVerificarUsuario();
         SistemaLogin.removerUsuarioPorCpf(cpf);
     }
     
-    //Metodo responsável pela menu de verificação de existência do usuário
+    /**Metodo responsável pela menu de verificação de existência do usuário
+     * 
+     * @return cpf do cliente existente
+     */
     public static String menuVerificarUsuario(){
         System.out.print("Cpf: ");
         String cpf = scanner.nextLine();
@@ -618,7 +688,9 @@ public class Menu {
         }
     }
     
-    //Metodo responsável pelo menu de cadastro de usuários.
+    /**Metodo responsável pelo menu de cadastro de usuários.
+     * 
+     */
     public static void menuCadastrarUsuario(){
         System.out.println("--- Cadastro de Usuário ---");
         System.out.print("Nome: ");

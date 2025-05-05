@@ -119,7 +119,9 @@ public class OrdemServico {
         }
     }
     
-    // Método para salvar a lista de ordens de serviço no arquivo JSON
+    /**Método para salvar a lista de ordens de serviço no arquivo JSON
+     * 
+     */
     public static void salvarOrdensServico() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("dados/OrdensServico.json")) {
@@ -131,7 +133,7 @@ public class OrdemServico {
     
     public static void criarOrdemDeServico(OrdemServico ordemServico) {
         ListaOrdensServico.add(ordemServico);
-        salvarOrdensServico();  // Salva a lista de ordens de serviço no arquivo JSON
+        salvarOrdensServico();  
     }
     
     public static void listarOrdensServico(){

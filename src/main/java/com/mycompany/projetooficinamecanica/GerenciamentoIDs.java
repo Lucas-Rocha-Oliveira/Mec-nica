@@ -11,7 +11,9 @@ import java.io.IOException; // Para lidar com exceções de entrada e saída.
 public class GerenciamentoIDs {
     private static Map<String, Integer> contadores;
 
-    // Carrega o arquivo JSON com os IDs e joga dentro do map
+    /** Carrega o arquivo JSON com os IDs e joga dentro do map
+     * 
+     */
     public static void carregarContadorIDs() {
         try (FileReader reader = new FileReader("dados/ContadorID.json")) {
             Gson gson = new Gson();
@@ -25,7 +27,9 @@ public class GerenciamentoIDs {
         }
 }
 
-    // Salva o map dentro do arquivo JSON
+    /** Salva o map dentro do arquivo JSON
+     * 
+     */
     public static void salvarContadorIDs() {
         try (FileWriter writer = new FileWriter("dados/ContadorID.json")) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -35,10 +39,16 @@ public class GerenciamentoIDs {
         }
     }
 
-    // Retorna o ID atual dependendo da classe
+    /** Retorna o ID atual dependendo da classe
+     * 
+     * @param tipo
+     * @return id atual de acordo com a classe
+     */
     public static int proximoID(String tipo) {
         if (!contadores.containsKey(tipo)) {
-            contadores.put(tipo, 1); // Se não houver o tipo, inicializa o contador com 1
+            contadores.put(tipo, 1); /** Se não houver o tipo, inicializa o contador com 1
+             * 
+             */
         }
         int idAtual = contadores.get(tipo);
         contadores.put(tipo, idAtual + 1);

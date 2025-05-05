@@ -98,7 +98,9 @@ public class Veiculo {
                 "\nAno: " + getAno() + "\nproprietário: " + getProprietario();
     }
     
-    //responsável por carregar os veiculos do jason para o array.
+    /**responsável por carregar os veiculos do jason para o array.
+     * 
+     */
     public static void carregarVeiculos(){ 
         Gson gson = new Gson();
         try(FileReader reader = new FileReader("dados/veiculos.json")){
@@ -108,7 +110,9 @@ public class Veiculo {
         }
     }
     
-    //Metodo responsável por salvar os veiculos do Array no arquivo json.
+    /**
+     * Metodo responsável por salvar os veiculos do Array no arquivo json.
+     */
     public static void salvarVeiculos(){
       Gson gson = new Gson();
         try(FileWriter writer = new FileWriter("data/veiculos.json")){
@@ -118,7 +122,9 @@ public class Veiculo {
         }  
     }
     
-    //Metodo responsável por adicionar um veiculo no Array de veiculos
+    /**
+     * Metodo responsável por adicionar um veiculo no Array de veiculos
+     */
     public static boolean cadastrarVeiculo(String placa, String modelo, String marca, String cor, int ano, String cpf){
         Cliente proprietario = Cliente.buscarClientePorCpf(cpf);
         if(proprietario == null){
@@ -138,7 +144,11 @@ public class Veiculo {
         return true;
     }
     
-    //Metodo para verificar se um veiculo esta registrado no array de veiculos
+    /**Metodo para verificar se um veiculo esta registrado no array de veiculos
+     * 
+     * @param placa
+     * @return 
+     */
     public static boolean buscarVeiculoPorPlaca(String placa){
         for(Veiculo v : listaVeiculos){
             if(v.getPlaca().equalsIgnoreCase(placa)){
@@ -149,7 +159,11 @@ public class Veiculo {
         return false;
     }
     
-    //Metodo para remover um veiculo do array pela placa.
+    /**
+     * Metodo para remover um veiculo do array pela placa.
+     */
+            
+            
     public static void removerVeiculoPorPlaca(String placa) {
         carregarVeiculos(); // Atualiza a lista de veículos
 
@@ -163,7 +177,11 @@ public class Veiculo {
         }
     }
     
-    //Metodo respon´savel por lsitar os veículos
+    /** metodo responsável por listas véiculo
+     * 
+     */
+    
+    
     public static void listarVeiculos(){
         for(Veiculo v : listaVeiculos){
             System.out.println(v);
