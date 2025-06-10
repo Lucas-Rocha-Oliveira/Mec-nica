@@ -49,51 +49,38 @@ public class SistemaLogin {
         }
     }
     
-    /**Metodo para carregar os usuarios do arquivo json para o array.
-     * 
+    /**
+     * Carrega a lista de todos os funcionários (usuários do sistema) a partir
+     * de um arquivo JSON ("data/usuarios.json").
+     * O método delega a desserialização para a instância do Gson gerenciada
+     * pela classe {@link GerenciadorJson}, que lida com tipos complexos e herança.
+     * Em caso de falha na leitura ou se o arquivo estiver vazio, inicializa
+     * uma nova lista de funcionários para evitar erros no sistema.
      */
     public static void carregarUsuarios(){
-        /**Cria um objeto do tipo Gson usado para converter dados entre JSON e objetos Java.
-         * 
-         */
-        Gson gson = new Gson();
-        
-        /**Abre o arquivo para leitura
-         * 
-         */
+        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador centralizado
         try(FileReader reader = new FileReader("data/usuarios.json")){
-            /**@param reader lê o conteudo do json
-            *@return Lista de objeto Funcionario carregados do JSON.
-            **/
             listaUsuarios = gson.fromJson(reader, new TypeToken<List<Funcionario>>(){}.getType());
+            if (listaUsuarios == null) {
+                listaUsuarios = new ArrayList<>();
+            }
         } catch(IOException e){
-            /**Captura erros de saída.
-             * 
-             */
-            System.out.print("Erro ao carregar os usuários: " + e);
-        }}
+            System.out.println("Arquivo de usuários não encontrado. Criando nova lista.");
+            listaUsuarios = new ArrayList<>();
+        }
+    }
     
-    /*8Metodo para salvar o array de usuarios no arquivo json.
-    
-    */
+    /**
+     * Salva a lista de todos os funcionários (usuários do sistema) no arquivo
+     * JSON ("data/usuarios.json").
+     * Usa a instância configurada do Gson vinda do {@link GerenciadorJson} para
+     * garantir que a serialização seja feita corretamente e com formatação legível.
+     */
     public static void salvarUsuarios(){
-        /**Cria um objeto do tipo Gson usado para converter dados entre JSON e objetos Java.
-         * 
-         */
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();//Cria um objeto Gson com 'PrettyPrintin' deixa mais legivel com uma boa formatação.
-        
-        /**"try" Abre o arquivo para escrita
-         * 
-         */
+        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador centralizado
         try (FileWriter write = new FileWriter("data/usuarios.json")){
-        /**Cria um FileWrite para escrever no arquivo usuarios.jason
-         * 
-         */
-            gson.toJson(listaUsuarios, write);//Conver a lista de usuarios para Json e escreve noa arquivo.
+            gson.toJson(listaUsuarios, write);
         } catch(IOException e){
-            /**Captura erros de saída.
-             * 
-             */
             System.out.println("Erro ao salvar usuários: " + e.getMessage());
         }
     }

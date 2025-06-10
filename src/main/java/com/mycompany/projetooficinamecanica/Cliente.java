@@ -65,25 +65,32 @@ public class Cliente extends Pessoa{
     /**Metodo usado para carregar os clientes do arquivo json para o array.
      * 
      */
+     /**
+     * Carrega a lista de clientes a partir de um arquivo JSON.
+     * Utiliza o GerenciadorJson para obter uma instância configurada do Gson,
+     * garantindo que todos os TypeAdapters necessários sejam utilizados.
+     * Se o arquivo não for encontrado ou estiver vazio, uma nova lista de clientes
+     * é criada para evitar erros de NullPointerException.
+     */
     public static void carregarClientes(){
-        /**Cria um objeto do tipo Gson usado para o processo de conversão entre java e json.
-         * 
-         */
-        Gson gson = new Gson();
+        // Obtém a instância customizada e centralizada do Gson.
+        Gson gson = GerenciadorJson.getGson(); 
         
+        // Usa um try-with-resources para garantir que o leitor de arquivo seja fechado automaticamente.
         try(FileReader reader = new FileReader("data/clientes.json")){
-            /**Carregamento do aquivo json para o array de clientes.
-             * 
-             */
+            // Converte o texto do JSON para uma lista de objetos Cliente.
             listaClientes = gson.fromJson(reader, new TypeToken<List<Cliente>>(){}.getType());
+            
+            // Verificação de segurança: se o arquivo JSON estiver vazio, gson.fromJson retorna null.
+            if (listaClientes == null) {
+                listaClientes = new ArrayList<>();
+            }
         } catch(IOException e){
-            /**Captura de erros no processo e ler o arquivo json.
-             * 
-             */
-            System.out.println("Erro ao ler o arquivo clients.json: " + e);
+            // Informa ao usuário caso o arquivo não exista e inicializa uma lista vazia.
+            System.out.println("Arquivo de clientes não encontrado. Criando nova lista.");
+            listaClientes = new ArrayList<>();
         }
-        
-    };
+    }
     /**Metodo suado para listar os clientes armazenados no Array de clientes.
      * 
      */
@@ -104,28 +111,17 @@ public class Cliente extends Pessoa{
         listaClientes.add(cliente);
     }
     
-    /**Metodo usado para armazenar o array de clientes dentro do jason.
-     * 
+    /**
+     * Salva a lista de clientes atual em um arquivo JSON.
+     * Este método utiliza uma instância do Gson fornecida pelo GerenciadorJson
+     * para garantir que a serialização seja feita corretamente.
      */
     public static void salvarClientes(){
-        /**Cria um objeto Gson usado na convertação de java para json e vice-versa, com 'PrettyPrintin' deixa mais legivel com uma boa formatação.
-         * 
-         */
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        
-        /**processo abrir o arquivo json para escrita.
-         * 
-         */
+        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador
         try(FileWriter writer = new FileWriter("data/clientes.json")){
-        /**converter a listaClientes em json.
-         * 
-         */
-        gson.toJson(listaClientes, writer);
+            gson.toJson(listaClientes, writer);
         } catch(IOException e){
-            /**captura de erros no processo de abertura do arquivo para escrita.
-             * 
-             */
-            System.out.println("Erro ao escrever o arquivo json: " + e);
+            System.out.println("Erro ao escrever o arquivo de clientes: " + e.getMessage());
         }
     }
     

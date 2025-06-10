@@ -24,6 +24,7 @@ public class ProjetoOficinaMecanica {
         
         OrdemServico.carregarOrdensServico();
         
+        Estoque.carregarProdutos();
         
         //testes
         Menu.menuPrincipal();

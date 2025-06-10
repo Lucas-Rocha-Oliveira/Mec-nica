@@ -11,33 +11,34 @@ import java.io.IOException; // Para lidar com exceções de entrada e saída.
 public class GerenciamentoIDs {
     private static Map<String, Integer> contadores;
 
-    /** Carrega o arquivo JSON com os IDs e joga dentro do map
-     * 
+    /** Carrega o mapa de contadores de ID do arquivo JSON.
+     * Utiliza o GerenciadorJson para garantir consistência.
      */
     public static void carregarContadorIDs() {
+        Gson gson = GerenciadorJson.getGson();
         try (FileReader reader = new FileReader("dados/ContadorID.json")) {
-            Gson gson = new Gson();
             contadores = gson.fromJson(reader, new TypeToken<Map<String, Integer>>() {}.getType());
             if (contadores == null) {
-                contadores = new java.util.HashMap<>(); // Caso o JSON esteja vazio
+                contadores = new java.util.HashMap<>();
             }
         } catch (IOException e) {
-            System.out.println("Arquivo JSON não encontrado ou erro ao ler. Criando novo mapa de IDs.");
-            contadores = new java.util.HashMap<>(); // Caso o arquivo não exista
-        }
-}
-
-    /** Salva o map dentro do arquivo JSON
-     * 
-     */
-    public static void salvarContadorIDs() {
-        try (FileWriter writer = new FileWriter("dados/ContadorID.json")) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            gson.toJson(contadores, writer);
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar o arquivo JSON do gerenciador de ID: " + e);
+            System.out.println("Arquivo de IDs não encontrado. Criando novo mapa de IDs.");
+            contadores = new java.util.HashMap<>();
         }
     }
+
+    /** Salva o mapa de contadores de ID no arquivo JSON.
+     * Utiliza o GerenciadorJson para garantir uma serialização consistente.
+     */
+    public static void salvarContadorIDs() {
+        Gson gson = GerenciadorJson.getGson();
+        try (FileWriter writer = new FileWriter("dados/ContadorID.json")) {
+            gson.toJson(contadores, writer);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar o arquivo JSON de IDs: " + e.getMessage());
+        }
+    }
+
 
     /** Retorna o ID atual dependendo da classe
      * 

@@ -98,33 +98,42 @@ public class Veiculo {
                 "\nAno: " + getAno() + "\nproprietário: " + getProprietario();
     }
     
-    /**responsável por carregar os veiculos do jason para o array.
-     * 
+    /**
+     * Carrega a lista de veículos a partir de um arquivo JSON ("data/veiculos.json").
+     * Este método utiliza o {@link GerenciadorJson} para obter uma instância do Gson
+     * que já está configurada com todos os adaptadores de tipo necessários,
+     * garantindo a correta desserialização dos objetos.
+     * Se o arquivo não existir ou estiver vazio, uma nova lista vazia é inicializada
+     * para garantir a segurança da operação e evitar NullPointerExceptions.
      */
     public static void carregarVeiculos(){ 
-        Gson gson = new Gson();
-        try(FileReader reader = new FileReader("dados/veiculos.json")){
+        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador centralizado
+        try(FileReader reader = new FileReader("data/veiculos.json")){
             listaVeiculos = gson.fromJson(reader, new TypeToken<List<Veiculo>>(){}.getType());
+            if (listaVeiculos == null) {
+                listaVeiculos = new ArrayList<>();
+            }
         }catch(IOException e){
-            System.out.print("Erro ao carregar o arquivo json de veículos: " + e);
+            System.out.println("Arquivo de veículos não encontrado. Criando nova lista.");
+            listaVeiculos = new ArrayList<>();
         }
     }
     
     /**
-     * Metodo responsável por salvar os veiculos do Array no arquivo json.
+     * Salva a lista de veículos atual no arquivo JSON ("data/veiculos.json").
+     * Utiliza a instância centralizada do Gson obtida através do {@link GerenciadorJson}
+     * para garantir uma serialização consistente e formatada (Pretty Printing).
      */
     public static void salvarVeiculos(){
-      Gson gson = new Gson();
+      Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador centralizado
         try(FileWriter writer = new FileWriter("data/veiculos.json")){
             gson.toJson(listaVeiculos, writer);
         }catch(IOException e){
-            System.out.print("Erro ao escrever o arquivo json de veículos: " + e);
+            System.out.println("Erro ao escrever o arquivo de veículos: " + e.getMessage());
         }  
     }
     
-    /**
-     * Metodo responsável por adicionar um veiculo no Array de veiculos
-     */
+    //Metodo responsável por adicionar um veiculo no Array de veiculos
     public static boolean cadastrarVeiculo(String placa, String modelo, String marca, String cor, int ano, String cpf){
         Cliente proprietario = Cliente.buscarClientePorCpf(cpf);
         if(proprietario == null){
@@ -144,11 +153,7 @@ public class Veiculo {
         return true;
     }
     
-    /**Metodo para verificar se um veiculo esta registrado no array de veiculos
-     * 
-     * @param placa
-     * @return 
-     */
+    //Metodo para verificar se um veiculo esta registrado no array de veiculos
     public static boolean buscarVeiculoPorPlaca(String placa){
         for(Veiculo v : listaVeiculos){
             if(v.getPlaca().equalsIgnoreCase(placa)){
@@ -159,11 +164,7 @@ public class Veiculo {
         return false;
     }
     
-    /**
-     * Metodo para remover um veiculo do array pela placa.
-     */
-            
-            
+    //Metodo para remover um veiculo do array pela placa.
     public static void removerVeiculoPorPlaca(String placa) {
         carregarVeiculos(); // Atualiza a lista de veículos
 
@@ -177,11 +178,7 @@ public class Veiculo {
         }
     }
     
-    /** metodo responsável por listas véiculo
-     * 
-     */
-    
-    
+    //Metodo respon´savel por lsitar os veículos
     public static void listarVeiculos(){
         for(Veiculo v : listaVeiculos){
             System.out.println(v);

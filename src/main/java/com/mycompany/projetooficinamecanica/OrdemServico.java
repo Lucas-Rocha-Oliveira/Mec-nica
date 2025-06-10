@@ -20,41 +20,107 @@ public class OrdemServico {
     private String descricaoProblema;
     private String solucao;
     private String status;
-    private String data;
+    private String dataEHora;
     private Veiculo veiculo;
+    private List<Servico> servicosRealizados = new ArrayList<>();
+    private List<Produto> produtosUtilizados = new ArrayList<>();
     
     static List<OrdemServico> ListaOrdensServico = new ArrayList<>();
-
+    
+    private OrdemServico(OrdemServicoBuilder builder){
+        this.id = builder.id;
+        this.cliente = builder.cliente;
+        this.mecanico = builder.mecanico;
+        this.descricaoProblema = builder.descricaoProblema;
+        this.solucao = builder.solucao;
+        this.status = builder.status;
+        this.dataEHora = builder.dataEHora;
+        this.veiculo = builder.veiculo;
+    }
+    
+    public static class OrdemServicoBuilder{
+        private int id;
+        private Cliente cliente;
+        private Mecanico mecanico;
+        private String descricaoProblema;
+        private String solucao;
+        private String status;
+        private String dataEHora;
+        private Veiculo veiculo;
+        private List<Servico> servicosRealizados = new ArrayList<>();
+        private List<Produto> produtosUtilizados = new ArrayList<>();
+        
+        public OrdemServicoBuilder id(int id){
+            this.id = id;
+            return this;
+        }
+        
+        public OrdemServicoBuilder cliente(Cliente cliente){
+            this.cliente = cliente;
+            return this;
+        }
+        
+        public OrdemServicoBuilder mecanico(Mecanico mecanico){
+            this.mecanico = mecanico;
+            return this;
+        }
+        
+        
+        public OrdemServicoBuilder descricaoProblema(String descricaoProblema){
+            this.descricaoProblema = descricaoProblema;
+            return this;
+        }
+        
+        public OrdemServicoBuilder solucao(String solucao){
+            this.solucao = solucao;
+            return this;
+        }
+        
+        public OrdemServicoBuilder status(String status){
+            this.status = status;
+            return this;
+        }
+        
+        public OrdemServicoBuilder dataEHora(String dataEHora){
+            this.dataEHora = dataEHora;
+            return this;
+        }
+        
+        public OrdemServicoBuilder veiculo(Veiculo veiculo){
+            this.veiculo = veiculo;
+            return this;
+        }
+        
+        public OrdemServico build(){
+            return new OrdemServico(this);
+        }
+        
+        public OrdemServicoBuilder adicionaServico(Servico servico){
+            this.servicosRealizados.add(servico);
+            return this;
+        }
+        
+        public OrdemServicoBuilder adicionaProduto(Produto produto){
+            this.produtosUtilizados.add(produto);
+            return this;
+        }
+        
+    }
+    
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
     public Mecanico getMecanico() {
         return mecanico;
     }
 
-    public void setMecanico(Mecanico mecanico) {
-        this.mecanico = mecanico;
-    }
-
     public String getDescricaoProblema() {
         return descricaoProblema;
-    }
-
-    public void setDescricaoProblema(String descricaoProblema) {
-        this.descricaoProblema = descricaoProblema;
     }
 
     public String getSolucao() {
@@ -73,49 +139,40 @@ public class OrdemServico {
         this.status = status;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
+    public String getDataEHora() {
+        return dataEHora;
     }
 
     public Veiculo getVeiculo() {
         return veiculo;
     }
 
-    public void setVeiculo(Veiculo veiculo) {
-        this.veiculo = veiculo;
+    public List<Servico> getServicosRealizados() {
+        return servicosRealizados;
+    }
+
+    public List<Produto> getProdutosUtilizados() {
+        return produtosUtilizados;
     }
     
-    OrdemServico(){
     
-    }
-    
-    OrdemServico(Cliente cliente, Mecanico mecanico, String descricaoProblema, String solucao, String status, String data, Veiculo veiculo){
-        this.id = GerenciamentoIDs.proximoID("OrdemServico");
-        this.cliente = cliente;
-        this.mecanico = mecanico;
-        this.descricaoProblema = descricaoProblema;
-        this.solucao = solucao;
-        this.status = status;
-        this.data = data;
-        this.veiculo = veiculo;
-    }
     
     @Override
     public String toString(){
         return "\nID: " + getId() + "\nCliente: " + getCliente() + "\nMecânico: " + getMecanico() + "\nDescrição do problema: " + getDescricaoProblema() + "\nSolução: " + getSolucao() + "\nStatus: " + getStatus()
-                + "\nData: " + getData() + "Veículo: " + getVeiculo();
+                + "\nData e hora: " + getDataEHora() + "Veículo: " + getVeiculo();
     }
     
     public static void carregarOrdensServico(){
-        Gson gson = new Gson();
-        try(FileReader reader = new FileReader("dados/OrdensServico.json")){
+        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador
+        try(FileReader reader = new FileReader("data/OrdensServico.json")){
             ListaOrdensServico = gson.fromJson(reader, new TypeToken<List<OrdemServico>>(){}.getType());
+            if(ListaOrdensServico == null) { // Evita erro se o arquivo estiver vazio
+                ListaOrdensServico = new ArrayList<>();
+            }
         }catch(IOException e){
-            System.out.println("Erro ao carregar o arquivo jason das ordens de serviço: " + e);
+            System.out.println("Arquivo de Ordens de Serviço não encontrado. Criando nova lista.");
+            ListaOrdensServico = new ArrayList<>();
         }
     }
     
@@ -123,11 +180,11 @@ public class OrdemServico {
      * 
      */
     public static void salvarOrdensServico() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter("dados/OrdensServico.json")) {
+        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador
+        try (FileWriter writer = new FileWriter("data/OrdensServico.json")) {
             gson.toJson(ListaOrdensServico, writer);
         } catch (IOException e) {
-            System.out.println("Erro ao salvar o arquivo JSON: " + e);
+            System.out.println("Erro ao salvar o arquivo JSON: " + e.getMessage());
         }
     }
     
@@ -177,6 +234,14 @@ public class OrdemServico {
         }
       System.out.println("Ordem de serviço não existe.");
       return false;
+    }
+    
+    public void adicionarProduto(Produto produto){
+        this.produtosUtilizados.add(produto);
+    }
+    
+    public void adicionarServico(Servico servico){
+        this.servicosRealizados.add(servico);
     }
     
 }

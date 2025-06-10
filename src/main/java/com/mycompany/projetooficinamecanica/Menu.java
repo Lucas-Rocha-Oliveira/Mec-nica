@@ -77,15 +77,18 @@ public class Menu {
         System.out.println("1. Clientes");
         System.out.println("2. Veiculos");
         System.out.println("3. Funcionarios");
-        System.out.print("4. Ordens de Serviços");
-        System.out.print("5. Logout");
+        System.out.println("4. Ordens de Serviços");
+        System.out.println("5. Estoque");
+        System.out.println("6. Logout");
         int opcao = scanner.nextInt();
+        scanner.nextLine();
         switch(opcao){
             case 1 -> menuClientes();
             case 2 -> menuVeiculo();
             case 3 -> menuUsuarios();
             case 4 -> menuOrdemServico();
-            case 5 -> menuPrincipal();
+            case 5 -> menuEstoque();
+            case 6 -> menuPrincipal();
         }
     }
     
@@ -97,13 +100,74 @@ public class Menu {
         System.out.println("1. Ver minhas ordens de serviço");
         System.out.println("2. Atualizar status de ordem");
         System.out.println("3. Veiculos");
-        System.out.println("4. logout");
+        System.out.println("4. Estoque");
+        System.out.println("5. logout");
         int opcao = scanner.nextInt();
+        scanner.nextLine();
         switch(opcao){
             case 1 -> menuListarOrdensServicosPorCpf(usuarioLogado.getCpf());
             case 2 -> menuAtualizarOrdemServicoPorMecanico();
             case 3 -> menuVeiculo();
-            case 4 -> menuPrincipal();
+            case 4 -> menuEstoque();
+            case 5 -> menuPrincipal();
+        }
+    }
+    
+    public static void menuEstoque(){
+        System.out.println("--- Menu Estoque ---");
+        System.out.println("1. Consultar Estoque completo");
+        System.out.println("2. Adicionar um produto ao catálogo");//Permite cadastrar um item que a oficina nunca vendeu antes.
+        System.out.println("3. Registrar entrada de fornecedor");//Aumenta a quantidade de um produto já existente no catálogo.
+        System.out.println("4. Ajustar estoque manualmente");
+        System.out.println("5. Gerar relatório de estoque baixo");
+        System.out.println("6. Remover produto do catalogo");
+        System.out.println("7. Voltar para o menu principal");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+        switch(opcao){
+            case 1 -> Estoque.listarProdutos();
+            case 2 -> menuAdicionarProduto();
+            case 7 -> menuEpecializado();
+        }
+    }
+    
+    public static void menuAdicionarProduto(){
+       System.out.println("--- Adicionar Produto ---"); 
+       System.out.print("Codigo: "); 
+       int codigo = scanner.nextInt();
+       scanner.nextLine();
+       System.out.print("Nome: "); 
+       String nome = scanner.nextLine();
+       System.out.print("Preço: R$"); 
+       double preco = scanner.nextDouble();
+       scanner.nextLine();
+       System.out.print("Quantidade em estoque: "); 
+       int qtdEmEstoque = scanner.nextInt();
+       scanner.nextLine();
+       System.out.println("Selecione uma categoria:\n1 - Peça\n2 - Consumível"); 
+       int categoria = scanner.nextInt();
+       scanner.nextLine();
+       Produto.CategoriaDoProduto categoriaEscolhida = null;
+       switch(categoria){
+           case 1: 
+            categoriaEscolhida = Produto.CategoriaDoProduto.PEÇA;
+            break;
+           case 2: 
+            categoriaEscolhida = Produto.CategoriaDoProduto.CONSUMIVEL;
+            break;
+       }
+        Produto novoProduto = new Produto(codigo, nome, preco, qtdEmEstoque, categoriaEscolhida);
+        Estoque.adicionarProduto(novoProduto);
+        System.out.println("Produto adicionado com sucesso!");
+        System.out.print("Deseja adicionar outro produto? [S/N]");
+        String opcao = scanner.nextLine().toUpperCase();
+        switch(opcao){
+            case "S":
+                menuAdicionarProduto();
+            case "N": 
+                Estoque.salvarProdutos();
+                System.out.println("Voltando para o menu do Estoque.");
+                menuEstoque();
         }
     }
     
@@ -113,6 +177,7 @@ public class Menu {
         while(true){ 
             System.out.print("ID: ");
             int id = scanner.nextInt();
+            scanner.nextLine();
             if(OrdemServico.verificarOrdemServico(id, usuarioLogado.getCpf())){
                 System.out.print("Novo Status: ");
                 String novo = scanner.nextLine();
@@ -142,13 +207,16 @@ public class Menu {
         System.out.println("1. Clientes");
         System.out.println("2. Ordem de serviço");
         System.out.println("3. Veiculos");
-        System.out.println("4. logout");
+        System.out.println("4. Estoque");
+        System.out.println("5. logout");
         int opcao = scanner.nextInt();
+        scanner.nextLine();
         switch(opcao){
             case 1 -> menuClientes();
             case 2 -> menuOrdemServico();
             case 3 -> menuVeiculo();
-            case 4 -> menuPrincipal();
+            case 4 -> menuEstoque();
+            case 5 -> menuPrincipal();
         }
     }
     
@@ -160,11 +228,12 @@ public class Menu {
     }
     
     public static void menuOrdemServico(){
-        System.out.print("--- Ordens de serviço ---");
-        System.out.print("1. Criar ordem de serviço");
-        System.out.print("2. Consultar ordens de serviços");
-        System.out.print("3. Atualizar status ordem");
+        System.out.println("--- Ordens de serviço ---");
+        System.out.println("1. Abrir ordem de serviço");
+        System.out.println("2. Consultar ordens de serviços");
+        System.out.println("3. Atualizar status ordem");
         int opcao = scanner.nextInt();
+        scanner.nextLine();
         switch(opcao){
             case 1 -> menuCriarOrdemServico();
             case 2 -> {
@@ -228,23 +297,6 @@ public class Menu {
         System.out.print("Digite a descrição do problema: ");
         String descricaoProblema = scanner.nextLine();
 
-        /** Obter solução (pode ser uma entrada inicial ou deixar em branco)
-         * 
-         */
-        System.out.print("Digite a solução (opcional): ");
-        String solucao = scanner.nextLine();
-
-        /** Obter status (ex: "Em andamento", "Concluída")
-         * 
-         */
-        System.out.print("Digite o status da ordem (Ex: Em andamento, Concluída): ");
-        String status = scanner.nextLine();
-
-        /** Obter data
-         * 
-         */
-        System.out.print("Digite a data do serviço (dd/MM/yyyy): ");
-        String data = scanner.nextLine();
 
         /** Escolher o veículo para a ordem
          * 
@@ -269,7 +321,17 @@ public class Menu {
         /** Criando a ordem de serviço
          * 
          */
-        OrdemServico ordemServico = new OrdemServico(cliente, mecanico, descricaoProblema, solucao, status, data, veiculo);
+        System.out.println("Construindo Ordem de serviço...");
+        OrdemServico ordemServico = new OrdemServico.OrdemServicoBuilder()
+                .id(GerenciamentoIDs.proximoID("OrdemServico"))
+                .dataEHora(Utilidades.getDataEHoraAtuaisFormatadas())
+                .cliente(cliente)
+                .mecanico(mecanico)
+                .descricaoProblema(descricaoProblema)
+                .status("Aguardando Análise")
+                .solucao("")
+                .build();
+        
 
         /** Chama o método para adicionar a ordem de serviço na lista
          * 
@@ -300,6 +362,7 @@ public class Menu {
       System.out.println("3. Listar");
       System.out.println("4. Menu Principal");
       int opcao = scanner.nextInt();
+      scanner.nextLine();
         switch(opcao){
             case 1 -> menuCadastrarVeiculo();
             case 2 -> menuRemoverVeiculo();
