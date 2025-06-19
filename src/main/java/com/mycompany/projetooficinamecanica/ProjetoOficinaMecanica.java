@@ -1,32 +1,25 @@
 package com.mycompany.projetooficinamecanica;
 
+
+import com.google.gson.reflect.TypeToken;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
+
 /**
  *
  * @author Lucas
  */
 public class ProjetoOficinaMecanica {
 
-    public static void main(String[] args) {
-        /**Carrega os usuários armazenados no json para o array de usuarios
-         * 
-         */
-        SistemaLogin.carregarUsuarios();
-        /**Carrega os clientes armazenados no json para o array de clientes
-         * 
-         */
-        Cliente.carregarClientes();
-        /**Carrega os veiculos armazenados no json para o array de veiculos
-         * 
-         */
-        Veiculo.carregarVeiculos();
+    public static void main(String[] args) throws IOException {
         
-        GerenciamentoIDs.carregarContadorIDs();
+    JsonUtil.carregarJsons();
         
-        OrdemServico.carregarOrdensServico();
-        
-        Estoque.carregarProdutos();
-        
-        //testes
-        Menu.menuPrincipal();
+    Menu.menuPrincipal();
+       
+       
+      
+       
     }
 }

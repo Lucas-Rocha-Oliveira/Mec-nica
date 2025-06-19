@@ -25,7 +25,15 @@ public class OrdemServico {
     private List<Servico> servicosRealizados = new ArrayList<>();
     private List<Produto> produtosUtilizados = new ArrayList<>();
     
-    static List<OrdemServico> ListaOrdensServico = new ArrayList<>();
+    private static List<OrdemServico> ListaOrdensServico = new ArrayList<>();
+
+    public static List<OrdemServico> getListaOrdensServico() {
+        return ListaOrdensServico;
+    }
+
+    public static void setListaOrdensServico(List<OrdemServico> ListaOrdensServico) {
+        OrdemServico.ListaOrdensServico = ListaOrdensServico;
+    }
     
     private OrdemServico(OrdemServicoBuilder builder){
         this.id = builder.id;
@@ -163,34 +171,10 @@ public class OrdemServico {
                 + "\nData e hora: " + getDataEHora() + "Veículo: " + getVeiculo();
     }
     
-    public static void carregarOrdensServico(){
-        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador
-        try(FileReader reader = new FileReader("data/OrdensServico.json")){
-            ListaOrdensServico = gson.fromJson(reader, new TypeToken<List<OrdemServico>>(){}.getType());
-            if(ListaOrdensServico == null) { // Evita erro se o arquivo estiver vazio
-                ListaOrdensServico = new ArrayList<>();
-            }
-        }catch(IOException e){
-            System.out.println("Arquivo de Ordens de Serviço não encontrado. Criando nova lista.");
-            ListaOrdensServico = new ArrayList<>();
-        }
-    }
     
-    /**Método para salvar a lista de ordens de serviço no arquivo JSON
-     * 
-     */
-    public static void salvarOrdensServico() {
-        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador
-        try (FileWriter writer = new FileWriter("data/OrdensServico.json")) {
-            gson.toJson(ListaOrdensServico, writer);
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar o arquivo JSON: " + e.getMessage());
-        }
-    }
-    
-    public static void criarOrdemDeServico(OrdemServico ordemServico) {
+    public static void criarOrdemDeServico(OrdemServico ordemServico) throws IOException {
         ListaOrdensServico.add(ordemServico);
-        salvarOrdensServico();  
+        JsonUtil.salvar("data/OrdensServico.json", ListaOrdensServico);  
     }
     
     public static void listarOrdensServico(){
@@ -199,12 +183,12 @@ public class OrdemServico {
         }
     }
     
-    public static void atualizarStatusOrdemPorId(int id, String novoStatus){
+    public static void atualizarStatusOrdemPorId(int id, String novoStatus) throws IOException{
         for(OrdemServico o : ListaOrdensServico){
             if(o.getId() == id){
                 o.setStatus(novoStatus);
                 System.out.println("Status da ordem de seriço atualizado para: " + novoStatus);
-                salvarOrdensServico();
+                JsonUtil.salvar("data/OrdensServico.json", ListaOrdensServico);
                 return;
             }
         }

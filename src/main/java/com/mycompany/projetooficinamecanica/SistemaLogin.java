@@ -6,12 +6,7 @@ package com.mycompany.projetooficinamecanica;
  */
 import java.util.ArrayList;//lista que pode adicionar ou remover elementos sem ter que predefinir o tamanho da lista. 
 import java.util.List;//Para trabalhar com listas.
-import java.io.FileReader; // Para ler arquivos.
-import java.io.FileWriter; // Para escrever arquivos
 import java.io.IOException; // Para lidar com exceções de entrada e saída.
-import com.google.gson.Gson; // Biblioteca Gson para manipular JSON.
-import com.google.gson.GsonBuilder; //Usado para configurar a instancia do Gason.
-import com.google.gson.reflect.TypeToken; // Para converter JSON em List<Funcionario>.
 
 /**
  * Classe responsável pelo sistema de longin.
@@ -23,10 +18,14 @@ public class SistemaLogin {
     * 
     */
    //static faz o array pertencer a classe e não a um objeto.
-   static List<Funcionario> listaUsuarios = new ArrayList<>();
+   private static List<Funcionario> listaUsuarios = new ArrayList<>();
    
    public static List<Funcionario> getListaUsuarios(){
         return listaUsuarios;
+    }
+
+    public static void setListaUsuarios(List<Funcionario> listaUsuarios) {
+        SistemaLogin.listaUsuarios = listaUsuarios;
     }
    
     /**Metodo usado para adicionar os usuarios dentro do array responsável.
@@ -49,49 +48,13 @@ public class SistemaLogin {
         }
     }
     
-    /**
-     * Carrega a lista de todos os funcionários (usuários do sistema) a partir
-     * de um arquivo JSON ("data/usuarios.json").
-     * O método delega a desserialização para a instância do Gson gerenciada
-     * pela classe {@link GerenciadorJson}, que lida com tipos complexos e herança.
-     * Em caso de falha na leitura ou se o arquivo estiver vazio, inicializa
-     * uma nova lista de funcionários para evitar erros no sistema.
-     */
-    public static void carregarUsuarios(){
-        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador centralizado
-        try(FileReader reader = new FileReader("data/usuarios.json")){
-            listaUsuarios = gson.fromJson(reader, new TypeToken<List<Funcionario>>(){}.getType());
-            if (listaUsuarios == null) {
-                listaUsuarios = new ArrayList<>();
-            }
-        } catch(IOException e){
-            System.out.println("Arquivo de usuários não encontrado. Criando nova lista.");
-            listaUsuarios = new ArrayList<>();
-        }
-    }
-    
-    /**
-     * Salva a lista de todos os funcionários (usuários do sistema) no arquivo
-     * JSON ("data/usuarios.json").
-     * Usa a instância configurada do Gson vinda do {@link GerenciadorJson} para
-     * garantir que a serialização seja feita corretamente e com formatação legível.
-     */
-    public static void salvarUsuarios(){
-        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador centralizado
-        try (FileWriter write = new FileWriter("data/usuarios.json")){
-            gson.toJson(listaUsuarios, write);
-        } catch(IOException e){
-            System.out.println("Erro ao salvar usuários: " + e.getMessage());
-        }
-    }
-    
     /**Metodo para remover um usuário do Array.
      * 
      * @param cpf 
      */
-    public static void removerUsuarioPorCpf(String cpf){
+    public static void removerUsuarioPorCpf(String cpf) throws IOException{
         boolean removido = listaUsuarios.removeIf(c -> c.getCpf().equals(cpf));
-        salvarUsuarios();
+        JsonUtil.salvar("data/usuarios.json", listaUsuarios);
         System.out.println("Usuário removido com sucesso.");
     }
     
@@ -135,12 +98,12 @@ public class SistemaLogin {
      * @param cpf
      * @param nome 
      */
-    public static void alterarNomeUsuarioPorCpf(String cpf, String nome){
+    public static void alterarNomeUsuarioPorCpf(String cpf, String nome) throws IOException{
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
                 u.setNome(nome);
                 System.out.println("Nome alterado com sucesso!");
-                salvarUsuarios();
+                JsonUtil.salvar("data/usuarios.json", listaUsuarios);;
                 break;
             }
         }
@@ -151,12 +114,12 @@ public class SistemaLogin {
      * @param cpf
      * @param novocpf 
      */
-    public static void alterarCpfUsuarioPorCpf(String cpf, String novocpf){
+    public static void alterarCpfUsuarioPorCpf(String cpf, String novocpf) throws IOException{
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
                 u.setCpf(novocpf);
                 System.out.println("Cpf alterado com sucesso!");
-                salvarUsuarios();
+                JsonUtil.salvar("data/usuarios.json", listaUsuarios);;;
                 break;
             }
         }
@@ -167,12 +130,12 @@ public class SistemaLogin {
      * @param cpf
      * @param login 
      */
-    public static void alterarLoginUsuarioPorCpf(String cpf, String login){
+    public static void alterarLoginUsuarioPorCpf(String cpf, String login) throws IOException{
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
                 u.setLogin(login);
                 System.out.println("Login alterado com sucesso!");
-                salvarUsuarios();
+                JsonUtil.salvar("data/usuarios.json", listaUsuarios);;;
                 break;
             }
         }
@@ -183,12 +146,12 @@ public class SistemaLogin {
      * @param cpf
      * @param senha 
      */
-    public static void alterarSenhaUsuarioPorCpf(String cpf, String senha){
+    public static void alterarSenhaUsuarioPorCpf(String cpf, String senha) throws IOException{
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
                 u.setSenha(senha);
                 System.out.println("Senha alterado com sucesso!");
-                salvarUsuarios();
+                JsonUtil.salvar("data/usuarios.json", listaUsuarios);;;
                 break;
             }
         }
@@ -199,12 +162,12 @@ public class SistemaLogin {
      * @param cpf
      * @param cargo 
      */
-    public static void alterarCargoUsuarioPorCpf(String cpf, String cargo){
+    public static void alterarCargoUsuarioPorCpf(String cpf, String cargo) throws IOException{
         for(Funcionario u : listaUsuarios){
             if(u.getCpf().equals(cpf)){
                 u.setCargo(cargo);
                 System.out.println("Cargo alterado com sucesso!");
-                salvarUsuarios();
+                JsonUtil.salvar("data/usuarios.json", listaUsuarios);;;
                 break;
             }
         }

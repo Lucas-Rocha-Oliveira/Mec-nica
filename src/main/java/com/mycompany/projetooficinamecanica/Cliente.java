@@ -1,13 +1,9 @@
 package com.mycompany.projetooficinamecanica;
 
+import java.io.IOException;
 import java.util.List;//Permite manipular objetos do tipo list
 import java.util.ArrayList;//Array dinâmico
-import com.google.gson.Gson; // Biblioteca Gson para manipular JSON.
-import com.google.gson.GsonBuilder; //Usado para configurar a instancia do Gason.
-import com.google.gson.reflect.TypeToken; // Para converter JSON em List<CLiente>.
-import java.io.FileReader; //Para ler arquivos
-import java.io.FileWriter; // para escrever arquivos.
-import java.io.IOException; // Para lidar com exceções de entrada e saída.
+
 
 /**
  *
@@ -22,14 +18,8 @@ public class Cliente extends Pessoa{
     String endereco;
     String telefone;
     
-    static List<Cliente> listaClientes = new ArrayList<>();
+    private static List<Cliente> listaClientes = new ArrayList<>();
     
-    /**Construtor vazio para o funcionamento correto da conversão da instância para json.
-     * 
-     */
-    Cliente(){
-        super("","");
-    };
     
     Cliente(String nome, String cpf, String endereco, String telefone){
         super(nome, cpf);
@@ -61,36 +51,15 @@ public class Cliente extends Pessoa{
     public String toString(){
         return super.toString() + "\nEndereço: " + getEndereco() + "\nTelefone: " + getTelefone() + "\n";
     }
-    
-    /**Metodo usado para carregar os clientes do arquivo json para o array.
-     * 
-     */
-     /**
-     * Carrega a lista de clientes a partir de um arquivo JSON.
-     * Utiliza o GerenciadorJson para obter uma instância configurada do Gson,
-     * garantindo que todos os TypeAdapters necessários sejam utilizados.
-     * Se o arquivo não for encontrado ou estiver vazio, uma nova lista de clientes
-     * é criada para evitar erros de NullPointerException.
-     */
-    public static void carregarClientes(){
-        // Obtém a instância customizada e centralizada do Gson.
-        Gson gson = GerenciadorJson.getGson(); 
-        
-        // Usa um try-with-resources para garantir que o leitor de arquivo seja fechado automaticamente.
-        try(FileReader reader = new FileReader("data/clientes.json")){
-            // Converte o texto do JSON para uma lista de objetos Cliente.
-            listaClientes = gson.fromJson(reader, new TypeToken<List<Cliente>>(){}.getType());
-            
-            // Verificação de segurança: se o arquivo JSON estiver vazio, gson.fromJson retorna null.
-            if (listaClientes == null) {
-                listaClientes = new ArrayList<>();
-            }
-        } catch(IOException e){
-            // Informa ao usuário caso o arquivo não exista e inicializa uma lista vazia.
-            System.out.println("Arquivo de clientes não encontrado. Criando nova lista.");
-            listaClientes = new ArrayList<>();
-        }
+
+    public static List<Cliente> getListaClientes() {
+        return listaClientes;
     }
+
+    public static void setListaClientes(List<Cliente> listaClientes) {
+        Cliente.listaClientes = listaClientes;
+    }
+    
     /**Metodo suado para listar os clientes armazenados no Array de clientes.
      * 
      */
@@ -111,30 +80,16 @@ public class Cliente extends Pessoa{
         listaClientes.add(cliente);
     }
     
-    /**
-     * Salva a lista de clientes atual em um arquivo JSON.
-     * Este método utiliza uma instância do Gson fornecida pelo GerenciadorJson
-     * para garantir que a serialização seja feita corretamente.
-     */
-    public static void salvarClientes(){
-        Gson gson = GerenciadorJson.getGson(); // Usa o gerenciador
-        try(FileWriter writer = new FileWriter("data/clientes.json")){
-            gson.toJson(listaClientes, writer);
-        } catch(IOException e){
-            System.out.println("Erro ao escrever o arquivo de clientes: " + e.getMessage());
-        }
-    }
-    
     /**Metodo responsável por apagar um cliente.
      * 
      * @param cpf 
      */
-    public static void removerClientePorCpf(String cpf){
+    public static void removerClientePorCpf(String cpf) throws IOException{
         boolean removido = listaClientes.removeIf(c -> c.getCpf().equals(cpf));
         
         if(removido){
             System.out.println("Cliente removido com sucesso!");
-            salvarClientes();
+            JsonUtil.salvar("data/clientes.json", listaClientes);
         }else{
             System.out.println("ERRO - Cliente não encontrado");
         }
@@ -162,14 +117,14 @@ public class Cliente extends Pessoa{
      * @param cpf
      * @param nome 
      */
-    public static void editarNomeCliente(String cpf, String nome){
+    public static void editarNomeCliente(String cpf, String nome) throws IOException{
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
                 u.setNome(nome);
                 break;
             }
         }
-        salvarClientes();
+        JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Nome alterado com sucesso!");
     }
     
@@ -178,14 +133,14 @@ public class Cliente extends Pessoa{
      * @param cpf
      * @param novocpf 
      */
-    public static void editarCpfCliente(String cpf, String novocpf){
+    public static void editarCpfCliente(String cpf, String novocpf) throws IOException{
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
                 u.setCpf(novocpf);
                 break;
             }
         }
-        salvarClientes();
+        JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Cpf alterado com sucesso!");
     }
     
@@ -194,14 +149,14 @@ public class Cliente extends Pessoa{
      * @param cpf
      * @param endereco 
      */
-    public static void editarEnderecoCliente(String cpf, String endereco){
+    public static void editarEnderecoCliente(String cpf, String endereco) throws IOException{
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
                 u.setEndereco(endereco);
                 break;
             }
         }
-        salvarClientes();
+        JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Endereço alterado com sucesso!");
     }
     
@@ -210,14 +165,14 @@ public class Cliente extends Pessoa{
      * @param cpf
      * @param telefone 
      */
-    public static void editarTelefoneCliente(String cpf, String telefone){
+    public static void editarTelefoneCliente(String cpf, String telefone) throws IOException{
         for(Cliente u : listaClientes){
             if(u.getCpf().equals(cpf)){
                 u.setTelefone(telefone);
                 break;
             }
         }
-        salvarClientes();
+        JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Telefone alterado com sucesso!");
     }
     

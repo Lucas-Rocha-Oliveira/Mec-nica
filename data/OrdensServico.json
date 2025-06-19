@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": 1,
+    "descricaoProblema": "queima da junta do cabeçote",
+    "solucao": "",
+    "status": "Aguardando Análise",
+    "dataEHora": "10/06/2025 15:10",
+    "cliente": {
+      "endereco": "R.Dom Pedro, Bela Vista, Diamantina-MG",
+      "telefone": "(38)9-9876-9868",
+      "nome": "Cecilia Ferreira Silva",
+      "cpf": "987.234.567-98"
+    },
+    "mecanico": {
+      "login": "carlos.santos",
+      "senha": "senhaForte123",
+      "cargo": "Mecanico",
+      "nome": "Carlos Santos",
+      "cpf": "111.222.333-44"
+    },
+    "servicosRealizados": [],
+    "produtosUtilizados": []
+  }
+]

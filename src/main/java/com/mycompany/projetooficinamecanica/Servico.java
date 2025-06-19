@@ -9,20 +9,26 @@ package com.mycompany.projetooficinamecanica;
  * @author Lucas
  */
 public enum Servico {
-    TROCA_DE_PNEU("Troca de Pneu", 100),
-    ALINHAMENTO("Alinhamento", 200),
-    BALANCEMANTO("Balanceamento", 150),
-    REVISAO_DOS_FREIOS("Revisao dos freios", 160),
-    REVISAO_DO_SISTEMA_DE_ARREFECIMENTO("Revisão do sistema de arrefecimento", 130),
-    TROCA_DE_PASTILHAS("Troca de pastilhas", 125),
-    TROCA_CORREIA_DENTADA("Troca da correia dentada", 350);
+    TROCA_DE_PNEU("Troca de Pneu", 100, 45),
+    ALINHAMENTO("Alinhamento", 200, 60),
+    BALANCEMANTO("Balanceamento", 150, 60),
+    REVISAO_DOS_FREIOS("Revisao dos freios", 160, 50),
+    REVISAO_DO_SISTEMA_DE_ARREFECIMENTO("Revisão do sistema de arrefecimento", 130, 180),
+    TROCA_DE_PASTILHAS("Troca de pastilhas", 125, 90),
+    TROCA_CORREIA_DENTADA("Troca da correia dentada", 350, 60);
     
     private final String descricao;
-    private final double preco;   
+    private final double preco;  
+    private final int duracaoEstimadaEmMinutos;
         
-    Servico(String descricao, double preco){
+    Servico(String descricao, double preco, int duracaoEstimadaEmMinutos){
         this.descricao = descricao;
         this.preco = preco;
+        this.duracaoEstimadaEmMinutos = duracaoEstimadaEmMinutos;
+    }
+
+    public int getDuracaoEstimadaEmMinutos() {
+        return duracaoEstimadaEmMinutos;
     }
 
     public String getDescricao() {

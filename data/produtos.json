@@ -1,0 +1,16 @@
+[
+  {
+    "codigo": 1,
+    "nome": "Oleo 15w30",
+    "preco": 42.0,
+    "quantidadeEmEstoque": 14,
+    "categoria": "CONSUMIVEL"
+  },
+  {
+    "codigo": 2,
+    "nome": "Oleo 15w40",
+    "preco": 40.0,
+    "quantidadeEmEstoque": 14,
+    "categoria": "CONSUMIVEL"
+  }
+]

@@ -1,16 +1,18 @@
 [
   {
+    "type": "mecanico",
+    "login": "carlos.santos",
+    "senha": "senhaForte123",
+    "cargo": "Mecanico",
+    "nome": "Carlos Santos",
+    "cpf": "111.222.333-44"
+  },
+  {
+    "type": "gerente",
     "login": "admin",
     "senha": "admin",
     "cargo": "Gerente",
-    "nome": "Ademar",
-    "cpf": "345.678.543-34"
-  },
-  {
-    "login": "pepedro34",
-    "senha": "batata67",
-    "cargo": "Mecanico",
-    "nome": "Pedro",
-    "cpf": "098-456-432"
+    "nome": "Admin da Silva",
+    "cpf": "000.000.000-00"
   }
 ]

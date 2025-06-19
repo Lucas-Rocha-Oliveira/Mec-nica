@@ -1,5 +1,7 @@
 package com.mycompany.projetooficinamecanica;
 
+import static com.mycompany.projetooficinamecanica.Estoque.listaDeProdutos;
+import java.io.IOException;
 import java.util.Scanner; //Permite ler dados digitados pelo usuário.
 
 /**
@@ -20,7 +22,7 @@ public class Menu {
     /**Metodo responsável pelo processo de login do usuário no sistema.
      * 
      */
-    public static void menuLogin(){
+    public static void menuLogin() throws IOException{
         while (true){
             System.out.println("--- MECÂNICA ---");
             System.out.print("Login: ");
@@ -41,7 +43,7 @@ public class Menu {
     /**Metodo responsável pelo menu principal
      * 
      */
-    public static void menuPrincipal(){
+    public static void menuPrincipal() throws IOException{
         System.out.println("--- Sistema Oficina Mecânica ---");
         System.out.println("1. Login");
         System.out.println("0. Sair");
@@ -57,7 +59,7 @@ public class Menu {
         }
     }
     
-    public static void menuEpecializado(){
+    public static void menuEpecializado() throws IOException{
         if(usuarioLogado!=null){
             if(usuarioLogado.getCargo().equals("Gerente")){
                 menuGerente();
@@ -72,7 +74,7 @@ public class Menu {
     /**Metodo responsável pelo menu de gerente
      * 
      */
-    public static void menuGerente(){
+    public static void menuGerente() throws IOException{
         System.out.println("--- Menu Gerente ---");
         System.out.println("1. Clientes");
         System.out.println("2. Veiculos");
@@ -95,7 +97,7 @@ public class Menu {
     /**Metodo responsável pelo menu de gerente
      * 
      */
-    public static void menuMecanico(){
+    public static void menuMecanico() throws IOException{
         System.out.println("--- Menu Mecânico ---");
         System.out.println("1. Ver minhas ordens de serviço");
         System.out.println("2. Atualizar status de ordem");
@@ -113,7 +115,7 @@ public class Menu {
         }
     }
     
-    public static void menuEstoque(){
+    public static void menuEstoque() throws IOException{
         System.out.println("--- Menu Estoque ---");
         System.out.println("1. Consultar Estoque completo");
         System.out.println("2. Adicionar um produto ao catálogo");//Permite cadastrar um item que a oficina nunca vendeu antes.
@@ -131,7 +133,7 @@ public class Menu {
         }
     }
     
-    public static void menuAdicionarProduto(){
+    public static void menuAdicionarProduto() throws IOException{
        System.out.println("--- Adicionar Produto ---"); 
        System.out.print("Codigo: "); 
        int codigo = scanner.nextInt();
@@ -165,14 +167,14 @@ public class Menu {
             case "S":
                 menuAdicionarProduto();
             case "N": 
-                Estoque.salvarProdutos();
+                JsonUtil.salvar("data/produtos.json", listaDeProdutos);
                 System.out.println("Voltando para o menu do Estoque.");
                 menuEstoque();
         }
     }
     
     
-    public static void menuAtualizarOrdemServicoPorMecanico(){
+    public static void menuAtualizarOrdemServicoPorMecanico() throws IOException{
         System.out.println("--- Atualizar Ordem de Serviço ----");
         while(true){ 
             System.out.print("ID: ");
@@ -202,7 +204,7 @@ public class Menu {
     /*8Metodo responsável pelo menu d usuário com cargo Caixa
     
     */
-    public static void menuCaixa(){
+    public static void menuCaixa() throws IOException{
         System.out.println("--- Menu Caixa ---");
         System.out.println("1. Clientes");
         System.out.println("2. Ordem de serviço");
@@ -220,14 +222,14 @@ public class Menu {
         }
     }
     
-    public static void menuListarOrdensServicosPorCpf(String cpf){
+    public static void menuListarOrdensServicosPorCpf(String cpf) throws IOException{
         System.out.println("--- Ordens de serviços ---");
         System.out.println("--- " + usuarioLogado.getNome() + " ---");
         OrdemServico.listarOrdensServicosPorCpf(cpf);
         menuMecanico();
     }
     
-    public static void menuOrdemServico(){
+    public static void menuOrdemServico() throws IOException{
         System.out.println("--- Ordens de serviço ---");
         System.out.println("1. Abrir ordem de serviço");
         System.out.println("2. Consultar ordens de serviços");
@@ -244,7 +246,7 @@ public class Menu {
         } 
     }
     
-    public static void menuAtualizarOrdemServico(){
+    public static void menuAtualizarOrdemServico() throws IOException{
         System.out.println("=== ATUALIZAR STATUS DA ORDEM DE SERVIÇO ===");
         System.out.print("Digite o ID da ordem de serviço: ");
         int id = scanner.nextInt();
@@ -264,7 +266,7 @@ public class Menu {
         }
     }
     
-    public static void menuCriarOrdemServico(){
+    public static void menuCriarOrdemServico() throws IOException{
        /** Obter CPF do cliente e validar
         * 
         */
@@ -304,15 +306,15 @@ public class Menu {
         Veiculo veiculo = null;
         while (veiculo == null) {
             System.out.println("Selecione um veículo:");
-            for (int i = 0; i < Veiculo.listaVeiculos.size(); i++) {
-                Veiculo v = Veiculo.listaVeiculos.get(i);
+            for (int i = 0; i < Veiculo.getListaVeiculos().size(); i++) {
+                Veiculo v = Veiculo.getListaVeiculos().get(i);
                 System.out.println((i + 1) + ". " + v.getPlaca() + " - " + v.getModelo());
             }
             System.out.print("Escolha o número do veículo: ");
             int veiculoEscolhido = scanner.nextInt();
             scanner.nextLine(); // Limpa o buffer
-            if (veiculoEscolhido > 0 && veiculoEscolhido <= Veiculo.listaVeiculos.size()) {
-                veiculo = Veiculo.listaVeiculos.get(veiculoEscolhido - 1);
+            if (veiculoEscolhido > 0 && veiculoEscolhido <= Veiculo.getListaVeiculos().size()) {
+                veiculo = Veiculo.getListaVeiculos().get(veiculoEscolhido - 1);
             } else {
                 System.out.println("Veículo inválido, tente novamente.");
             }
@@ -355,7 +357,7 @@ public class Menu {
         }
     }
     
-    public static void menuVeiculo(){
+    public static void menuVeiculo() throws IOException{
       System.out.println("--- Veiculos ---");
       System.out.println("1. Cadastrar veiculo");
       System.out.println("2. Remover veiculo");
@@ -374,7 +376,7 @@ public class Menu {
         }
     }
     
-    public static void menuRemoverVeiculo(){
+    public static void menuRemoverVeiculo() throws IOException{
         System.out.println("--- Remover Veiculo ---");
         while (true){
             System.out.print("Placa: ");
@@ -398,7 +400,7 @@ public class Menu {
         
     };
     
-    public static void menuCadastrarVeiculo(){
+    public static void menuCadastrarVeiculo() throws IOException{
        System.out.println("--- Castrar Veículo ---");
        System.out.print("Placa: ");
        String placa = scanner.nextLine();
@@ -420,14 +422,14 @@ public class Menu {
            System.out.println("Deseja Cadastrar outro veículo?[S/N]");
            String opcao = scanner.nextLine().toUpperCase();
            if(opcao.equals("S")){
-               Veiculo.salvarVeiculos();
+               JsonUtil.salvar("data/veiculos.json", Veiculo.getListaVeiculos());
                menuCadastrarVeiculo();
            }else if(opcao.equals("N")){
-               Veiculo.salvarVeiculos();
+               JsonUtil.salvar("data/veiculos.json", Veiculo.getListaVeiculos());
                menuEpecializado();
            }else{
                System.out.println("Entrada inválida, voltando para o menu pricipal.");
-               Veiculo.salvarVeiculos();
+               JsonUtil.salvar("data/veiculos.json", Veiculo.getListaVeiculos());
                menuEpecializado();
            }
        }
@@ -437,7 +439,7 @@ public class Menu {
     /**Metodo responsável pelo menu de clientes
      * 
      */
-    public static void menuClientes(){
+    public static void menuClientes() throws IOException{
         System.out.println("--- Clientes ---");
         System.out.println("1. Listar");
         System.out.println("2. Cadastrar");
@@ -463,7 +465,7 @@ public class Menu {
     /**Metodo responsável pelo menu de cadastro de clientes
      * 
      */
-    public static void menuCadastrarCliente(){
+    public static void menuCadastrarCliente() throws IOException{
         System.out.println("--- Cadastro de cliente ---");
         System.out.print("Nome: ");
         String nome = scanner.nextLine();
@@ -485,18 +487,18 @@ public class Menu {
         if(opcao.equals("S")){
             menuCadastrarCliente();
         }else if (opcao.equals("N")){
-            Cliente.salvarClientes();
+            JsonUtil.salvar("data/clientes.json", Cliente.getListaClientes());
             menuClientes();
         } else{
             System.out.println("Opção inválida, voltando para o menu principal");
-            Cliente.salvarClientes();
+            JsonUtil.salvar("data/clientes.json", Cliente.getListaClientes());
             menuEpecializado();
         }
     }
     
     /*8Metodo responsável pelo menu de remoção de cliente.
     */
-    public static void menuRemoverCliente(){
+    public static void menuRemoverCliente() throws IOException{
         System.out.println("--- Remover Cliente ---");
         System.out.print("CPF do cliente: ");
         String cpf = scanner.nextLine();
@@ -516,7 +518,7 @@ public class Menu {
     /**Metodo responsável pelo menu de edição de dados do cliente.
      * 
      */
-    public static void menuEditarCliente(){
+    public static void menuEditarCliente() throws IOException{
         System.out.println("--- Editar Cliente ---");
         String cpf = menuVerificarUsuarioPorCpf();
         menuOpcoesEdicaoCliente(cpf);
@@ -526,7 +528,7 @@ public class Menu {
      * 
      * @param cpf do cliente
      */
-    public static void menuOpcoesEdicaoCliente(String cpf){
+    public static void menuOpcoesEdicaoCliente(String cpf) throws IOException{
         System.out.println("1. Nome");
         System.out.println("2. CPF");
         System.out.println("3. Endereço");
@@ -577,7 +579,7 @@ public class Menu {
      * 
      * @param cpf 
      */
-    public static void menuContinuidadeEdicaoCliente(String cpf){
+    public static void menuContinuidadeEdicaoCliente(String cpf) throws IOException{
         System.out.println("Continuar com a edição do cliente atual?\n"
                 + "S. Sim\nN. Editar outro usuário\n0. Menu principal");
         String opcao = scanner.nextLine().toUpperCase();
@@ -597,7 +599,7 @@ public class Menu {
      * 
      * @return 
      */
-    public static String menuVerificarUsuarioPorCpf(){
+    public static String menuVerificarUsuarioPorCpf() throws IOException{
         while (true){
             System.out.print("CPF do cliente: ");
             String cpf = scanner.nextLine();
@@ -616,7 +618,7 @@ public class Menu {
     /**Metodo responsável pelo menu de usuários.
      * 
      */
-    public static void menuUsuarios(){
+    public static void menuUsuarios() throws IOException{
         System.out.println("--- Usuários ---");
         System.out.println("1. Listar");
         System.out.println("2. Cadastrar");
@@ -645,7 +647,7 @@ public class Menu {
     /**Metodo responsável pelo menu de edição de Usuário
      * 
      */
-    public static void menuEdicaoUsuario(){
+    public static void menuEdicaoUsuario() throws IOException{
         System.out.println("--- Edição Usuário ---");
         String cpf = menuVerificarUsuario();
         menuOpcoesEdicaoUsuario(cpf);
@@ -655,7 +657,7 @@ public class Menu {
      * 
      * @param cpf 
      */
-    public static void menuOpcoesEdicaoUsuario(String cpf){
+    public static void menuOpcoesEdicaoUsuario(String cpf) throws IOException{
         System.out.println("1. Nome");
         System.out.println("2. CPF");
         System.out.println("3. Login");
@@ -711,7 +713,7 @@ public class Menu {
      * 
      * @param cpf 
      */
-    public static void menuContinuidadeEdicaoUsuario(String cpf){
+    public static void menuContinuidadeEdicaoUsuario(String cpf) throws IOException{
         System.out.print("Deseja continuar a editar o usuário atual?\n"
                 + "S. Sim\nN. Editar outro usuário\n0. Menu Principal");
         String opcao = scanner.nextLine().toUpperCase();
@@ -730,7 +732,7 @@ public class Menu {
     /**Metodo responsável pelo menu de remoção de usuário.
      * 
      */
-    public static void menuRemoverUsuario(){
+    public static void menuRemoverUsuario() throws IOException{
         System.out.println("--- Remove Usuário ---");
         String cpf = menuVerificarUsuario();
         SistemaLogin.removerUsuarioPorCpf(cpf);
@@ -754,7 +756,7 @@ public class Menu {
     /**Metodo responsável pelo menu de cadastro de usuários.
      * 
      */
-    public static void menuCadastrarUsuario(){
+    public static void menuCadastrarUsuario() throws IOException{
         System.out.println("--- Cadastro de Usuário ---");
         System.out.print("Nome: ");
         String nome = scanner.nextLine();
@@ -785,10 +787,10 @@ public class Menu {
         System.out.print("Quer cadastrar outro usuário?[S/N]: ");
         String opcao = scanner.nextLine().toUpperCase();
         if(opcao.equals("S")){
-            SistemaLogin.salvarUsuarios();
+            JsonUtil.salvar("data/usuarios.json", SistemaLogin.getListaUsuarios());
             menuCadastrarUsuario();
         }else if (opcao.equals("N")){
-            SistemaLogin.salvarUsuarios();
+            JsonUtil.salvar("data/usuarios.json", SistemaLogin.getListaUsuarios());
             menuUsuarios();
         } 
     }    

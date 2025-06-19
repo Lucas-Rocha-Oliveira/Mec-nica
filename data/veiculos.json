@@ -1,1 +1,41 @@
-[]
+[
+  {
+    "placa": "QWZ-1234",
+    "modelo": "Uno",
+    "marca": "Fiat",
+    "cor": "Vermelho",
+    "ano": 2018,
+    "proprietario": {
+      "endereco": "Rua das Flores, 10",
+      "telefone": "(31) 98877-6655",
+      "nome": "Ana Paula",
+      "cpf": "987.654.321-00"
+    }
+  },
+  {
+    "placa": "RTY-5678",
+    "modelo": "Onix",
+    "marca": "Chevrolet",
+    "cor": "Preto",
+    "ano": 2020,
+    "proprietario": {
+      "endereco": "Avenida Principal, 500",
+      "telefone": "(31) 91122-3344",
+      "nome": "Marcos Andrade",
+      "cpf": "987.234.567-98"
+    }
+  },
+  {
+    "placa": "ABC-9876",
+    "modelo": "Gol",
+    "marca": "Volkswagen",
+    "cor": "Branco",
+    "ano": 2019,
+    "proprietario": {
+      "endereco": "Rua dos Coqueiros, 25",
+      "telefone": "(31) 99988-7766",
+      "nome": "Juliana Costa",
+      "cpf": "456.789.123-11"
+    }
+  }
+]
