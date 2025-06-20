@@ -7,6 +7,7 @@ package com.mycompany.projetooficinamecanica;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  *
@@ -20,4 +21,13 @@ public class Utilidades {
     public static String getDataAtualFormatada(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")); 
     }
+    
+    public static LocalDateTime gerarDataHoraPorString(String data) throws DateTimeParseException {
+        
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        
+        return LocalDateTime.parse(data, formatador);
+        
+    }
+    
 }

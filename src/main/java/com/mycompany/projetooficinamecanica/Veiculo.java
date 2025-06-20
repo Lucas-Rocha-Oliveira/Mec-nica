@@ -143,4 +143,13 @@ public class Veiculo {
         }
     }
     
+    public static Veiculo retornaVeiculoPorPlaca(String placa){
+        for(Veiculo v: listaVeiculos){
+            if(v.getPlaca().equals(placa)){
+                return v;
+            }
+        }
+        return null;
+    }
+    
 }

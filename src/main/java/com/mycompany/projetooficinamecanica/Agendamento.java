@@ -26,6 +26,14 @@ public class Agendamento {
         this.idElevador = idElevador;
     }
 
+    public LocalDateTime getDataHoraFim() {
+        return dataHoraFim;
+    }
+
+    public int getIdElevador() {
+        return idElevador;
+    }
+
     public LocalDateTime getDataHoraInicio() {
         return dataHoraInicio;
     }

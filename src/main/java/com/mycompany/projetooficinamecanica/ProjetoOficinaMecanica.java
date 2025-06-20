@@ -14,11 +14,11 @@ public class ProjetoOficinaMecanica {
 
     public static void main(String[] args) throws IOException {
         
-    JsonUtil.carregarJsons();
+    //JsonUtil.carregarJsons();
         
-    Menu.menuPrincipal();
+    //Menu.menuPrincipal();
        
-       
+    Servico.listarServicos();
       
        
     }

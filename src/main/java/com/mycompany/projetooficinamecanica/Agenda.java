@@ -37,5 +37,24 @@ public class Agenda {
     public static boolean verificarDiponibilidade(LocalDateTime dataHoraInicioProposta, int duracaoProposta, int idElevadorProposto){
         LocalDateTime dataHoraFimProposta = dataHoraInicioProposta.plusMinutes(duracaoProposta);
         
+        for(Agendamento agendamentoExistente : compromissos){
+           
+            if(agendamentoExistente.getIdElevador() == idElevadorProposto){
+              
+                LocalDateTime inicioExixtente = agendamentoExistente.getDataHoraInicio();
+                LocalDateTime fimExistente = agendamentoExistente.getDataHoraFim();
+                
+                boolean conflito = dataHoraInicioProposta.isBefore(fimExistente) && dataHoraFimProposta.isAfter(inicioExixtente);
+                
+                if(conflito){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public static void adicionarCompromisso(Agendamento agendamento){
+        compromissos.add(agendamento);
     }
 }
