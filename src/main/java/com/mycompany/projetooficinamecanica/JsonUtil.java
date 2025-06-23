@@ -6,11 +6,16 @@ package com.mycompany.projetooficinamecanica;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +37,17 @@ public class JsonUtil {
         
         return new GsonBuilder()
             .registerTypeAdapterFactory(funcionarioFactory)
+            .registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+                @Override
+                public void write(JsonWriter out, LocalDateTime value) throws IOException {
+                    out.value(value.toString());
+                }
+
+                @Override
+                public LocalDateTime read(JsonReader in) throws IOException {
+                    return LocalDateTime.parse(in.nextString());
+                }
+            })
             .setPrettyPrinting()
             .create();
     }
@@ -52,8 +68,16 @@ public class JsonUtil {
     }
     
     public static <T> List<T> carregarLista(String caminho, Type tipo) throws IOException{
-        try(FileReader reader = new FileReader(caminho)){
-            return gson.fromJson(reader, tipo);
+        try (FileReader reader = new FileReader(caminho)) {
+            List<T> listaCarregada = gson.fromJson(reader, tipo);
+            if (listaCarregada == null) {
+                return new ArrayList<>();
+            } else {
+                return listaCarregada;
+            }
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado: " + caminho + ". Criando nova lista.");
+            return new ArrayList<>();
         }
     }
     
@@ -64,10 +88,12 @@ public class JsonUtil {
         
         Estoque.setListaDeProdutos(carregarLista("data/produtos.json", new TypeToken<List<Produto>>(){}.getType()));
         
-        GerenciamentoIDs.setContadores(carregar("dados/ContadorID.json", new TypeToken<Map<String, Integer>>(){}.getType()));
+        GerenciamentoIDs.setContadores(carregar("data/ContadorID.json", new TypeToken<Map<String, Integer>>(){}.getType()));
         
         OrdemServico.setListaOrdensServico(carregarLista("data/OrdensServico.json", new TypeToken<List<OrdemServico>>(){}.getType()));
         
         Veiculo.setListaVeiculos(carregarLista("data/veiculos.json", new TypeToken<List<Veiculo>>(){}.getType()));
+        
+        Agenda.setCompromissos(carregarLista("data/Agenda.json", new TypeToken<List<Agendamento>>(){}.getType()));
     }
 }

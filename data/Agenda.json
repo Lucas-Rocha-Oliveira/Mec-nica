@@ -1,0 +1,39 @@
+[
+  {
+    "id": 2,
+    "ordemServico": {
+      "id": 1,
+      "cliente": {
+        "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
+        "telefone": "(38)9-8887-7654",
+        "nome": "Maria Aparecida",
+        "cpf": "345.456.432-56"
+      },
+      "mecanico": null,
+      "descricaoProblema": "Direção puchando para o lado",
+      "solucao": null,
+      "status": "Aguardando Inspeção",
+      "dataEHora": "23/06/2025 16:11",
+      "veiculo": {
+        "placa": "QWZ-1234",
+        "modelo": "Uno",
+        "marca": "Fiat",
+        "cor": "Vermelho",
+        "ano": 2018,
+        "proprietario": {
+          "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
+          "telefone": "(38)9-8887-7654",
+          "nome": "Maria Aparecida",
+          "cpf": "345.456.432-56"
+        }
+      },
+      "servicosRealizados": [
+        "DIAGNOSTICO_INICIAL"
+      ],
+      "produtosUtilizados": []
+    },
+    "dataHoraInicio": "2025-07-12T13:00",
+    "dataHoraFim": "2025-07-12T14:00",
+    "idElevador": 1
+  }
+]

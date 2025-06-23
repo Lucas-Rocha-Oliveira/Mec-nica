@@ -6,6 +6,7 @@ package com.mycompany.projetooficinamecanica;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -30,6 +31,14 @@ public class Agendamento {
         return dataHoraFim;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public OrdemServico getOrdemServico() {
+        return ordemServico;
+    }
+
     public int getIdElevador() {
         return idElevador;
     }
@@ -44,5 +53,15 @@ public class Agendamento {
             duracaoTotal += s.getDuracaoEstimadaEmMinutos();
         }
         return duracaoTotal;
+    }
+    
+    @Override 
+    public String toString(){
+        return "------------------------\nAgendamento ID: " + getId() + "\nLocal: Elevador " + getIdElevador()
+                + "\nHorário: " + getDataHoraInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " das " +
+                getDataHoraInicio().format(DateTimeFormatter.ofPattern("HH:mm")) + " as " + getDataHoraFim().format(DateTimeFormatter.ofPattern("HH:mm")) +
+                "\nCliente: " + getOrdemServico().getCliente().getNome() + " (Veículo: " + getOrdemServico().getVeiculo().getPlaca() + ")" +
+                "\nServiço: " + getOrdemServico().getServicosRealizados().get(0).getDescricao() + 
+                "\n------------------------";
     }
 }

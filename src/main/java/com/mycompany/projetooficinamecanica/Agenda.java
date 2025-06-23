@@ -4,6 +4,7 @@
  */
 package com.mycompany.projetooficinamecanica;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,10 @@ import java.util.List;
  */
 public class Agenda {
     private static List<Agendamento> compromissos = new ArrayList<>();
+
+    public static void setCompromissos(List<Agendamento> compromissos) {
+        Agenda.compromissos = compromissos;
+    }
     
     public static void verAgenda(){
         System.out.println("--- Agenda Oficina ---");
@@ -33,8 +38,12 @@ public class Agenda {
         
         System.out.println("-------------------");
     }
+
+    public static List<Agendamento> getCompromissos() {
+        return compromissos;
+    }
     
-    public static boolean verificarDiponibilidade(LocalDateTime dataHoraInicioProposta, int duracaoProposta, int idElevadorProposto){
+    public static boolean verificarDisponibilidade(LocalDateTime dataHoraInicioProposta, int duracaoProposta, int idElevadorProposto){
         LocalDateTime dataHoraFimProposta = dataHoraInicioProposta.plusMinutes(duracaoProposta);
         
         for(Agendamento agendamentoExistente : compromissos){
@@ -54,7 +63,7 @@ public class Agenda {
         return true;
     }
     
-    public static void adicionarCompromisso(Agendamento agendamento){
+    public static void adicionarCompromisso(Agendamento agendamento) throws IOException{
         compromissos.add(agendamento);
     }
 }

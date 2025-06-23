@@ -83,7 +83,8 @@ public class Menu {
         System.out.println("3. Funcionarios");
         System.out.println("4. Ordens de Serviços");
         System.out.println("5. Estoque");
-        System.out.println("6. Logout");
+        System.out.println("6. Agenda");
+        System.out.println("7. Logout");
         int opcao = scanner.nextInt();
         scanner.nextLine();
         switch(opcao){
@@ -92,7 +93,8 @@ public class Menu {
             case 3 -> menuUsuarios();
             case 4 -> menuOrdemServico();
             case 5 -> menuEstoque();
-            case 6 -> menuPrincipal();
+            case 6 -> menuAgenda();
+            case 7 -> menuPrincipal();
         }
     }
     
@@ -103,18 +105,43 @@ public class Menu {
         System.out.println("--- Menu Mecânico ---");
         System.out.println("1. Ver minhas ordens de serviço");
         System.out.println("2. Atualizar status de ordem");
-        System.out.println("3. Veiculos");
-        System.out.println("4. Estoque");
-        System.out.println("5. logout");
+        System.out.println("3. Agenda");
+        System.out.println("4. Veiculos");
+        System.out.println("5. Estoque");
+        System.out.println("6. logout");
         int opcao = scanner.nextInt();
         scanner.nextLine();
         switch(opcao){
             case 1 -> menuListarOrdensServicosPorCpf(usuarioLogado.getCpf());
             case 2 -> menuAtualizarOrdemServicoPorMecanico();
-            case 3 -> menuVeiculo();
-            case 4 -> menuEstoque();
-            case 5 -> menuPrincipal();
+            case 3 -> menuAgenda();
+            case 4 -> menuVeiculo();
+            case 5 -> menuEstoque();
+            case 6 -> menuPrincipal();
         }
+    }
+    
+    public static void menuAgenda() throws IOException{
+        System.out.println("--- Menu Agenda ---");
+        System.out.println("1. Fazer um agendamento.");
+        System.out.println("2. Ver Agenda.");
+        System.out.println("3. Menu Principal.");
+        
+        int opcao = scanner.nextInt();
+        
+        switch(opcao){
+            case 1 -> menuAgendamentoPrevio();
+            case 2 -> {
+                Agenda.verAgenda();
+                menuAgenda();
+            }
+            case 3 -> menuEpecializado();
+        }
+        
+    }
+    
+    public static void menuCancelarAgendamento(){
+        
     }
     
     public static void menuAgendamentoPrevio() throws IOException{
@@ -129,7 +156,7 @@ public class Menu {
             }
         }
         
-        Veiculo veiculo;
+        Veiculo veiculo = null;
         while(true){
             System.out.print("Placa do veiculo: ");
             String placa = scanner.nextLine();
@@ -141,20 +168,6 @@ public class Menu {
         
         System.out.print("Problema relatado pelo cliente: ");
         String descricaoProblema = scanner.nextLine();
-        System.out.print("--- Insira a hora e a data do agendamento ---");
-        LocalDateTime dataHoraProposta = null;
-        while(true){
-            System.out.print("Use o formato exato 'dd/MM/yyyy HH:mm'");
-            String  dataHoraDigitada = scanner.nextLine();
-            try{
-                dataHoraProposta = Utilidades.gerarDataHoraPorString(dataHoraDigitada);
-                break;
-            }catch(DateTimeParseException e){
-                System.out.println("ERRO: O formato da data inserido está incorreto.");
-            }
-        }
-        
-        System.out.println("Data e hora válidas: " + dataHoraProposta);
         
         System.out.println("Qual motivo do Agendamento?");
         System.out.println("1. Diagnóstico\n2.Serviço especifico.");
@@ -172,7 +185,7 @@ public class Menu {
         Servico servicoPrincipal = null;
         switch(opcao){
             case 1: 
-                servicoPrincipal = Servico.DIAGNOSTICO_INICAL;
+                servicoPrincipal = Servico.DIAGNOSTICO_INICIAL;
                 break;
             case 2:
                 Servico.listarServicos();
@@ -195,7 +208,7 @@ public class Menu {
                         servicoPrincipal = Servico.ALINHAMENTO;
                         break;
                     case 3:
-                        servicoPrincipal = Servico.BALANCEMANTO;
+                        servicoPrincipal = Servico.BALANCIAMENTO;
                         break;
                     case 4:
                         servicoPrincipal = Servico.REVISAO_DOS_FREIOS;
@@ -210,14 +223,14 @@ public class Menu {
                         servicoPrincipal = Servico.TROCA_CORREIA_DENTADA;
                         break;
                     case 8:
-                        servicoPrincipal = Servico.DIAGNOSTICO_INICAL;
+                        servicoPrincipal = Servico.DIAGNOSTICO_INICIAL;
                         break;
                 }  
         }
        
         int idElevadorProposto = 0;
         
-        if(servicoPrincipal == Servico.BALANCEMANTO || servicoPrincipal == Servico.ALINHAMENTO){
+        if(servicoPrincipal == Servico.BALANCIAMENTO || servicoPrincipal == Servico.ALINHAMENTO){
             System.out.println("Serviço especializado, o agendamento será no elevado 3");
             idElevadorProposto = 3;
         }else{
@@ -236,30 +249,46 @@ public class Menu {
         
         System.out.println("Elevador " + idElevadorProposto + " selecionado.");
         
-        int duracao = servicoPrincipal.getDuracaoEstimadaEmMinutos();
-        
-        boolean disponibilidade = Agenda.verificarDiponibilidade(dataHoraProposta, duracao, idElevadorProposto);
-        
-        if(disponibilidade){
-           
-            OrdemServico novaOrdem = new OrdemServico.OrdemServicoBuilder()
-            .id(GerenciamentoIDs.proximoID("OrdemServico")) 
-            .dataEHora(Utilidades.getDataEHoraAtuaisFormatadas())
-            .cliente(cliente) 
-            .veiculo(veiculo)
-            .descricaoProblema(descricaoProblema)
-            .status("Aguardando Inspeção")
-            .adicionaServico(servicoPrincipal)       
-            .build();
+        while(true){
+            System.out.println("--- Insira a hora e a data do agendamento ---");
+            LocalDateTime dataHoraProposta = null;
+            while(true){
+                System.out.print("Use o formato exato 'dd/MM/yyyy HH:mm': ");
+                String  dataHoraDigitada = scanner.nextLine();
+                try{
+                    dataHoraProposta = Utilidades.gerarDataHoraPorString(dataHoraDigitada);
+                    System.out.println("Data e hora válidas: " + dataHoraProposta);
+                    break;
+                }catch(DateTimeParseException e){
+                    System.out.println("ERRO: O formato da data inserido está incorreto.");
+                }
+            }
+            int duracao = servicoPrincipal.getDuracaoEstimadaEmMinutos();
             
-            Agenda.adicionarCompromisso(new Agendamento(novaOrdem, dataHoraProposta, idElevadorProposto));
+            boolean disponibilidade = Agenda.verificarDisponibilidade(dataHoraProposta, duracao, idElevadorProposto);
             
-            System.out.print("Agendamento Confirmado !!!");
-        }else{
-            System.out.println("Desculpe, este horário no elevador " + idElevadorProposto + " já está ocupado. Por favor, tente outro horário.");
-            //colcar pra poder tentar outro horario ou outro horario e data.
+            if(disponibilidade){
+                OrdemServico novaOrdem = new OrdemServico.OrdemServicoBuilder()
+                .id(GerenciamentoIDs.proximoID("OrdemServico")) 
+                .dataEHora(Utilidades.getDataEHoraAtuaisFormatadas())
+                .cliente(cliente) 
+                .veiculo(veiculo)
+                .descricaoProblema(descricaoProblema)
+                .status("Aguardando Inspeção")
+                .adicionaServico(servicoPrincipal)       
+                .build();
+            
+                Agenda.adicionarCompromisso(new Agendamento(novaOrdem, dataHoraProposta, idElevadorProposto));
+            
+                System.out.println("Agendamento Confirmado !!!");
+                
+                break;
+            }else{
+                System.out.println("Desculpe, este horário no elevador " + idElevadorProposto + " já está ocupado. Por favor, tente outro horário.");
+            }
         }
-        
+        JsonUtil.salvar("data/Agenda.json", Agenda.getCompromissos());
+        menuAgenda();
     }
     
     public static void menuEstoque() throws IOException{
@@ -353,19 +382,21 @@ public class Menu {
     */
     public static void menuCaixa() throws IOException{
         System.out.println("--- Menu Caixa ---");
-        System.out.println("1. Clientes");
-        System.out.println("2. Ordem de serviço");
-        System.out.println("3. Veiculos");
-        System.out.println("4. Estoque");
-        System.out.println("5. logout");
+        System.out.println("1. Agenda");
+        System.out.println("2. Clientes");
+        System.out.println("3. Ordem de serviço");
+        System.out.println("4. Veiculos");
+        System.out.println("5. Estoque");
+        System.out.println("6. logout");
         int opcao = scanner.nextInt();
         scanner.nextLine();
         switch(opcao){
-            case 1 -> menuClientes();
-            case 2 -> menuOrdemServico();
-            case 3 -> menuVeiculo();
-            case 4 -> menuEstoque();
-            case 5 -> menuPrincipal();
+            case 1 -> menuAgenda();
+            case 2 -> menuClientes();
+            case 3 -> menuOrdemServico();
+            case 4 -> menuVeiculo();
+            case 5 -> menuEstoque();
+            case 6 -> menuPrincipal();
         }
     }
     

@@ -18,12 +18,14 @@ com\mycompany\projetooficinamecanica\Mecanico.class
 com\mycompany\projetooficinamecanica\Teste.class
 com\mycompany\projetooficinamecanica\GerenciamentoIDs.class
 com\mycompany\projetooficinamecanica\JsonUtil$3.class
+com\mycompany\projetooficinamecanica\JsonUtil$8.class
 com\mycompany\projetooficinamecanica\JsonUtil.class
 com\mycompany\projetooficinamecanica\Menu.class
 com\mycompany\projetooficinamecanica\JsonUtil$5.class
 com\mycompany\projetooficinamecanica\OrdemServicoTypeAdapter$3.class
 com\mycompany\projetooficinamecanica\Produto$CategoriaDoProduto.class
 com\mycompany\projetooficinamecanica\RuntimeTypeAdapterFactory$1.class
+com\mycompany\projetooficinamecanica\JsonUtil$7.class
 com\mycompany\projetooficinamecanica\Veiculo.class
 com\mycompany\projetooficinamecanica\Pessoa.class
 com\mycompany\projetooficinamecanica\Utilidades.class

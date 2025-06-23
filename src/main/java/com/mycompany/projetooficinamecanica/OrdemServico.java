@@ -1,16 +1,12 @@
 package com.mycompany.projetooficinamecanica;
 
-import java.util.ArrayList;//lista que pode adicionar ou remover elementos sem ter que predefinir o tamanho da lista. 
-import java.util.List;//Para trabalhar com listas.
-import java.io.FileReader; // Para ler arquivos.
-import java.io.FileWriter; // Para escrever arquivos
-import java.io.IOException; // Para lidar com exceções de entrada e saída.
-import com.google.gson.Gson; // Biblioteca Gson para manipular JSON.
-import com.google.gson.GsonBuilder; //Usado para configurar a instancia do Gason.
-import com.google.gson.reflect.TypeToken; // Para converter JSON em List<OrdensServico>.
+import java.util.ArrayList; 
+import java.util.List;
+import java.io.IOException;
 
 /**
- *
+ * Representa uma Ordem de Serviço na oficina. Utiliza o padrão Builder
+ * para uma construção flexível e passo a passo.
  * @author Lucas
  */
 public class OrdemServico {
@@ -22,19 +18,27 @@ public class OrdemServico {
     private String status;
     private String dataEHora;
     private Veiculo veiculo;
+    // As listas são inicializadas aqui para garantir que nunca sejam nulas.
     private List<Servico> servicosRealizados = new ArrayList<>();
     private List<Produto> produtosUtilizados = new ArrayList<>();
     
     private static List<OrdemServico> ListaOrdensServico = new ArrayList<>();
 
+    // Getters e Setters para a lista estática, se necessário para o JsonUtil
     public static List<OrdemServico> getListaOrdensServico() {
         return ListaOrdensServico;
     }
 
-    public static void setListaOrdensServico(List<OrdemServico> ListaOrdensServico) {
-        OrdemServico.ListaOrdensServico = ListaOrdensServico;
+    public static void setListaOrdensServico(List<OrdemServico> lista) {
+        if (lista != null) {
+            OrdemServico.ListaOrdensServico = lista;
+        }
     }
     
+    /**
+     * Construtor privado. A única forma de criar uma OrdemServico é através do Builder.
+     * Este construtor copia os dados do builder para o objeto final.
+     */
     private OrdemServico(OrdemServicoBuilder builder){
         this.id = builder.id;
         this.cliente = builder.cliente;
@@ -44,8 +48,13 @@ public class OrdemServico {
         this.status = builder.status;
         this.dataEHora = builder.dataEHora;
         this.veiculo = builder.veiculo;
+        this.servicosRealizados = builder.servicosRealizados; 
+        this.produtosUtilizados = builder.produtosUtilizados; 
     }
     
+    /**
+     * Classe interna estática que implementa o padrão Builder.
+     */
     public static class OrdemServicoBuilder{
         private int id;
         private Cliente cliente;
@@ -73,7 +82,6 @@ public class OrdemServico {
             return this;
         }
         
-        
         public OrdemServicoBuilder descricaoProblema(String descricaoProblema){
             this.descricaoProblema = descricaoProblema;
             return this;
@@ -99,10 +107,6 @@ public class OrdemServico {
             return this;
         }
         
-        public OrdemServico build(){
-            return new OrdemServico(this);
-        }
-        
         public OrdemServicoBuilder adicionaServico(Servico servico){
             this.servicosRealizados.add(servico);
             return this;
@@ -112,65 +116,40 @@ public class OrdemServico {
             this.produtosUtilizados.add(produto);
             return this;
         }
-        
+
+        public OrdemServico build(){
+            return new OrdemServico(this);
+        }
     }
     
-    public int getId() {
-        return id;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public Mecanico getMecanico() {
-        return mecanico;
-    }
-
-    public String getDescricaoProblema() {
-        return descricaoProblema;
-    }
-
-    public String getSolucao() {
-        return solucao;
-    }
-
-    public void setSolucao(String solucao) {
-        this.solucao = solucao;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getDataEHora() {
-        return dataEHora;
-    }
-
-    public Veiculo getVeiculo() {
-        return veiculo;
-    }
-
-    public List<Servico> getServicosRealizados() {
-        return servicosRealizados;
-    }
-
-    public List<Produto> getProdutosUtilizados() {
-        return produtosUtilizados;
-    }
-    
-    
+    // --- Getters e Setters para a OrdemServico ---
+    public int getId() { return id; }
+    public Cliente getCliente() { return cliente; }
+    public Mecanico getMecanico() { return mecanico; }
+    public String getDescricaoProblema() { return descricaoProblema; }
+    public String getSolucao() { return solucao; }
+    public void setSolucao(String solucao) { this.solucao = solucao; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public String getDataEHora() { return dataEHora; }
+    public Veiculo getVeiculo() { return veiculo; }
+    public List<Servico> getServicosRealizados() { return servicosRealizados; }
+    public List<Produto> getProdutosUtilizados() { return produtosUtilizados; }
     
     @Override
     public String toString(){
-        return "\nID: " + getId() + "\nCliente: " + getCliente() + "\nMecânico: " + getMecanico() + "\nDescrição do problema: " + getDescricaoProblema() + "\nSolução: " + getSolucao() + "\nStatus: " + getStatus()
-                + "\nData e hora: " + getDataEHora() + "Veículo: " + getVeiculo();
+        String mecanicoNome = (mecanico != null) ? mecanico.getNome() : "Não definido";
+        return "\n--- ORDEM DE SERVIÇO #" + getId() + " ---\n" + 
+               "Cliente: " + getCliente().getNome() + "\n" +
+               "Veículo: " + getVeiculo().getPlaca() + "\n" +
+               "Mecânico: " + mecanicoNome + "\n" + 
+               "Descrição: " + getDescricaoProblema() + "\n" + 
+               "Solução: " + getSolucao() + "\n" + 
+               "Status: " + getStatus() + "\n" +
+               "Data: " + getDataEHora() + "\n";
     }
     
+    // --- Métodos de Gerenciamento Estático ---
     
     public static void criarOrdemDeServico(OrdemServico ordemServico) throws IOException {
         ListaOrdensServico.add(ordemServico);
@@ -187,38 +166,38 @@ public class OrdemServico {
         for(OrdemServico o : ListaOrdensServico){
             if(o.getId() == id){
                 o.setStatus(novoStatus);
-                System.out.println("Status da ordem de seriço atualizado para: " + novoStatus);
+                System.out.println("Status da ordem de serviço atualizado para: " + novoStatus);
                 JsonUtil.salvar("data/OrdensServico.json", ListaOrdensServico);
                 return;
             }
         }
-        System.out.println("Ordem de serviço com ID " + id + "não encontrada");
+        System.out.println("Ordem de serviço com ID " + id + " não encontrada");
     }
     
     public static void listarOrdensServicosPorCpf(String cpf){
         for(OrdemServico o : ListaOrdensServico){
-            if(o.getMecanico().getCpf().equals(cpf)){
+            if(o.getMecanico() != null && o.getMecanico().getCpf().equals(cpf)){
                 System.out.println(o);
             }
         }
     }
     
-    
     public static boolean verificarOrdemServico(int ID, String cpf){
-      for(OrdemServico o : ListaOrdensServico){
-            if(o.getId()==ID){
-                if(o.getMecanico().getCpf().equals(cpf)){
+        for(OrdemServico o : ListaOrdensServico){
+            if(o.getId() == ID){
+                if(o.getMecanico() != null && o.getMecanico().getCpf().equals(cpf)){
                     return true;
-                }else{
+                } else {
                    System.out.println("Ordem de serviço não pertence a você.");
                    return false;
                 }
-                
             }
         }
-      System.out.println("Ordem de serviço não existe.");
-      return false;
+        System.out.println("Ordem de serviço não existe.");
+        return false;
     }
+    
+    // --- Métodos de Instância ---
     
     public void adicionarProduto(Produto produto){
         this.produtosUtilizados.add(produto);
@@ -227,5 +206,4 @@ public class OrdemServico {
     public void adicionarServico(Servico servico){
         this.servicosRealizados.add(servico);
     }
-    
 }
