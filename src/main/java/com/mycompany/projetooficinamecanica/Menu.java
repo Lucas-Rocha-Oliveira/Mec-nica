@@ -4,6 +4,7 @@ import static com.mycompany.projetooficinamecanica.Estoque.listaDeProdutos;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner; //Permite ler dados digitados pelo usuário.
 
@@ -90,6 +91,7 @@ public class Menu {
         System.out.println("4. Ordens de Serviços");
         System.out.println("5. Estoque");
         System.out.println("6. Agenda");
+        System.out.println("7. Balanco");
         System.out.println("8. Relatório(s)");
         System.out.println("9. Logout");
         int opcao = scanner.nextInt();
@@ -101,8 +103,10 @@ public class Menu {
             case 4 -> menuOrdemServico();
             case 5 -> menuEstoque();
             case 6 -> menuAgenda();
+            case 7 -> menuBalanco();
             case 8 -> menuRelatorio();
             case 9 -> menuPrincipal();
+            
         }
     }
 
@@ -129,6 +133,73 @@ public class Menu {
             case 6 -> menuPrincipal();
         }
     }
+    
+    public static void menuBalanco() throws IOException{
+        
+        System.out.println("--- Menu Balaço ---");
+        System.out.println("1. Adicionar Despesa(s).");
+        System.out.println("2. Listar Despesas.");
+        System.out.println("3. Menu Principal.");
+        
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+        switch(opcao){
+            case 1 :
+                menuAdicionarDespesa();
+            case 2 :
+                Despesa.exibir();
+                menuBalanco();
+            case 3 :
+                menuEpecializado();
+        }
+    }
+    
+    public static void menuAdicionarDespesa() throws IOException {
+    System.out.println("--- Adicionar Despesa ---");
+
+    while (true) {
+        System.out.print("Descrição da Despesa: ");
+        String descricao = scanner.nextLine();
+
+        System.out.print("Custo da Despesa: ");
+        double preco = scanner.nextDouble();
+        scanner.nextLine(); 
+        
+        
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataAtual = null;
+        while (true) {
+    System.out.print("Digite a data da despesa (dd/MM/yyyy): ");
+    String dataTexto = scanner.nextLine();
+
+    try {
+         dataAtual = LocalDate.parse(dataTexto, formato);
+        break;
+    } catch (DateTimeParseException e) {
+        System.out.println("Formato inválido. Tente novamente.");
+    }
+}
+
+        Despesa novaDespesa = new Despesa(descricao, preco, dataAtual);
+        Despesa.adicionarDespesa(novaDespesa);
+
+        while (true) {
+            System.out.print("Deseja adicionar outra despesa? [S/N]: ");
+            String opcao = scanner.nextLine().toUpperCase();
+
+            if (!opcao.equals("S") && !opcao.equals("N")) {
+                System.out.println("Opção inválida.");
+            } else if (opcao.equals("N")) {
+                System.out.println("Voltando pro menu balanço...");
+                menuBalanco();
+                return; 
+            } else {
+                break; 
+            }
+        }
+    }
+}
 
     public static void menuRelatorio() throws IOException {
         System.out.println("--- Menu Relatorio ---");

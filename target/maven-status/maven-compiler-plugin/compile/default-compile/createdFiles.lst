@@ -1,6 +1,7 @@
 com\mycompany\projetooficinamecanica\RuntimeTypeAdapterFactory.class
 com\mycompany\projetooficinamecanica\JsonUtil$4.class
 com\mycompany\projetooficinamecanica\Funcionario.class
+com\mycompany\projetooficinamecanica\Despesa.class
 com\mycompany\projetooficinamecanica\Estoque.class
 com\mycompany\projetooficinamecanica\SistemaLogin.class
 com\mycompany\projetooficinamecanica\Agenda.class
@@ -30,6 +31,7 @@ com\mycompany\projetooficinamecanica\Veiculo.class
 com\mycompany\projetooficinamecanica\Pessoa.class
 com\mycompany\projetooficinamecanica\Utilidades.class
 com\mycompany\projetooficinamecanica\JsonUtil$2.class
+com\mycompany\projetooficinamecanica\Venda.class
 com\mycompany\projetooficinamecanica\OrdemServico$OrdemServicoBuilder.class
 com\mycompany\projetooficinamecanica\Servico.class
 com\mycompany\projetooficinamecanica\OrdemServico.class
