@@ -16,9 +16,9 @@ public class ProjetoOficinaMecanica {
         
     JsonUtil.carregarJsons();
         
-    //Menu.menuPrincipal();
+    Menu.menuPrincipal();
        
-    Menu.menuAgenda();
+    //Menu.menuAgenda();
      
     
        

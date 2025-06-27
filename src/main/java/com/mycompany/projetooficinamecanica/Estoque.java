@@ -52,4 +52,12 @@ public class Estoque {
             System.out.println(c);
         }
     }
+    
+    public static boolean verificarQuantidadeEstoque(Produto produto){
+        if(produto.getQuantidadeEmEstoque()==0){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

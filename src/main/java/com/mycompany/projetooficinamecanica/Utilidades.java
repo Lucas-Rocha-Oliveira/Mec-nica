@@ -5,6 +5,7 @@
 package com.mycompany.projetooficinamecanica;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -28,6 +29,17 @@ public class Utilidades {
         
         return LocalDateTime.parse(data, formatador);
         
+    }
+    
+    public static LocalDate gerarDataPorString(String data) throws Exception {
+        
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        try {
+            return LocalDate.parse(data, formatador);
+        } catch (DateTimeParseException e) {
+            throw new Exception("O formato da data '" + data + "' é inválido. Use dd/MM/yyyy.", e);
+        }
     }
     
 }
