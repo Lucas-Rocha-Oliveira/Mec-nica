@@ -64,7 +64,7 @@ public class Relatorio {
         return novoRelatorio;
     }
     
-    public static void getRelatorioMes(int mes){
+    public static void getRelatorioMes(int mes, int ano){
         Month mesEscolhido = Month.of(mes);
         
         List<Relatorio> ListaRelatoriosMensal = new ArrayList<>();

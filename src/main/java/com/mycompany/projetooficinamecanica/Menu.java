@@ -175,6 +175,19 @@ public class Menu {
             System.out.println(relatorioHoje);
         }
     }
+    
+    
+    public static void menuGerarRelatorioMensal(){
+        System.out.println("---Relatório Mensal---");
+        System.out.println("Digite o ano: ");
+        int ano = scanner.nextInt();
+        
+        System.out.println("Digite o mês: ");
+        int mes = scanner.nextInt();
+        scanner.nextLine();
+        
+        Relatorio.getRelatorioMes(mes, ano);
+    }
 
     public static void menuAgenda() throws IOException {
         System.out.println("--- Menu Agenda ---");
@@ -469,6 +482,7 @@ public class Menu {
         System.out.println("1. Abrir ordem de serviço");
         System.out.println("2. Consultar ordens de serviços");
         System.out.println("3. Atualizar status ordem");
+        System.out.println("4. Menu Principal");
         int opcao = scanner.nextInt();
         scanner.nextLine();
         switch (opcao) {
@@ -478,6 +492,7 @@ public class Menu {
                 menuOrdemServico();
             }
             case 3 -> menuAtualizarOrdemServico();
+            case 4 -> menuEpecializado();
         }
     }
 

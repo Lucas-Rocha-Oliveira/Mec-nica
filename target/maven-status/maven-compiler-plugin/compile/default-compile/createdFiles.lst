@@ -35,5 +35,6 @@ com\mycompany\projetooficinamecanica\Servico.class
 com\mycompany\projetooficinamecanica\OrdemServico.class
 com\mycompany\projetooficinamecanica\OrdemServicoTypeAdapter$1.class
 com\mycompany\projetooficinamecanica\OrdemServicoTypeAdapter$4.class
+com\mycompany\projetooficinamecanica\Relatorio.class
 com\mycompany\projetooficinamecanica\Gerente.class
 com\mycompany\projetooficinamecanica\OrdemServicoTypeAdapter.class
