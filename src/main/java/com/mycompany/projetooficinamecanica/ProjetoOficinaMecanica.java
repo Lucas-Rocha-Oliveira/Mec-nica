@@ -1,10 +1,8 @@
 package com.mycompany.projetooficinamecanica;
 
 
-import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.List;
+
 
 /**
  *
@@ -17,10 +15,8 @@ public class ProjetoOficinaMecanica {
     JsonUtil.carregarJsons();
         
     Menu.menuPrincipal();
-       
-    //Menu.menuAgenda();
      
-    
+
        
     }
 }

@@ -1,0 +1,15 @@
+[
+  {
+    "listaDeProdutosVendidos": [
+      {
+        "codigo": 1,
+        "nome": "Oleo 15w30",
+        "preco": 42.0,
+        "quantidadeEmEstoque": 12,
+        "categoria": "CONSUMIVEL"
+      }
+    ],
+    "listaDeServicosRealizados": [],
+    "dataRelatorio": "2025-06-27"
+  }
+]

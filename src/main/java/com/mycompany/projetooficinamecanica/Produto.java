@@ -58,7 +58,6 @@ public class Produto {
     }
     
     
-    
     @Override
     public String toString(){
         return categoria + ": " + nome + "- R$" + preco + ", Em Estoque: " + quantidadeEmEstoque;

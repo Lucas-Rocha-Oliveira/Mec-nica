@@ -46,6 +46,10 @@ public class Estoque {
         }
         return null;
     }
+
+    public static void subtrairQuantidadeEstoque(Produto produto, int quantidade) throws IOException{
+        produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - quantidade);
+    }
     
     public static void listarProdutos(){
         for(Produto c: listaDeProdutos){

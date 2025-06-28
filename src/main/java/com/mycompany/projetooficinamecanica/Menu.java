@@ -93,7 +93,8 @@ public class Menu {
         System.out.println("6. Agenda");
         System.out.println("7. Balanco");
         System.out.println("8. Relatório(s)");
-        System.out.println("9. Logout");
+        System.out.println("9. Lançar venda.");
+        System.out.println("10. Logout");
         int opcao = scanner.nextInt();
         scanner.nextLine();
         switch (opcao) {
@@ -105,8 +106,9 @@ public class Menu {
             case 6 -> menuAgenda();
             case 7 -> menuBalanco();
             case 8 -> menuRelatorio();
-            case 9 -> menuPrincipal();
-            
+            case 9 -> menuLancarVenda();
+            case 10 -> menuPrincipal();
+
         }
     }
 
@@ -133,73 +135,71 @@ public class Menu {
             case 6 -> menuPrincipal();
         }
     }
-    
-    public static void menuBalanco() throws IOException{
-        
+
+    public static void menuBalanco() throws IOException {
+
         System.out.println("--- Menu Balaço ---");
         System.out.println("1. Adicionar Despesa(s).");
         System.out.println("2. Listar Despesas.");
         System.out.println("3. Menu Principal.");
-        
+
         int opcao = scanner.nextInt();
         scanner.nextLine();
-        switch(opcao){
-            case 1 :
+        switch (opcao) {
+            case 1:
                 menuAdicionarDespesa();
-            case 2 :
+            case 2:
                 Despesa.exibir();
                 menuBalanco();
-            case 3 :
+            case 3:
                 menuEpecializado();
         }
     }
-    
+
     public static void menuAdicionarDespesa() throws IOException {
-    System.out.println("--- Adicionar Despesa ---");
-
-    while (true) {
-        System.out.print("Descrição da Despesa: ");
-        String descricao = scanner.nextLine();
-
-        System.out.print("Custo da Despesa: ");
-        double preco = scanner.nextDouble();
-        scanner.nextLine(); 
-        
-        
-
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate dataAtual = null;
-        while (true) {
-    System.out.print("Digite a data da despesa (dd/MM/yyyy): ");
-    String dataTexto = scanner.nextLine();
-
-    try {
-         dataAtual = LocalDate.parse(dataTexto, formato);
-        break;
-    } catch (DateTimeParseException e) {
-        System.out.println("Formato inválido. Tente novamente.");
-    }
-}
-
-        Despesa novaDespesa = new Despesa(descricao, preco, dataAtual);
-        Despesa.adicionarDespesa(novaDespesa);
+        System.out.println("--- Adicionar Despesa ---");
 
         while (true) {
-            System.out.print("Deseja adicionar outra despesa? [S/N]: ");
-            String opcao = scanner.nextLine().toUpperCase();
+            System.out.print("Descrição da Despesa: ");
+            String descricao = scanner.nextLine();
 
-            if (!opcao.equals("S") && !opcao.equals("N")) {
-                System.out.println("Opção inválida.");
-            } else if (opcao.equals("N")) {
-                System.out.println("Voltando pro menu balanço...");
-                menuBalanco();
-                return; 
-            } else {
-                break; 
+            System.out.print("Custo da Despesa: ");
+            double preco = scanner.nextDouble();
+            scanner.nextLine();
+
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate dataAtual = null;
+            while (true) {
+                System.out.print("Digite a data da despesa (dd/MM/yyyy): ");
+                String dataTexto = scanner.nextLine();
+
+                try {
+                    dataAtual = LocalDate.parse(dataTexto, formato);
+                    break;
+                } catch (DateTimeParseException e) {
+                    System.out.println("Formato inválido. Tente novamente.");
+                }
+            }
+
+            Despesa novaDespesa = new Despesa(descricao, preco, dataAtual);
+            Despesa.adicionarDespesa(novaDespesa);
+
+            while (true) {
+                System.out.print("Deseja adicionar outra despesa? [S/N]: ");
+                String opcao = scanner.nextLine().toUpperCase();
+
+                if (!opcao.equals("S") && !opcao.equals("N")) {
+                    System.out.println("Opção inválida.");
+                } else if (opcao.equals("N")) {
+                    System.out.println("Voltando pro menu balanço...");
+                    menuBalanco();
+                    return;
+                } else {
+                    break;
+                }
             }
         }
     }
-}
 
     public static void menuRelatorio() throws IOException {
         System.out.println("--- Menu Relatorio ---");
@@ -208,7 +208,7 @@ public class Menu {
         System.out.println("3. Menu Principal.");
 
         int opcao = scanner.nextInt();
-
+        scanner.nextLine();
         switch (opcao) {
             case 1:
                 menuGerarRelatorioDiario();
@@ -216,47 +216,46 @@ public class Menu {
                 break;
             case 2:
                 menuGerarRelatorioMensal();
-                break;       
+                menuRelatorio();
+                break;
             case 3:
                 menuEpecializado();
                 break;
         }
     }
-    
-    public static void menuGerarRelatorioDiario(){
+
+    public static void menuGerarRelatorioDiario() {
         System.out.println("--- Relatorio Diário ---");
         LocalDate dataRelatorio = null;
-        while(true){
-            System.out.println("Data do relatorio: ");
+        while (true) {
+            System.out.print("Data do relatorio: ");
             String data = scanner.nextLine();
-            try{
+            try {
                 dataRelatorio = Utilidades.gerarDataPorString(data);
                 break;
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Formato de data inexistente, tente novamente.");
             }
         }
-        
+
         Relatorio relatorioHoje = Relatorio.getRelatorioDeHoje(dataRelatorio);
-        
-        
-        if(relatorioHoje == null){
+
+        if (relatorioHoje == null) {
             System.out.println("Esse dia não houve relatório.");
-        }else{
+        } else {
             System.out.println(relatorioHoje);
         }
     }
-    
-    
-    public static void menuGerarRelatorioMensal(){
+
+    public static void menuGerarRelatorioMensal() {
         System.out.println("---Relatório Mensal---");
         System.out.println("Digite o ano: ");
         int ano = scanner.nextInt();
-        
+        scanner.nextLine();
         System.out.println("Digite o mês: ");
         int mes = scanner.nextInt();
         scanner.nextLine();
-        
+
         Relatorio.getRelatorioMes(mes, ano);
     }
 
@@ -267,7 +266,7 @@ public class Menu {
         System.out.println("3. Menu Principal.");
 
         int opcao = scanner.nextInt();
-
+        scanner.nextLine();
         switch (opcao) {
             case 1 -> menuAgendamentoPrevio();
             case 2 -> {
@@ -332,6 +331,7 @@ public class Menu {
                 while (true) {
                     System.out.println("Selecione um serviço: ");
                     op = scanner.nextInt();
+                    scanner.nextLine();
                     if (op < 1 || op > 8) {
                         System.out.println("opção inválida.");
                     } else {
@@ -528,7 +528,8 @@ public class Menu {
         System.out.println("3. Ordem de serviço");
         System.out.println("4. Veiculos");
         System.out.println("5. Estoque");
-        System.out.println("6. logout");
+        System.out.println("6. Lançar Venda.");
+        System.out.println("7. logout");
         int opcao = scanner.nextInt();
         scanner.nextLine();
         switch (opcao) {
@@ -537,8 +538,53 @@ public class Menu {
             case 3 -> menuOrdemServico();
             case 4 -> menuVeiculo();
             case 5 -> menuEstoque();
-            case 6 -> menuPrincipal();
+            case 6 -> menuLancarVenda();
+            case 7 -> menuPrincipal();
         }
+    }
+
+    public static void menuLancarVenda() throws IOException {
+        System.out.println("--- Loja ---");
+
+        Produto produto = null;
+
+        while (true) {
+            System.out.print("Código do Produto: ");
+            int codigo = scanner.nextInt();
+            scanner.nextLine();
+            produto = Estoque.buscarProdutoPorCodigo(codigo);
+            if (produto == null) {
+                System.out.println("Esse produto não existe no estoque, tente outro.");
+            } else {
+                break;
+            }
+        }
+
+        while (true) {
+            System.out.print("Quantidade vendida: ");
+            int quantidade = scanner.nextInt();
+            scanner.nextLine();
+            if ((produto.getQuantidadeEmEstoque() - quantidade) < 0) {
+                System.out.println("Quantidade pretentida é maior que em estoque.");
+            } else {
+                Estoque.subtrairQuantidadeEstoque(produto, quantidade);
+                Relatorio.adicionarVendaProduto(produto);
+                System.out.println("Venda Lançada com sucesso!\nDeseja lançar outra venda? [S/N]: ");
+                String opcao = scanner.nextLine().toUpperCase();
+                switch (opcao) {
+                    case "S":
+                        menuLancarVenda();
+                        break;
+                    case "N":
+                        menuEpecializado();
+                        break;
+                    default:
+                        menuEpecializado();
+                        break;
+                }
+            }
+        }
+
     }
 
     public static void menuListarOrdensServicosPorCpf(String cpf) throws IOException {
@@ -553,7 +599,9 @@ public class Menu {
         System.out.println("1. Abrir ordem de serviço");
         System.out.println("2. Consultar ordens de serviços");
         System.out.println("3. Atualizar status ordem");
-        System.out.println("4. Menu Principal");
+        System.out.println("4. Adicionar Serviço Realizado");
+        System.out.println("5. Adicionar Produto Utilizado");
+        System.out.println("6. Menu Principal");
         int opcao = scanner.nextInt();
         scanner.nextLine();
         switch (opcao) {
@@ -563,8 +611,148 @@ public class Menu {
                 menuOrdemServico();
             }
             case 3 -> menuAtualizarOrdemServico();
-            case 4 -> menuEpecializado();
+            case 4 -> menuAdicionarServicoRealizado();
+            case 5 -> menuAdicionarPecaUltilizada();
+            case 6 -> menuEpecializado();
         }
+    }
+
+    public static void menuAdicionarPecaUltilizada() throws IOException{
+        System.out.println("--- Produto Utilizado ---");
+
+        OrdemServico os = null;
+
+        while (true) {
+            System.out.println("Insira o id da Ordem de Serviço");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            os = OrdemServico.getOrdemServicoPorId(id);
+            if (os == null) {
+                System.out.println("Nenhuma OS possuí esse ID");
+            } else {
+                break;
+            }
+        }
+        Produto produto = null;
+        while(true){
+            System.out.println("Insira o codigo do produto.");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            produto = Estoque.buscarProdutoPorCodigo(id);
+            if(produto == null){
+                System.out.println("Código inválido, tente novamente.");
+            }else{
+                break;
+            }
+        }
+
+        while (true) {
+            System.out.print("Quantidade utilizada: ");
+            int quantidade = scanner.nextInt();
+            scanner.nextLine();
+            if((produto.getQuantidadeEmEstoque() - quantidade) < 0){
+                System.out.println("Quantidade solicitada indiponível no estoque.");
+            }else{
+                Estoque.subtrairQuantidadeEstoque(produto, quantidade);
+                Relatorio.adicionarVendaProduto(produto);
+                for(int i=0; i <= quantidade; i++){
+                        os.adicionarProduto(produto);
+                }
+                System.out.println("Produto registrado com sucesso. \nDeseja adicionar outra peça? [S/N]: ");
+                String continuar = scanner.nextLine().toUpperCase();
+                switch (continuar) {
+                    case "S":
+                        menuAdicionarPecaUltilizada();
+                        break;
+                    case "N":
+                        menuOrdemServico();
+                        JsonUtil.salvar("data/produtos.json", listaDeProdutos);
+                        break;
+                    default:
+                        menuEpecializado();
+                        JsonUtil.salvar("data/produtos.json", listaDeProdutos);
+                        break;
+                }
+            }
+        }
+    }
+
+    public static void menuAdicionarServicoRealizado() throws IOException {
+
+        System.out.println("--- Servico Realizado ---");
+
+        OrdemServico os = null;
+
+        while (true) {
+            System.out.println("Insira o id da Ordem de Serviço");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            os = OrdemServico.getOrdemServicoPorId(id);
+            if (os == null) {
+                System.out.println("Nenhuma OS possuí esse ID");
+            } else {
+                break;
+            }
+        }
+
+        Servico.listarServicos();
+        Servico servicoAdicionado = null;
+        int op = 0;
+
+        while (true) {
+            System.out.println("Selecione um serviço: ");
+            op = scanner.nextInt();
+            scanner.nextLine();
+            if (op < 1 || op > 8) {
+                System.out.println("opção inválida.");
+            } else {
+                break;
+            }
+        }
+        switch (op) {
+            case 1:
+                servicoAdicionado = Servico.TROCA_DE_PNEU;
+                break;
+            case 2:
+                servicoAdicionado = Servico.ALINHAMENTO;
+                break;
+            case 3:
+                servicoAdicionado = Servico.BALANCIAMENTO;
+                break;
+            case 4:
+                servicoAdicionado = Servico.REVISAO_DOS_FREIOS;
+                break;
+            case 5:
+                servicoAdicionado = Servico.REVISAO_DO_SISTEMA_DE_ARREFECIMENTO;
+                break;
+            case 6:
+                servicoAdicionado = Servico.TROCA_DE_PASTILHAS;
+                break;
+            case 7:
+                servicoAdicionado = Servico.TROCA_CORREIA_DENTADA;
+                break;
+            case 8:
+                servicoAdicionado = Servico.DIAGNOSTICO_INICIAL;
+                break;
+        }
+
+        os.adicionarServico(servicoAdicionado);
+        Relatorio.adicionarServicoRealizado(servicoAdicionado);
+
+        System.out.println("Serviço Adicionado com sucesso.\nDeseja adicionar outro serviço?: [S/N]: ");
+        String continuar = scanner.nextLine().toUpperCase();
+        switch (continuar) {
+            case "S":
+                menuAdicionarServicoRealizado();
+                break;
+            case "N":
+                menuOrdemServico();
+                break;
+            default:
+                menuEpecializado();
+                break;
+        }
+
     }
 
     public static void menuAtualizarOrdemServico() throws IOException {

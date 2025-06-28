@@ -181,6 +181,15 @@ public class OrdemServico {
             }
         }
     }
+
+    public static OrdemServico getOrdemServicoPorId(int id){
+        for(OrdemServico os : ListaOrdensServico){
+            if(os.getId() == id){
+                return os;
+            }
+        }
+        return null;
+    }
     
     public static boolean verificarOrdemServico(int ID, String cpf){
         for(OrdemServico o : ListaOrdensServico){
