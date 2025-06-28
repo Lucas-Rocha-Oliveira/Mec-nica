@@ -215,4 +215,12 @@ public class OrdemServico {
     public void adicionarServico(Servico servico){
         this.servicosRealizados.add(servico);
     }
+
+    public double somarServicosRealizados(){
+        double total = 0;
+        for(Servico s : getServicosRealizados()){
+            total += s.getPreco();
+        }
+        return total;
+    }
 }

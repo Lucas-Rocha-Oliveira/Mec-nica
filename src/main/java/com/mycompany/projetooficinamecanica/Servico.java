@@ -11,7 +11,7 @@ package com.mycompany.projetooficinamecanica;
 public enum Servico {
     TROCA_DE_PNEU("Troca de Pneu", 100, 45),
     ALINHAMENTO("Alinhamento", 200, 60),
-    BALANCIAMENTO("Balanceamento", 150, 60),
+    BALANCEAMENTO("Balanceamento", 150, 60),
     REVISAO_DOS_FREIOS("Revisao dos freios", 160, 50),
     REVISAO_DO_SISTEMA_DE_ARREFECIMENTO("Revisão do sistema de arrefecimento", 130, 180),
     TROCA_DE_PASTILHAS("Troca de pastilhas", 125, 90),
@@ -48,6 +48,7 @@ public enum Servico {
         }
         System.out.println("-----------------------");
     }
+    
     
     
     @Override

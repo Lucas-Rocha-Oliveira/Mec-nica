@@ -1,10 +1,6 @@
 [
   {
     "id": 1,
-    "descricaoProblema": "queima da junta do cabeçote",
-    "solucao": "",
-    "status": "Aguardando Análise",
-    "dataEHora": "10/06/2025 15:10",
     "cliente": {
       "endereco": "R.Dom Pedro, Bela Vista, Diamantina-MG",
       "telefone": "(38)9-9876-9868",
@@ -18,7 +14,69 @@
       "nome": "Carlos Santos",
       "cpf": "111.222.333-44"
     },
+    "descricaoProblema": "queima da junta do cabeçote",
+    "solucao": "",
+    "status": "Aguardando Análise",
+    "dataEHora": "10/06/2025 15:10",
     "servicosRealizados": [],
+    "produtosUtilizados": []
+  },
+  {
+    "id": 3,
+    "cliente": {
+      "endereco": "R.Dom Pedro, Bela Vista, Diamantina-MG",
+      "telefone": "(38)9-9876-9868",
+      "nome": "Cecilia Ferreira Silva",
+      "cpf": "987.234.567-98"
+    },
+    "descricaoProblema": "Pneu Furado",
+    "status": "Aguardando Inspeção",
+    "dataEHora": "28/06/2025 17:47",
+    "veiculo": {
+      "placa": "ABC-9876",
+      "modelo": "Gol",
+      "marca": "Volkswagen",
+      "cor": "Branco",
+      "ano": 2019,
+      "proprietario": {
+        "endereco": "Rua dos Coqueiros, 25",
+        "telefone": "(31) 99988-7766",
+        "nome": "Juliana Costa",
+        "cpf": "456.789.123-11"
+      }
+    },
+    "servicosRealizados": [
+      "TROCA_DE_PNEU"
+    ],
+    "produtosUtilizados": []
+  },
+  {
+    "id": 4,
+    "cliente": {
+      "endereco": "R.Dom Pedro, Bela Vista, Diamantina-MG",
+      "telefone": "(38)9-9876-9868",
+      "nome": "Cecilia Ferreira Silva",
+      "cpf": "987.234.567-98"
+    },
+    "descricaoProblema": "pneu furado",
+    "status": "Aguardando Inspeção",
+    "dataEHora": "28/06/2025 17:51",
+    "veiculo": {
+      "placa": "ABC-9876",
+      "modelo": "Gol",
+      "marca": "Volkswagen",
+      "cor": "Branco",
+      "ano": 2019,
+      "proprietario": {
+        "endereco": "Rua dos Coqueiros, 25",
+        "telefone": "(31) 99988-7766",
+        "nome": "Juliana Costa",
+        "cpf": "456.789.123-11"
+      }
+    },
+    "servicosRealizados": [
+      "TROCA_DE_PNEU"
+    ],
     "produtosUtilizados": []
   }
 ]

@@ -1,39 +1,72 @@
 [
   {
-    "id": 2,
+    "id": 4,
     "ordemServico": {
-      "id": 1,
+      "id": 3,
       "cliente": {
-        "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
-        "telefone": "(38)9-8887-7654",
-        "nome": "Maria Aparecida",
-        "cpf": "345.456.432-56"
+        "endereco": "R.Dom Pedro, Bela Vista, Diamantina-MG",
+        "telefone": "(38)9-9876-9868",
+        "nome": "Cecilia Ferreira Silva",
+        "cpf": "987.234.567-98"
       },
-      "mecanico": null,
-      "descricaoProblema": "Direção puchando para o lado",
-      "solucao": null,
+      "descricaoProblema": "Pneu Furado",
       "status": "Aguardando Inspeção",
-      "dataEHora": "23/06/2025 16:11",
+      "dataEHora": "28/06/2025 17:47",
       "veiculo": {
-        "placa": "QWZ-1234",
-        "modelo": "Uno",
-        "marca": "Fiat",
-        "cor": "Vermelho",
-        "ano": 2018,
+        "placa": "ABC-9876",
+        "modelo": "Gol",
+        "marca": "Volkswagen",
+        "cor": "Branco",
+        "ano": 2019,
         "proprietario": {
-          "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
-          "telefone": "(38)9-8887-7654",
-          "nome": "Maria Aparecida",
-          "cpf": "345.456.432-56"
+          "endereco": "Rua dos Coqueiros, 25",
+          "telefone": "(31) 99988-7766",
+          "nome": "Juliana Costa",
+          "cpf": "456.789.123-11"
         }
       },
       "servicosRealizados": [
-        "DIAGNOSTICO_INICIAL"
+        "TROCA_DE_PNEU"
       ],
       "produtosUtilizados": []
     },
-    "dataHoraInicio": "2025-07-12T13:00",
-    "dataHoraFim": "2025-07-12T14:00",
+    "dataHoraInicio": "2025-06-29T13:00",
+    "dataHoraFim": "2025-06-29T13:45",
+    "idElevador": 2
+  },
+  {
+    "id": 5,
+    "ordemServico": {
+      "id": 4,
+      "cliente": {
+        "endereco": "R.Dom Pedro, Bela Vista, Diamantina-MG",
+        "telefone": "(38)9-9876-9868",
+        "nome": "Cecilia Ferreira Silva",
+        "cpf": "987.234.567-98"
+      },
+      "descricaoProblema": "pneu furado",
+      "status": "Aguardando Inspeção",
+      "dataEHora": "28/06/2025 17:51",
+      "veiculo": {
+        "placa": "ABC-9876",
+        "modelo": "Gol",
+        "marca": "Volkswagen",
+        "cor": "Branco",
+        "ano": 2019,
+        "proprietario": {
+          "endereco": "Rua dos Coqueiros, 25",
+          "telefone": "(31) 99988-7766",
+          "nome": "Juliana Costa",
+          "cpf": "456.789.123-11"
+        }
+      },
+      "servicosRealizados": [
+        "TROCA_DE_PNEU"
+      ],
+      "produtosUtilizados": []
+    },
+    "dataHoraInicio": "2025-06-29T18:00",
+    "dataHoraFim": "2025-06-29T18:45",
     "idElevador": 1
   }
 ]

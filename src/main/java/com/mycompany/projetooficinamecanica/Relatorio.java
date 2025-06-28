@@ -1,35 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.projetooficinamecanica;
 
+import com.mycompany.projetooficinamecanica.TransacaoFinanceira.TipoTransacao;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gson.reflect.TypeToken;
 
-/* Atributos da classe:
-lista de produtos 
-lista de serviços 
-local date tima
-
-Métodos da classe:
-adiociomar produto
-adicionar serviço 
-gerar relatorio
-*/
-
+/**
+ * Representa um relatório diário, que contém todas as transações financeiras de
+ * um dia.
+ */
 public class Relatorio {
 
-    private List<Produto> listaDeProdutosVendidos = new ArrayList<>();
-    private List<Servico> listaDeServicosRealizados = new ArrayList<>();
+    private List<TransacaoFinanceira> listaDeTransacoes = new ArrayList<>();
+    private LocalDate dataRelatorio;
+
     private static List<Relatorio> listaDeRelatorios = new ArrayList<>();
 
-    private LocalDate dataRelatorio;
+    public Relatorio(LocalDate data) {
+        this.dataRelatorio = data;
+        this.listaDeTransacoes = new ArrayList<>();
+    }
+
+    public static Relatorio getRelatorioDeHoje() {
+        return getRelatorioPorData(LocalDate.now());
+    }
+
+    // Getters e Setters
+    public List<TransacaoFinanceira> getListaDeTransacoes() {
+        return listaDeTransacoes;
+    }
 
     public LocalDate getDataRelatorio() {
         return dataRelatorio;
@@ -39,137 +43,205 @@ public class Relatorio {
         return listaDeRelatorios;
     }
 
-    public static void setListaDeRelatorios(List<Relatorio> listaDeRelatorios) {
-        Relatorio.listaDeRelatorios = listaDeRelatorios;
+    public static void setListaDeRelatorios(List<Relatorio> lista) {
+        if (lista != null) {
+            listaDeRelatorios = lista;
+        }
     }
 
-    public void setDataRelatorio(LocalDate dataRelatorio) {
-        this.dataRelatorio = dataRelatorio;
+    // Método único para adicionar qualquer transação financeira
+    public void adicionarTransacao(TransacaoFinanceira transacao) {
+        this.listaDeTransacoes.add(transacao);
     }
 
-    public Relatorio(LocalDate dataRelatorio) {
-        this.dataRelatorio = dataRelatorio;
-    }
-
-    public static void adicionarVendaProduto(Produto produto) throws IOException {
-        Relatorio relatorioHoje = getRelatorioDeHoje(LocalDate.now());
-        relatorioHoje.listaDeProdutosVendidos.add(produto);
-        listaDeRelatorios.add(relatorioHoje);
-        JsonUtil.salvar("data/Relatorios.json", listaDeRelatorios);
-    }
-
-    public static void adicionarServicoRealizado(Servico servico) throws IOException {
-        Relatorio relatorioHoje = getRelatorioDeHoje(LocalDate.now());
-        relatorioHoje.listaDeServicosRealizados.add(servico);
-        JsonUtil.salvar("data/Relatorios.json", listaDeRelatorios);
-    }
-
-    public static Relatorio getRelatorioDeHoje(LocalDate data) {
+    /**
+     * Encontra o relatório para uma data específica ou cria um novo se não existir.
+     * Este é o método principal para garantir que estamos a trabalhar no relatório
+     * correto.
+     */
+    public static Relatorio getRelatorioPorData(LocalDate data) {
         for (Relatorio r : listaDeRelatorios) {
             if (r.getDataRelatorio().isEqual(data)) {
-                return r;
+                return r; // Retorna o relatório existente
             }
         }
-
-        Relatorio novoRelatorio = new Relatorio(LocalDateTime.now().toLocalDate());
+        // Se não encontrou, cria um novo, adiciona à lista e retorna-o
+        Relatorio novoRelatorio = new Relatorio(data);
+        listaDeRelatorios.add(novoRelatorio);
         return novoRelatorio;
     }
 
     public static void getRelatorioMes(int mes, int ano) {
         Month mesEscolhido = Month.of(mes);
-        List<Relatorio> relatoriosDoMes = new ArrayList<>();
-
-        for (Relatorio r : listaDeRelatorios) {
-            if (r.getDataRelatorio().getMonth() == mesEscolhido && r.getDataRelatorio().getYear() == ano) {
-                relatoriosDoMes.add(r);
-            }
-        }
-
-        if (relatoriosDoMes.isEmpty()) {
-            System.out.println("\nNão houve relatórios para " + mesEscolhido.toString() + " de " + ano + ".");
-            return;
-        }
+        double totalReceitasMensal = 0;
+        double totalDespesasMensal = 0;
 
         System.out.println("\n==============================================");
-        System.out.println("              RELATÓRIO MENSAL");
+        System.out.println("              BALANÇO MENSAL");
         System.out.println("              Mês/Ano: " + String.format("%02d", mes) + "/" + ano);
         System.out.println("==============================================");
 
-        
-        for (Relatorio relatorioDiario : relatoriosDoMes) {
-            System.out.println(); 
-            System.out.println(relatorioDiario.toString());
+        boolean encontrouMovimentacao = false;
+
+        // Percorre todos os relatórios diários já criados
+        for (Relatorio relatorioDiario : listaDeRelatorios) {
+            // Verifica se o relatório pertence ao mês e ano solicitados
+            if (relatorioDiario.getDataRelatorio().getMonth() == mesEscolhido
+                    && relatorioDiario.getDataRelatorio().getYear() == ano) {
+
+                // Para cada relatório diário, percorre suas transações
+                for (TransacaoFinanceira transacao : relatorioDiario.getListaDeTransacoes()) {
+                    encontrouMovimentacao = true; // Marca que encontrou pelo menos uma transação no mês
+
+                    // Separa em Receita ou Despesa com base no tipo
+                    if (transacao.getTipo().name().startsWith("RECEITA")) {
+                        totalReceitasMensal += transacao.getValor();
+                    } else if (transacao.getTipo().name().startsWith("DESPESA")) {
+                        totalDespesasMensal += transacao.getValor();
+                    }
+                }
+            }
         }
 
-        System.out.println("\n\n==============================================");
-        System.out.println("          FIM DO RELATÓRIO MENSAL");
+        if (!encontrouMovimentacao) {
+            System.out.println("\nNão houve movimentação financeira registada para " + mesEscolhido.toString() + " de "
+                    + ano + ".");
+            System.out.println("==============================================");
+            return;
+        }
+
+        double resultadoFinal = totalReceitasMensal - totalDespesasMensal;
+
+        System.out.printf("\nTotal de Receitas no Mês: R$ %.2f\n", totalReceitasMensal);
+        System.out.printf("Total de Despesas no Mês: R$ %.2f\n", totalDespesasMensal);
+        System.out.println("----------------------------------------------");
+        System.out.printf("Resultado Final do Mês:   R$ %.2f\n", resultadoFinal);
+
+        if (resultadoFinal > 0) {
+            System.out.println("(Lucro)");
+        } else if (resultadoFinal < 0) {
+            System.out.println("(Prejuízo)");
+        }
+        System.out.println("==============================================\n");
+    }
+
+    public static List<Relatorio> getRelatoriosPorMes(int mes) {
+        List<Relatorio> relatoriosDoMes = new ArrayList<>();
+        for (Relatorio r : listaDeRelatorios) {
+            if (r.getDataRelatorio().getMonthValue() == mes) {
+                relatoriosDoMes.add(r);
+            }
+        }
+        return relatoriosDoMes;
+    }
+
+    public static void menuGerarBalancoMensal(int mes) {
+        List<Relatorio> relatoriosDoMes = getRelatoriosPorMes(mes);
+        double total = 0;
+
+        System.out.println("========== BALANÇO DO MÊS " + mes + " ==========");
+
+        for (Relatorio r : relatoriosDoMes) {
+            for (TransacaoFinanceira t : r.getListaDeTransacoes()) {
+                System.out.println(t);
+
+                switch (t.getTipo()) {
+                    case RECEITA_SERVICO:
+                    case RECEITA_VENDA_PECA:
+                    case RECEITA_CANCELAMENTO:
+                        total += t.getValor();
+                        break;
+
+                    case DESPESA_SALARIO:
+                    case DESPESA_COMPRA_PECA:
+                    case DESPESA_OUTRAS:
+                        total -= t.getValor();
+                        break;
+                }
+            }
+        }
+
+        System.out.println("==============================================");
+        System.out.printf("Balanço do mês: R$ %.2f%n", total);
         System.out.println("==============================================");
     }
 
-    public static Relatorio getRelatorioDiario(LocalDate data) {
-
-        for (Relatorio r : listaDeRelatorios) {
-            if (r.getDataRelatorio() == data) {
-                return r;
-            }
-        }
-
-        return null;
-    }
-
-    public String listarServicosRealizados() {
+    public static StringBuilder listarDespessasPorMes(int mes) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n--- Serviços Realizados ---");
+        List<Relatorio> relatoriosDoMes = getRelatoriosPorMes(mes);
 
-        if (listaDeServicosRealizados.isEmpty()) {
-            sb.append("\nNáo houve serviço nesse dia.");
-        } else {
-            for (Servico s : listaDeServicosRealizados) {
-                sb.append("\n- ").append(s);
+        for (Relatorio r : relatoriosDoMes) {
+            for (TransacaoFinanceira t : r.getListaDeTransacoes()) {
+                if (t.getTipo() == TipoTransacao.DESPESA_COMPRA_PECA
+                        || t.getTipo() == TipoTransacao.DESPESA_SALARIO
+                        || t.getTipo() == TipoTransacao.DESPESA_OUTRAS) {
+
+                    sb.append("\n");
+                    sb.append(t);
+                }
             }
         }
-
-        return sb.toString();
-
+        sb.append("\n");
+        return sb;
     }
 
-    public String listarProdutosVendidos() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("\n--- Produtos Vendidos ---");
-
-        if (listaDeProdutosVendidos.isEmpty()) {
-            sb.append("\nNáo houve venda de produto nesse dia.");
-        } else {
-            for (Produto p : listaDeProdutosVendidos) {
-                sb.append("\n- ").append(p);
-            }
-        }
-
-        return sb.toString();
-
-    }
-
+    /**
+     * O toString agora é inteligente. Ele percorre a lista de transações
+     * e constrói as seções do relatório dinamicamente.
+     */
     @Override
     public String toString() {
-        // CORREÇÃO: Remova a parte de hora (HH:mm) do padrão de formatação.
         DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        StringBuilder sb = new StringBuilder();
 
-        StringBuilder relatorioCompleto = new StringBuilder();
+        sb.append("\n=====================================\n");
+        sb.append("      RELATÓRIO DO DIA: ").append(this.dataRelatorio.format(formatador)).append("\n");
+        sb.append("=====================================\n");
 
-        relatorioCompleto.append("=====================================\n");
-        relatorioCompleto.append("      RELATÓRIO REFERENTE AO DIA\n");
-        relatorioCompleto.append("=====================================\n");
-        relatorioCompleto.append("Data: ").append(getDataRelatorio().format(formatador)).append("\n");
+        // --- Seção de Serviços ---
+        sb.append("\n--- Serviços Realizados ---\n");
+        long servicosCount = this.listaDeTransacoes.stream()
+                .filter(t -> t.getTipo() == TipoTransacao.RECEITA_SERVICO)
+                .peek(t -> sb.append(t).append("\n"))
+                .count();
+        if (servicosCount == 0) {
+            sb.append("Não houve serviços neste dia.\n");
+        }
 
-        relatorioCompleto.append(listarServicosRealizados());
-        relatorioCompleto.append("\n");
-        relatorioCompleto.append(listarProdutosVendidos());
+        // --- Seção de Vendas ---
+        sb.append("\n--- Produtos Vendidos ---\n");
+        long vendasCount = this.listaDeTransacoes.stream()
+                .filter(t -> t.getTipo() == TipoTransacao.RECEITA_VENDA_PECA)
+                .peek(t -> sb.append(t).append("\n"))
+                .count();
+        if (vendasCount == 0) {
+            sb.append("Não houve venda de produtos neste dia.\n");
+        }
 
-        relatorioCompleto.append("\n=====================================");
+        // --- Seção de Outras Transações ---
+        sb.append("\n--- Outras Transações ---\n");
+        long outrasCount = this.listaDeTransacoes.stream()
+                .filter(t -> t.getTipo() != TipoTransacao.RECEITA_SERVICO
+                        && t.getTipo() != TipoTransacao.RECEITA_VENDA_PECA)
+                .peek(t -> sb.append(t).append("\n"))
+                .count();
+        if (outrasCount == 0) {
+            sb.append("Não houve outras transações neste dia.\n");
+        }
 
-        return relatorioCompleto.toString();
+        sb.append("\n=====================================");
+        return sb.toString();
     }
 
+    // Métodos para carregar e salvar os relatórios
+    public static void salvarRelatorios() throws IOException {
+        JsonUtil.salvar("data/Relatorios.json", listaDeRelatorios);
+    }
+
+    public static void carregarRelatorios() throws IOException {
+        Type tipoLista = new TypeToken<List<Relatorio>>() {
+        }.getType();
+        setListaDeRelatorios(JsonUtil.carregarLista("data/Relatorios.json", tipoLista));
+    }
 }

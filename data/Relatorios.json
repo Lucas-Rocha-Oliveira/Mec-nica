@@ -1,15 +1,24 @@
 [
   {
-    "listaDeProdutosVendidos": [
+    "listaDeTransacoes": [
       {
-        "codigo": 1,
-        "nome": "Oleo 15w30",
-        "preco": 42.0,
-        "quantidadeEmEstoque": 12,
-        "categoria": "CONSUMIVEL"
+        "valor": 100.0,
+        "descricao": "Receita do agendamento OS #4: Troca de Pneu",
+        "data": "2025-06-28T17:51:04.406391",
+        "tipo": "RECEITA_SERVICO"
       }
     ],
-    "listaDeServicosRealizados": [],
-    "dataRelatorio": "2025-06-27"
+    "dataRelatorio": "2025-06-29"
+  },
+  {
+    "listaDeTransacoes": [
+      {
+        "valor": 16.0,
+        "descricao": "Taxa de cancelamento da OS #2",
+        "data": "2025-06-28T17:51:55.114602400",
+        "tipo": "RECEITA_CANCELAMENTO"
+      }
+    ],
+    "dataRelatorio": "2025-06-28"
   }
 ]

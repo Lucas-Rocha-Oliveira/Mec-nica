@@ -6,7 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner; //Permite ler dados digitados pelo usuário.
+
+import com.mycompany.projetooficinamecanica.TransacaoFinanceira.TipoTransacao;
 
 /**
  *
@@ -141,7 +146,8 @@ public class Menu {
         System.out.println("--- Menu Balaço ---");
         System.out.println("1. Adicionar Despesa(s).");
         System.out.println("2. Listar Despesas.");
-        System.out.println("3. Menu Principal.");
+        System.out.println("3. Gerar Balanço Mensal.");
+        System.out.println("4. Menu Principal.");
 
         int opcao = scanner.nextInt();
         scanner.nextLine();
@@ -149,11 +155,46 @@ public class Menu {
             case 1:
                 menuAdicionarDespesa();
             case 2:
-                Despesa.exibir();
-                menuBalanco();
+                menuListarDespesa();
+                break;
             case 3:
+                menuGerarBalanço();
+            case 4:
                 menuEpecializado();
         }
+    }
+
+    public static void menuGerarBalanço(){
+        int mes = 0;
+        while (true) {
+            System.out.print("Mês (1 a 12): ");
+            mes = scanner.nextInt();
+            scanner.nextLine();
+            if (mes < 1 || mes > 12) {
+                System.out.println("Selecione um mês válido.");
+            } else {
+                break;
+            }
+        }
+        Relatorio.getRelatoriosPorMes(mes);
+    }
+
+    public static void menuListarDespesa() {
+        System.out.println("--- Listar Despesa ---");
+        int mes = 0;
+        while (true) {
+            System.out.print("Mês (1 a 12): ");
+            mes = scanner.nextInt();
+            scanner.nextLine();
+            if (mes < 1 || mes > 12) {
+                System.out.println("Selecione um mês válido.");
+            } else {
+                break;
+            }
+        }
+
+        StringBuilder resultado = Relatorio.listarDespessasPorMes(mes);
+        System.out.println(resultado.toString());
     }
 
     public static void menuAdicionarDespesa() throws IOException {
@@ -166,36 +207,49 @@ public class Menu {
             System.out.print("Custo da Despesa: ");
             double preco = scanner.nextDouble();
             scanner.nextLine();
-
-            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate dataAtual = null;
+            int opcaoTipo = 0;
             while (true) {
-                System.out.print("Digite a data da despesa (dd/MM/yyyy): ");
-                String dataTexto = scanner.nextLine();
-
-                try {
-                    dataAtual = LocalDate.parse(dataTexto, formato);
+                System.out.println("Tipo da Despesa\n1-DESPESA_SALARIO \n2- DESPESA_COMPRA_PECA\n3 - DESPESA_OUTRAS\n");
+                opcaoTipo = scanner.nextInt();
+                scanner.nextLine();
+                if (opcaoTipo != 1 && opcaoTipo != 2 && opcaoTipo != 3) {
+                    System.out.println("Opção inválida, tente novamente.");
+                } else {
                     break;
-                } catch (DateTimeParseException e) {
-                    System.out.println("Formato inválido. Tente novamente.");
                 }
             }
+            TipoTransacao tipo = null;
+            switch (opcaoTipo) {
+                case 1:
+                    tipo = TipoTransacao.DESPESA_SALARIO;
+                    break;
+                case 2:
+                    tipo = TipoTransacao.DESPESA_COMPRA_PECA;
+                    break;
+                case 3:
+                    tipo = TipoTransacao.DESPESA_OUTRAS;
+                    break;
+            }
 
-            Despesa novaDespesa = new Despesa(descricao, preco, dataAtual);
-            Despesa.adicionarDespesa(novaDespesa);
+            TransacaoFinanceira novaTransacaoFinanceira = new TransacaoFinanceira(preco, descricao, LocalDateTime.now(),
+                    tipo);
+            Relatorio.getRelatorioDeHoje().adicionarTransacao(novaTransacaoFinanceira);
+            Relatorio.salvarRelatorios();
 
             while (true) {
                 System.out.print("Deseja adicionar outra despesa? [S/N]: ");
                 String opcao = scanner.nextLine().toUpperCase();
 
                 if (!opcao.equals("S") && !opcao.equals("N")) {
-                    System.out.println("Opção inválida.");
-                } else if (opcao.equals("N")) {
-                    System.out.println("Voltando pro menu balanço...");
-                    menuBalanco();
-                    return;
+                    System.out.println("Opção inválida, tente novamente");
                 } else {
-                    break;
+                    if (opcao.equals("S")) {
+                        menuAdicionarDespesa();
+                        break;
+                    } else {
+                        menuBalanco();
+                        break;
+                    }
                 }
             }
         }
@@ -238,7 +292,7 @@ public class Menu {
             }
         }
 
-        Relatorio relatorioHoje = Relatorio.getRelatorioDeHoje(dataRelatorio);
+        Relatorio relatorioHoje = Relatorio.getRelatorioDeHoje();
 
         if (relatorioHoje == null) {
             System.out.println("Esse dia não houve relatório.");
@@ -263,7 +317,8 @@ public class Menu {
         System.out.println("--- Menu Agenda ---");
         System.out.println("1. Fazer um agendamento.");
         System.out.println("2. Ver Agenda.");
-        System.out.println("3. Menu Principal.");
+        System.out.println("3. Cancelar Agendamento.");
+        System.out.println("4. Menu Principal.");
 
         int opcao = scanner.nextInt();
         scanner.nextLine();
@@ -273,12 +328,40 @@ public class Menu {
                 Agenda.verAgenda();
                 menuAgenda();
             }
-            case 3 -> menuEpecializado();
+            case 3 -> menuCancelarAgendamento();
+            case 4 -> menuEpecializado();
         }
 
     }
 
-    public static void menuCancelarAgendamento() {
+    public static void menuCancelarAgendamento() throws IOException {
+        System.out.println("--- Cancelar Agendamento ---");
+        Agendamento agendamento = null;
+        while (true) {
+            System.out.print("ID do agendamento: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+            agendamento = Agenda.getCompromissoPorId(id);
+            if (agendamento == null) {
+                System.out.println("ID inválido, tente novamente.");
+            } else {
+                break;
+            }
+        }
+        Agenda.cancelarAgendamento(agendamento);
+        System.out.print("Agendamento cancelado com sucesso !\nDeseja fazer um novo agendamento?: [S/N]: ");
+        String continuar = scanner.nextLine().toUpperCase();
+        switch (continuar) {
+            case "S":
+                menuCancelarAgendamento();
+                break;
+            case "N":
+                menuAgenda();
+                break;
+            default:
+                menuEpecializado();
+                break;
+        }
 
     }
 
@@ -291,117 +374,96 @@ public class Menu {
             if (Cliente.verificarClientePorCpf(cpf)) {
                 cliente = Cliente.buscarClientePorCpf(cpf);
                 break;
+            } else {
+                System.out.println("Cliente não encontrado. Tente novamente.");
             }
         }
 
         Veiculo veiculo = null;
         while (true) {
-            System.out.print("Placa do veiculo: ");
+            System.out.print("Placa do veículo: ");
             String placa = scanner.nextLine();
             if (Veiculo.buscarVeiculoPorPlaca(placa)) {
                 veiculo = Veiculo.retornaVeiculoPorPlaca(placa);
                 break;
+            } else {
+                System.out.println("Veículo não encontrado. Tente novamente.");
             }
         }
 
         System.out.print("Problema relatado pelo cliente: ");
         String descricaoProblema = scanner.nextLine();
 
-        System.out.println("Qual motivo do Agendamento?");
-        System.out.println("1. Diagnóstico\n2.Serviço especifico.");
+        System.out.println("Qual o motivo do agendamento?");
+        System.out.println("1. Diagnóstico");
+        System.out.println("2. Serviço específico");
         int opcao = 0;
         while (true) {
             System.out.print("Motivo: ");
-            opcao = scanner.nextInt();
-            scanner.nextLine();
-            if (opcao != 1 && opcao != 2) {
-                System.out.println("Opção inválida tente novamente.");
-            } else {
-                break;
+            try {
+                opcao = scanner.nextInt();
+                scanner.nextLine(); // limpar buffer
+                if (opcao == 1 || opcao == 2)
+                    break;
+                System.out.println("Opção inválida, tente novamente.");
+            } catch (InputMismatchException e) {
+                scanner.nextLine(); // limpar entrada inválida
+                System.out.println("Por favor, digite um número válido.");
             }
         }
+
         Servico servicoPrincipal = null;
         switch (opcao) {
             case 1:
                 servicoPrincipal = Servico.DIAGNOSTICO_INICIAL;
                 break;
             case 2:
-                Servico.listarServicos();
-                int op = 0;
+                System.out.println("Escolha o serviço específico:");
+                Servico[] listaServicos = Servico.values();
+                for (int i = 0; i < listaServicos.length; i++) {
+                    System.out.println(
+                            (i + 1) + ". " + listaServicos[i].getDescricao() + " - R$" + listaServicos[i].getPreco());
+                }
+
+                int escolha = 0;
                 while (true) {
-                    System.out.println("Selecione um serviço: ");
-                    op = scanner.nextInt();
-                    scanner.nextLine();
-                    if (op < 1 || op > 8) {
-                        System.out.println("opção inválida.");
-                    } else {
-                        break;
+                    System.out.print("Serviço: ");
+                    try {
+                        escolha = scanner.nextInt();
+                        scanner.nextLine(); // limpar buffer
+                        if (escolha >= 1 && escolha <= listaServicos.length) {
+                            servicoPrincipal = listaServicos[escolha - 1];
+                            break;
+                        } else {
+                            System.out.println("Escolha inválida, tente novamente.");
+                        }
+                    } catch (InputMismatchException e) {
+                        scanner.nextLine(); // limpar entrada inválida
+                        System.out.println("Por favor, digite um número válido.");
                     }
                 }
-                switch (op) {
-                    case 1:
-                        servicoPrincipal = Servico.TROCA_DE_PNEU;
-                        break;
-                    case 2:
-                        servicoPrincipal = Servico.ALINHAMENTO;
-                        break;
-                    case 3:
-                        servicoPrincipal = Servico.BALANCIAMENTO;
-                        break;
-                    case 4:
-                        servicoPrincipal = Servico.REVISAO_DOS_FREIOS;
-                        break;
-                    case 5:
-                        servicoPrincipal = Servico.REVISAO_DO_SISTEMA_DE_ARREFECIMENTO;
-                        break;
-                    case 6:
-                        servicoPrincipal = Servico.TROCA_DE_PASTILHAS;
-                        break;
-                    case 7:
-                        servicoPrincipal = Servico.TROCA_CORREIA_DENTADA;
-                        break;
-                    case 8:
-                        servicoPrincipal = Servico.DIAGNOSTICO_INICIAL;
-                        break;
-                }
+                break;
         }
 
-        int idElevadorProposto = 0;
-
-        if (servicoPrincipal == Servico.BALANCIAMENTO || servicoPrincipal == Servico.ALINHAMENTO) {
-            System.out.println("Serviço especializado, o agendamento será no elevado 3");
-            idElevadorProposto = 3;
-        } else {
-            System.out.println("Serviço corriqueiro.");
-            while (true) {
-                System.out.print("Por favor, escolha um elevador de uso geral [1] ou [2]: ");
-                idElevadorProposto = scanner.nextInt();
-                scanner.nextLine();
-                if (idElevadorProposto == 1 || idElevadorProposto == 2) {
-                    break;
-                } else {
-                    System.out.println("Elevador inválido. Tente novamente.");
-                }
-            }
-        }
-
+        // Seleção aleatória de elevador entre 1 e 3
+        Random random = new Random();
+        int idElevadorProposto = random.nextInt(3) + 1;
         System.out.println("Elevador " + idElevadorProposto + " selecionado.");
 
+        int duracao = servicoPrincipal.getDuracaoEstimadaEmMinutos();
+
         while (true) {
-            System.out.println("--- Insira a hora e a data do agendamento ---");
             LocalDateTime dataHoraProposta = null;
             while (true) {
                 System.out.print("Use o formato exato 'dd/MM/yyyy HH:mm': ");
                 String dataHoraDigitada = scanner.nextLine();
                 try {
                     dataHoraProposta = Utilidades.gerarDataHoraPorString(dataHoraDigitada);
-                    System.out.println("Data e hora válidas: " + dataHoraProposta);
                     break;
                 } catch (DateTimeParseException e) {
                     System.out.println("ERRO: O formato da data inserido está incorreto.");
                 }
             }
-            int duracao = servicoPrincipal.getDuracaoEstimadaEmMinutos();
 
             boolean disponibilidade = Agenda.verificarDisponibilidade(dataHoraProposta, duracao, idElevadorProposto);
 
@@ -416,18 +478,34 @@ public class Menu {
                         .adicionaServico(servicoPrincipal)
                         .build();
 
-                Agenda.adicionarCompromisso(new Agendamento(novaOrdem, dataHoraProposta, idElevadorProposto));
+                OrdemServico.criarOrdemDeServico(novaOrdem);
 
-                System.out.println("Agendamento Confirmado !!!");
+                Agendamento novoAgendamento = new Agendamento(novaOrdem, dataHoraProposta, idElevadorProposto);
+                Agenda.adicionarCompromisso(novoAgendamento);
 
+                String descricaoTransacao = "Receita do agendamento OS #" + novaOrdem.getId() + ": "
+                        + servicoPrincipal.getDescricao();
+                double valorServico = servicoPrincipal.getPreco();
+
+                TransacaoFinanceira transacao = new TransacaoFinanceira(
+                        valorServico,
+                        descricaoTransacao,
+                        LocalDateTime.now(),
+                        TransacaoFinanceira.TipoTransacao.RECEITA_SERVICO);
+
+                Relatorio relatorioDoDia = Relatorio.getRelatorioPorData(dataHoraProposta.toLocalDate());
+                relatorioDoDia.adicionarTransacao(transacao);
+                Relatorio.salvarRelatorios();
+
+                System.out.println("Agendamento Confirmado!");
                 break;
             } else {
                 System.out.println("Desculpe, este horário no elevador " + idElevadorProposto
                         + " já está ocupado. Por favor, tente outro horário.");
             }
         }
-        JsonUtil.salvar("data/Agenda.json", Agenda.getCompromissos());
-        menuAgenda();
+
+        menuAgenda(); // Volta ao menu da agenda
     }
 
     public static void menuEstoque() throws IOException {
@@ -547,7 +625,6 @@ public class Menu {
         System.out.println("--- Loja ---");
 
         Produto produto = null;
-
         while (true) {
             System.out.print("Código do Produto: ");
             int codigo = scanner.nextInt();
@@ -560,31 +637,40 @@ public class Menu {
             }
         }
 
+        int quantidade = 0;
         while (true) {
             System.out.print("Quantidade vendida: ");
-            int quantidade = scanner.nextInt();
+            quantidade = scanner.nextInt();
             scanner.nextLine();
             if ((produto.getQuantidadeEmEstoque() - quantidade) < 0) {
-                System.out.println("Quantidade pretentida é maior que em estoque.");
+                System.out.println("Quantidade pretendida é maior que em estoque.");
             } else {
-                Estoque.subtrairQuantidadeEstoque(produto, quantidade);
-                Relatorio.adicionarVendaProduto(produto);
-                System.out.println("Venda Lançada com sucesso!\nDeseja lançar outra venda? [S/N]: ");
-                String opcao = scanner.nextLine().toUpperCase();
-                switch (opcao) {
-                    case "S":
-                        menuLancarVenda();
-                        break;
-                    case "N":
-                        menuEpecializado();
-                        break;
-                    default:
-                        menuEpecializado();
-                        break;
-                }
+                break;
             }
         }
 
+        Estoque.subtrairQuantidadeEstoque(produto, quantidade);
+
+        String descricao = "Venda de " + quantidade + "x " + produto.getNome();
+        double valorVenda = produto.getPreco() * quantidade;
+        TransacaoFinanceira transacao = new TransacaoFinanceira(
+                valorVenda,
+                descricao,
+                LocalDateTime.now(),
+                TransacaoFinanceira.TipoTransacao.RECEITA_VENDA_PECA);
+
+        Relatorio relatorioDoDia = Relatorio.getRelatorioPorData(LocalDate.now());
+        relatorioDoDia.adicionarTransacao(transacao);
+        Relatorio.salvarRelatorios();
+
+        System.out.println("Venda Lançada com sucesso!");
+        System.out.print("Deseja lançar outra venda? [S/N]: ");
+        String opcao = scanner.nextLine().toUpperCase();
+        if (opcao.equals("S")) {
+            menuLancarVenda();
+        } else {
+            menuEpecializado();
+        }
     }
 
     public static void menuListarOrdensServicosPorCpf(String cpf) throws IOException {
@@ -617,7 +703,7 @@ public class Menu {
         }
     }
 
-    public static void menuAdicionarPecaUltilizada() throws IOException{
+    public static void menuAdicionarPecaUltilizada() throws IOException {
         System.out.println("--- Produto Utilizado ---");
 
         OrdemServico os = null;
@@ -634,14 +720,14 @@ public class Menu {
             }
         }
         Produto produto = null;
-        while(true){
+        while (true) {
             System.out.println("Insira o codigo do produto.");
             int id = scanner.nextInt();
             scanner.nextLine();
             produto = Estoque.buscarProdutoPorCodigo(id);
-            if(produto == null){
+            if (produto == null) {
                 System.out.println("Código inválido, tente novamente.");
-            }else{
+            } else {
                 break;
             }
         }
@@ -650,13 +736,17 @@ public class Menu {
             System.out.print("Quantidade utilizada: ");
             int quantidade = scanner.nextInt();
             scanner.nextLine();
-            if((produto.getQuantidadeEmEstoque() - quantidade) < 0){
+            if ((produto.getQuantidadeEmEstoque() - quantidade) < 0) {
                 System.out.println("Quantidade solicitada indiponível no estoque.");
-            }else{
+            } else {
                 Estoque.subtrairQuantidadeEstoque(produto, quantidade);
-                Relatorio.adicionarVendaProduto(produto);
-                for(int i=0; i <= quantidade; i++){
-                        os.adicionarProduto(produto);
+                String descricao = "Produto: " + produto.getNome() + " - Quantidade: " + quantidade;
+                TransacaoFinanceira novaTransacaoFinanceira = new TransacaoFinanceira((produto.getPreco() * quantidade),
+                        descricao, LocalDateTime.now(), TipoTransacao.RECEITA_VENDA_PECA);
+                Relatorio.getRelatorioDeHoje().adicionarTransacao(novaTransacaoFinanceira);
+                Relatorio.salvarRelatorios();
+                for (int i = 0; i <= quantidade; i++) {
+                    os.adicionarProduto(produto);
                 }
                 System.out.println("Produto registrado com sucesso. \nDeseja adicionar outra peça? [S/N]: ");
                 String continuar = scanner.nextLine().toUpperCase();
@@ -717,7 +807,7 @@ public class Menu {
                 servicoAdicionado = Servico.ALINHAMENTO;
                 break;
             case 3:
-                servicoAdicionado = Servico.BALANCIAMENTO;
+                servicoAdicionado = Servico.BALANCEAMENTO;
                 break;
             case 4:
                 servicoAdicionado = Servico.REVISAO_DOS_FREIOS;
@@ -737,7 +827,9 @@ public class Menu {
         }
 
         os.adicionarServico(servicoAdicionado);
-        Relatorio.adicionarServicoRealizado(servicoAdicionado);
+        TransacaoFinanceira novaTransacaoFinanceira = new TransacaoFinanceira(servicoAdicionado.getPreco(),
+                servicoAdicionado.getDescricao(), LocalDateTime.now(), TipoTransacao.RECEITA_SERVICO);
+        Relatorio.getRelatorioDeHoje().adicionarTransacao(novaTransacaoFinanceira);
 
         System.out.println("Serviço Adicionado com sucesso.\nDeseja adicionar outro serviço?: [S/N]: ");
         String continuar = scanner.nextLine().toUpperCase();
@@ -747,9 +839,11 @@ public class Menu {
                 break;
             case "N":
                 menuOrdemServico();
+                Relatorio.salvarRelatorios();
                 break;
             default:
                 menuEpecializado();
+                Relatorio.salvarRelatorios();
                 break;
         }
 
