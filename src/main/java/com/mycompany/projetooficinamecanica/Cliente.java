@@ -2,26 +2,29 @@ package com.mycompany.projetooficinamecanica;
 
 import java.io.IOException;
 import java.util.List;//Permite manipular objetos do tipo list
+import com.mycompany.projetooficinamecanica.ClienteComparator.ClienteCpfComparator;
+import com.mycompany.projetooficinamecanica.ClienteComparator.ClienteNomeComparator;
 import java.util.ArrayList;//Array dinâmico
-
+import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  *
  * @author Lucas
  */
 
-/**Classe responsável em gerênciar os clientes do sistema.
+/**
+ * Classe responsável em gerênciar os clientes do sistema.
  * 
  * @author jvict
  */
-public class Cliente extends Pessoa{
+public class Cliente extends Pessoa {
     String endereco;
     String telefone;
-    
+
     private static List<Cliente> listaClientes = new ArrayList<>();
-    
-    
-    Cliente(String nome, String cpf, String endereco, String telefone){
+
+    Cliente(String nome, String cpf, String endereco, String telefone) {
         super(nome, cpf);
         this.endereco = endereco;
         this.telefone = telefone;
@@ -42,13 +45,15 @@ public class Cliente extends Pessoa{
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
-    /**Subescrição do metodo toString herdado de Pessoa, adicionando Enderço e Telefone.
+
+    /**
+     * Subescrição do metodo toString herdado de Pessoa, adicionando Enderço e
+     * Telefone.
      * 
-     * @return 
+     * @return
      */
-    @Override 
-    public String toString(){
+    @Override
+    public String toString() {
         return super.toString() + "\nEndereço: " + getEndereco() + "\nTelefone: " + getTelefone() + "\n";
     }
 
@@ -59,67 +64,106 @@ public class Cliente extends Pessoa{
     public static void setListaClientes(List<Cliente> listaClientes) {
         Cliente.listaClientes = listaClientes;
     }
-    
-    /**Metodo suado para listar os clientes armazenados no Array de clientes.
+
+    /**
+     * Metodo suado para listar os clientes armazenados no Array de clientes.
      * 
      */
-    public static void listarClientes(){
-        /**for percorrendo o array de clientes e printando.
+    public static void listarClientes() {
+        /**
+         * for percorrendo o array de clientes e printando.
          * 
          */
-        for(Cliente u : listaClientes){
+        for (Cliente u : listaClientes) {
             System.out.print(u);
         }
     }
-    
-    /**Metodo usado para armazenar um cliente dentro do array de clientes.
+
+    public static void listarClientesOrdenadoPorNome() {
+        List<Cliente> ordenada = new ArrayList<>(listaClientes);
+        ordenada.sort(new ClienteNomeComparator());
+
+        System.out.println("=== Lista de Clientes por Nome ===");
+        for (Cliente c : ordenada) {
+            System.out.println(c);
+        }
+    }
+
+    public static void listarClientesOrdenadoPorCpf() {
+        List<Cliente> ordenada = new ArrayList<>(listaClientes);
+        ordenada.sort(new ClienteCpfComparator());
+
+        System.out.println("=== Lista de Clientes por CPF ===");
+        for (Cliente c : ordenada) {
+            System.out.println(c);
+        }
+    }
+
+    // Adicione este método dentro da classe Cliente.java
+
+    public static Cliente find(List<Cliente> lista, Cliente alvo, Comparator<Cliente> comparator) {
+        Iterator<Cliente> iterator = lista.iterator();
+        while (iterator.hasNext()) {
+            Cliente atual = iterator.next();
+            // Usa o comparator para verificar se os objetos são "iguais" segundo o critério
+            if (comparator.compare(atual, alvo) == 0) {
+                return atual; // Encontrou
+            }
+        }
+        return null; // Não encontrou
+    }
+
+    /**
+     * Metodo usado para armazenar um cliente dentro do array de clientes.
      * 
-     * @param cliente 
+     * @param cliente
      */
-    public static void adicionarCliente(Cliente cliente){
+    public static void adicionarCliente(Cliente cliente) {
         listaClientes.add(cliente);
     }
-    
-    /**Metodo responsável por apagar um cliente.
+
+    /**
+     * Metodo responsável por apagar um cliente.
      * 
-     * @param cpf 
+     * @param cpf
      */
-    public static void removerClientePorCpf(String cpf) throws IOException{
+    public static void removerClientePorCpf(String cpf) throws IOException {
         boolean removido = listaClientes.removeIf(c -> c.getCpf().equals(cpf));
-        
-        if(removido){
+
+        if (removido) {
             System.out.println("Cliente removido com sucesso!");
             JsonUtil.salvar("data/clientes.json", listaClientes);
-        }else{
+        } else {
             System.out.println("ERRO - Cliente não encontrado");
         }
-        
-        
+
     }
-    
-    /**Metodo responsável por verificar a existencia de um cliente por cpf.
+
+    /**
+     * Metodo responsável por verificar a existencia de um cliente por cpf.
      * 
      * @param cpf
      * @return true se o cliente existir
      */
-    public static boolean verificarClientePorCpf(String cpf){
-        for(Cliente u : listaClientes){
-            if(u.getCpf().equals(cpf)){
+    public static boolean verificarClientePorCpf(String cpf) {
+        for (Cliente u : listaClientes) {
+            if (u.getCpf().equals(cpf)) {
                 return true;
             }
         }
         System.out.println("Esse cpf não pertence a nenhum cliente.");
         return false;
     }
-    
-    /**Metodo responsável por editar o nome de um cliente que esta dentro do Array.
+
+    /**
+     * Metodo responsável por editar o nome de um cliente que esta dentro do Array.
      * 
      * @param cpf
-     * @param nome 
+     * @param nome
      */
-    public static void editarNomeCliente(String cpf, String nome) throws IOException{
-        for(Cliente u : listaClientes){
-            if(u.getCpf().equals(cpf)){
+    public static void editarNomeCliente(String cpf, String nome) throws IOException {
+        for (Cliente u : listaClientes) {
+            if (u.getCpf().equals(cpf)) {
                 u.setNome(nome);
                 break;
             }
@@ -127,15 +171,16 @@ public class Cliente extends Pessoa{
         JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Nome alterado com sucesso!");
     }
-    
-    /**Metodo responsável por editar o cpf de um cliente que esta dentro do Array.
+
+    /**
+     * Metodo responsável por editar o cpf de um cliente que esta dentro do Array.
      * 
      * @param cpf
-     * @param novocpf 
+     * @param novocpf
      */
-    public static void editarCpfCliente(String cpf, String novocpf) throws IOException{
-        for(Cliente u : listaClientes){
-            if(u.getCpf().equals(cpf)){
+    public static void editarCpfCliente(String cpf, String novocpf) throws IOException {
+        for (Cliente u : listaClientes) {
+            if (u.getCpf().equals(cpf)) {
                 u.setCpf(novocpf);
                 break;
             }
@@ -143,15 +188,17 @@ public class Cliente extends Pessoa{
         JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Cpf alterado com sucesso!");
     }
-    
-    /**Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+
+    /**
+     * Metodo responsável por editar o Endereço de um cliente que esta dentro do
+     * Array.
      * 
      * @param cpf
-     * @param endereco 
+     * @param endereco
      */
-    public static void editarEnderecoCliente(String cpf, String endereco) throws IOException{
-        for(Cliente u : listaClientes){
-            if(u.getCpf().equals(cpf)){
+    public static void editarEnderecoCliente(String cpf, String endereco) throws IOException {
+        for (Cliente u : listaClientes) {
+            if (u.getCpf().equals(cpf)) {
                 u.setEndereco(endereco);
                 break;
             }
@@ -159,15 +206,17 @@ public class Cliente extends Pessoa{
         JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Endereço alterado com sucesso!");
     }
-    
-    /**Metodo responsável por editar o Endereço de um cliente que esta dentro do Array.
+
+    /**
+     * Metodo responsável por editar o Endereço de um cliente que esta dentro do
+     * Array.
      * 
      * @param cpf
-     * @param telefone 
+     * @param telefone
      */
-    public static void editarTelefoneCliente(String cpf, String telefone) throws IOException{
-        for(Cliente u : listaClientes){
-            if(u.getCpf().equals(cpf)){
+    public static void editarTelefoneCliente(String cpf, String telefone) throws IOException {
+        for (Cliente u : listaClientes) {
+            if (u.getCpf().equals(cpf)) {
                 u.setTelefone(telefone);
                 break;
             }
@@ -175,16 +224,18 @@ public class Cliente extends Pessoa{
         JsonUtil.salvar("data/clientes.json", listaClientes);
         System.out.println("Telefone alterado com sucesso!");
     }
-    
-    /**Metodo responsável por retornar um cliente, como busca o seu cpf.
+
+    /**
+     * Metodo responsável por retornar um cliente, como busca o seu cpf.
      * 
      * @param cpf
-     * @return O objeto Cliente correspondente ao CPF, ou null se não for encontrado.
- */
+     * @return O objeto Cliente correspondente ao CPF, ou null se não for
+     *         encontrado.
+     */
 
-    public static Cliente buscarClientePorCpf(String cpf){
-        for(Cliente u : listaClientes){
-            if(u.getCpf().equals(cpf)){
+    public static Cliente buscarClientePorCpf(String cpf) {
+        for (Cliente u : listaClientes) {
+            if (u.getCpf().equals(cpf)) {
                 return u;
             }
         }

@@ -23,8 +23,9 @@ public class Estoque {
         Estoque.listaDeProdutos = listaDeProdutos;
     }
     
-    public static void adicionarProduto(Produto produto){
+    public static void adicionarProduto(Produto produto) throws IOException{
         listaDeProdutos.add(produto);
+        JsonUtil.salvar("data/produtos.json", listaDeProdutos);
     }
     
     public static void removerProduto(int codigo) throws IOException{
@@ -36,6 +37,8 @@ public class Estoque {
         }else{
             System.out.println("ERRO - Produto não encontrado");
         }
+
+        JsonUtil.salvar("data/produtos.json", Estoque.listaDeProdutos);
     }
     
     public static Produto buscarProdutoPorCodigo(int codigo){
@@ -49,6 +52,7 @@ public class Estoque {
 
     public static void subtrairQuantidadeEstoque(Produto produto, int quantidade) throws IOException{
         produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() - quantidade);
+        JsonUtil.salvar("data/produtos.json", Estoque.listaDeProdutos);
     }
     
     public static void listarProdutos(){

@@ -8,6 +8,9 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.AttributeList;
+
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -71,58 +74,75 @@ public class Relatorio {
         return novoRelatorio;
     }
 
-    public static void getRelatorioMes(int mes, int ano) {
-        Month mesEscolhido = Month.of(mes);
-        double totalReceitasMensal = 0;
-        double totalDespesasMensal = 0;
+    public static void getRelatorioMensal(int mes, int ano) {
+        List<Relatorio> relatoriosDoMes = new ArrayList<>();
+        for(Relatorio r : listaDeRelatorios){
+            if(r.getDataRelatorio().getMonthValue() == mes && r.getDataRelatorio().getYear() == ano){
+                relatoriosDoMes.add(r);
+            }
+        }
 
-        System.out.println("\n==============================================");
-        System.out.println("              BALANÇO MENSAL");
-        System.out.println("              Mês/Ano: " + String.format("%02d", mes) + "/" + ano);
-        System.out.println("==============================================");
+        double totalReceitas = 0;
+        double totalDespesas = 0;
 
-        boolean encontrouMovimentacao = false;
+        List<TransacaoFinanceira> servicos = new ArrayList<>();
+        List<TransacaoFinanceira> produtos = new ArrayList<>();
+        List<TransacaoFinanceira> outras = new ArrayList<>();
 
-        // Percorre todos os relatórios diários já criados
-        for (Relatorio relatorioDiario : listaDeRelatorios) {
-            // Verifica se o relatório pertence ao mês e ano solicitados
-            if (relatorioDiario.getDataRelatorio().getMonth() == mesEscolhido
-                    && relatorioDiario.getDataRelatorio().getYear() == ano) {
+        for (Relatorio r : relatoriosDoMes) {
+            for (TransacaoFinanceira t : r.getListaDeTransacoes()) {
+                String tipo = t.getTipo().toString();
 
-                // Para cada relatório diário, percorre suas transações
-                for (TransacaoFinanceira transacao : relatorioDiario.getListaDeTransacoes()) {
-                    encontrouMovimentacao = true; // Marca que encontrou pelo menos uma transação no mês
-
-                    // Separa em Receita ou Despesa com base no tipo
-                    if (transacao.getTipo().name().startsWith("RECEITA")) {
-                        totalReceitasMensal += transacao.getValor();
-                    } else if (transacao.getTipo().name().startsWith("DESPESA")) {
-                        totalDespesasMensal += transacao.getValor();
+                if ("RECEITA_SERVICO".equals(tipo)) {
+                    servicos.add(t);
+                    totalReceitas += t.getValor();
+                } else if ("RECEITA_PRODUTO".equals(tipo)) {
+                    produtos.add(t);
+                    totalReceitas += t.getValor();
+                } else {
+                    outras.add(t);
+                    if (t.getValor() >= 0) {
+                        totalReceitas += t.getValor();
+                    } else {
+                        totalDespesas += Math.abs(t.getValor());
                     }
                 }
             }
         }
 
-        if (!encontrouMovimentacao) {
-            System.out.println("\nNão houve movimentação financeira registada para " + mesEscolhido.toString() + " de "
-                    + ano + ".");
-            System.out.println("==============================================");
-            return;
-        }
+        System.out.println("\n==============================================");
+        System.out.printf("              BALANÇO MENSAL\n");
+        System.out.printf("              Mês/Ano: %02d/%d\n", mes, ano);
+        System.out.println("==============================================");
 
-        double resultadoFinal = totalReceitasMensal - totalDespesasMensal;
+        System.out.println("\n--- Serviços Realizados ---");
+        if (servicos.isEmpty())
+            System.out.println("Não houve serviços realizados neste mês.");
+        else
+            for (TransacaoFinanceira t : servicos)
+                System.out.println(t);
 
-        System.out.printf("\nTotal de Receitas no Mês: R$ %.2f\n", totalReceitasMensal);
-        System.out.printf("Total de Despesas no Mês: R$ %.2f\n", totalDespesasMensal);
+        System.out.println("\n--- Produtos Vendidos ---");
+        if (produtos.isEmpty())
+            System.out.println("Não houve venda de produtos neste mês.");
+        else
+            for (TransacaoFinanceira t : produtos)
+                System.out.println(t);
+
+        System.out.println("\n--- Outras Transações ---");
+        if (outras.isEmpty())
+            System.out.println("Não houve outras transações neste mês.");
+        else
+            for (TransacaoFinanceira t : outras)
+                System.out.println(t);
+
+        System.out.println("\n==============================================");
+        System.out.printf("Total de Receitas no Mês: R$ %.2f\n", totalReceitas);
+        System.out.printf("Total de Despesas no Mês: R$ %.2f\n", totalDespesas);
         System.out.println("----------------------------------------------");
-        System.out.printf("Resultado Final do Mês:   R$ %.2f\n", resultadoFinal);
-
-        if (resultadoFinal > 0) {
-            System.out.println("(Lucro)");
-        } else if (resultadoFinal < 0) {
-            System.out.println("(Prejuízo)");
-        }
-        System.out.println("==============================================\n");
+        System.out.printf("Resultado Final do Mês:   R$ %.2f\n", totalReceitas - totalDespesas);
+        System.out.println((totalReceitas - totalDespesas >= 0) ? "(Lucro)" : "(Prejuízo)");
+        System.out.println("==============================================");
     }
 
     public static List<Relatorio> getRelatoriosPorMes(int mes) {
