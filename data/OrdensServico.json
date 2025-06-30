@@ -16,7 +16,7 @@
     },
     "descricaoProblema": "queima da junta do cabeçote",
     "solucao": "",
-    "status": "Aguardando Análise",
+    "status": "analisando problema ",
     "dataEHora": "10/06/2025 15:10",
     "servicosRealizados": [],
     "produtosUtilizados": []
@@ -76,6 +76,79 @@
     },
     "servicosRealizados": [
       "TROCA_DE_PNEU"
+    ],
+    "produtosUtilizados": []
+  },
+  {
+    "id": 5,
+    "cliente": {
+      "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
+      "telefone": "(38)9-8887-7654",
+      "nome": "Maria Aparecida",
+      "cpf": "345.456.432-56"
+    },
+    "mecanico": {
+      "login": "carlos.santos",
+      "senha": "senhaForte123",
+      "cargo": "Mecanico",
+      "nome": "Carlos Santos",
+      "cpf": "111.222.333-44"
+    },
+    "descricaoProblema": "motor fundido ",
+    "solucao": "",
+    "status": "Aguardando Análise",
+    "dataEHora": "29/06/2025 21:36",
+    "servicosRealizados": [],
+    "produtosUtilizados": []
+  },
+  {
+    "id": 6,
+    "cliente": {
+      "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
+      "telefone": "(38)9-8887-7654",
+      "nome": "Maria Aparecida",
+      "cpf": "345.456.432-56"
+    },
+    "mecanico": {
+      "login": "carlos.santos",
+      "senha": "senhaForte123",
+      "cargo": "Mecanico",
+      "nome": "Carlos Santos",
+      "cpf": "111.222.333-44"
+    },
+    "descricaoProblema": "pneu furado",
+    "solucao": "",
+    "status": "Aguardando Análise",
+    "dataEHora": "29/06/2025 21:40",
+    "servicosRealizados": [],
+    "produtosUtilizados": []
+  },
+  {
+    "id": 7,
+    "cliente": {
+      "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
+      "telefone": "(38)9-8887-7654",
+      "nome": "Maria Aparecida",
+      "cpf": "345.456.432-56"
+    },
+    "descricaoProblema": "barulho estranho no motor",
+    "status": "Aguardando Inspeção",
+    "dataEHora": "29/06/2025 22:50",
+    "veiculo": {
+      "placa": "RTY-5678",
+      "modelo": "Onix",
+      "marca": "Chevrolet",
+      "cor": "Preto",
+      "ano": 2020,
+      "proprietario": {
+        "endereco": "Avenida Principal, 500",
+        "telefone": "(31) 91122-3344",
+        "nome": "Marcos Andrade",
+        "cpf": "987.234.567-98"
+      }
+    },
+    "servicosRealizados": [
+      "DIAGNOSTICO_INICIAL"
     ],
     "produtosUtilizados": []
   }

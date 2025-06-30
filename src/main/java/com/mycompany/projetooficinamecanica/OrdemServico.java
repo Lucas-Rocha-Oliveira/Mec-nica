@@ -30,9 +30,9 @@ public class OrdemServico {
     }
 
     public static void setListaOrdensServico(List<OrdemServico> lista) {
-        if (lista != null) {
+        
             OrdemServico.ListaOrdensServico = lista;
-        }
+        
     }
     
     /**

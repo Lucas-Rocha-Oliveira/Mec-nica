@@ -88,24 +88,41 @@ public class Relatorio {
         List<TransacaoFinanceira> servicos = new ArrayList<>();
         List<TransacaoFinanceira> produtos = new ArrayList<>();
         List<TransacaoFinanceira> outras = new ArrayList<>();
+        List<TransacaoFinanceira> despesas = new ArrayList<>();
+        
 
-        for (Relatorio r : relatoriosDoMes) {
+         for (Relatorio r : relatoriosDoMes) {
             for (TransacaoFinanceira t : r.getListaDeTransacoes()) {
-                String tipo = t.getTipo().toString();
-
-                if ("RECEITA_SERVICO".equals(tipo)) {
-                    servicos.add(t);
-                    totalReceitas += t.getValor();
-                } else if ("RECEITA_PRODUTO".equals(tipo)) {
-                    produtos.add(t);
-                    totalReceitas += t.getValor();
-                } else {
-                    outras.add(t);
-                    if (t.getValor() >= 0) {
+                
+                // Usando switch no Enum diretamente (mais seguro e legível)
+                switch (t.getTipo()) {
+                    case RECEITA_SERVICO:
+                        servicos.add(t);
                         totalReceitas += t.getValor();
-                    } else {
-                        totalDespesas += Math.abs(t.getValor());
-                    }
+                        break;
+                    
+                    case RECEITA_VENDA_PECA:
+                        produtos.add(t);
+                        totalReceitas += t.getValor();
+                        break;
+
+                    case DESPESA_SALARIO:
+                    case DESPESA_COMPRA_PECA:
+                    case DESPESA_OUTRAS:
+                        despesas.add(t);
+                        totalDespesas += t.getValor(); // O valor já é positivo
+                        break;
+                    
+                    // Caso tenha outras transações não previstas
+                    default:
+                        outras.add(t);
+                        // Uma lógica de segurança caso existam outros tipos
+                        if (t.getValor() >= 0) {
+                            totalReceitas += t.getValor();
+                        } else {
+                            totalDespesas += Math.abs(t.getValor());
+                        }
+                        break;
                 }
             }
         }

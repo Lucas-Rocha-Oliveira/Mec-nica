@@ -3,14 +3,21 @@
     "codigo": 1,
     "nome": "Oleo 15w30",
     "preco": 42.0,
-    "quantidadeEmEstoque": 14,
+    "quantidadeEmEstoque": 11,
     "categoria": "CONSUMIVEL"
   },
   {
     "codigo": 2,
     "nome": "Oleo 15w40",
     "preco": 40.0,
-    "quantidadeEmEstoque": 14,
+    "quantidadeEmEstoque": 15,
     "categoria": "CONSUMIVEL"
+  },
+  {
+    "codigo": 3,
+    "nome": "vela",
+    "preco": 25.0,
+    "quantidadeEmEstoque": 28,
+    "categoria": "PEÇA"
   }
 ]

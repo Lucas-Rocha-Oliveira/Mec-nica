@@ -37,5 +37,18 @@
       "nome": "Juliana Costa",
       "cpf": "456.789.123-11"
     }
+  },
+  {
+    "placa": "SHH-1434",
+    "modelo": "corola",
+    "marca": "toyota",
+    "cor": "prata",
+    "ano": 2020,
+    "proprietario": {
+      "endereco": "R.Elvira Ramos Coutro, Bela Vista, Diamantina-MG",
+      "telefone": "(38)9-8887-7654",
+      "nome": "Maria Aparecida",
+      "cpf": "345.456.432-56"
+    }
   }
 ]

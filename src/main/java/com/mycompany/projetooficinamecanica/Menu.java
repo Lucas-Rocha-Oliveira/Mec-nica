@@ -170,17 +170,27 @@ public class Menu {
         switch (opcao) {
             case 1:
                 menuAdicionarDespesa();
+                break;
             case 2:
                 menuListarDespesa();
+                menuBalanco();
                 break;
             case 3:
                 menuGerarBalanço();
+                menuBalanco();
+                break;
             case 4:
                 menuEpecializado();
+                break;
         }
     }
 
     public static void menuGerarBalanço() {
+        System.out.println("---Balanço---");
+        System.out.print("Ano: ");
+        int ano = scanner.nextInt();
+        scanner.nextLine();
+        
         int mes = 0;
         while (true) {
             System.out.print("Mês (1 a 12): ");
@@ -192,7 +202,7 @@ public class Menu {
                 break;
             }
         }
-        Relatorio.getRelatoriosPorMes(mes);
+        Relatorio.getRelatorioMensal(mes, ano);
     }
 
     public static void menuListarDespesa() {
@@ -210,8 +220,14 @@ public class Menu {
         }
 
         StringBuilder resultado = Relatorio.listarDespessasPorMes(mes);
-        System.out.println(resultado.toString());
+         if (resultado.toString().trim().isEmpty()) {
+            System.out.println("\n>> Nenhuma despesa foi registrada para o mês " + mes + " <<\n");
+        } else {
+            System.out.println("\n--- Despesas do Mês " + mes + " ---");
+            System.out.println(resultado.toString());
+        }
     }
+    
 
     public static void menuAdicionarDespesa() throws IOException {
         System.out.println("--- Adicionar Despesa ---");
@@ -616,7 +632,7 @@ public class Menu {
                 break;
             }
         }
-        System.out.println("Quantidade da entrada: ");
+        System.out.print("Quantidade da entrada: ");
         int quantidade = scanner.nextInt();
         scanner.nextLine();
         produto.setQuantidadeEmEstoque(produto.getQuantidadeEmEstoque() + quantidade);
@@ -810,6 +826,8 @@ public class Menu {
         switch (opcao) {
             case 1 ->
                 menuCriarOrdemServico();
+                
+            
             case 2 -> {
                 OrdemServico.listarOrdensServico();
                 menuOrdemServico();
@@ -831,7 +849,7 @@ public class Menu {
         OrdemServico os = null;
 
         while (true) {
-            System.out.println("Insira o id da Ordem de Serviço");
+            System.out.print("Insira o id da Ordem de Serviço");
             int id = scanner.nextInt();
             scanner.nextLine();
             os = OrdemServico.getOrdemServicoPorId(id);
@@ -870,7 +888,7 @@ public class Menu {
                 for (int i = 0; i <= quantidade; i++) {
                     os.adicionarProduto(produto);
                 }
-                System.out.println("Produto registrado com sucesso. \nDeseja adicionar outra peça? [S/N]: ");
+                System.out.print("Produto registrado com sucesso. \nDeseja adicionar outra peça? [S/N]: ");
                 String continuar = scanner.nextLine().toUpperCase();
                 switch (continuar) {
                     case "S":
@@ -896,7 +914,7 @@ public class Menu {
         OrdemServico os = null;
 
         while (true) {
-            System.out.println("Insira o id da Ordem de Serviço");
+            System.out.print("Insira o id da Ordem de Serviço");
             int id = scanner.nextInt();
             scanner.nextLine();
             os = OrdemServico.getOrdemServicoPorId(id);
@@ -912,7 +930,7 @@ public class Menu {
         int op = 0;
 
         while (true) {
-            System.out.println("Selecione um serviço: ");
+            System.out.print("Selecione um serviço: ");
             op = scanner.nextInt();
             scanner.nextLine();
             if (op < 1 || op > 8) {
@@ -984,7 +1002,7 @@ public class Menu {
         if (opcao.equals("S")) {
             menuAtualizarOrdemServico();
         } else if (opcao.equals("N")) {
-            menuEpecializado();
+            menuAtualizarOrdemServico();
         } else {
             System.out.print("Opção inválida, voltando para o menu  principal.");
             menuEpecializado();

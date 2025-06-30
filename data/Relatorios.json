@@ -6,6 +6,78 @@
         "descricao": "Receita do agendamento OS #4: Troca de Pneu",
         "data": "2025-06-28T17:51:04.406391",
         "tipo": "RECEITA_SERVICO"
+      },
+      {
+        "valor": 84.0,
+        "descricao": "Venda de 2x Oleo 15w30",
+        "data": "2025-06-29T19:31:37.811504400",
+        "tipo": "RECEITA_VENDA_PECA"
+      },
+      {
+        "valor": 40.0,
+        "descricao": "Venda de 1x Oleo 15w40",
+        "data": "2025-06-29T19:33:11.515873700",
+        "tipo": "RECEITA_VENDA_PECA"
+      },
+      {
+        "valor": 1000.0,
+        "descricao": "troca da porta da loja",
+        "data": "2025-06-29T19:34:11.200039800",
+        "tipo": "DESPESA_OUTRAS"
+      },
+      {
+        "valor": 50.0,
+        "descricao": "troca da lampada ",
+        "data": "2025-06-29T19:37:54.096176300",
+        "tipo": "DESPESA_OUTRAS"
+      },
+      {
+        "valor": 2000.0,
+        "descricao": "troca do piso da loja",
+        "data": "2025-06-29T19:51:24.272189200",
+        "tipo": "DESPESA_OUTRAS"
+      },
+      {
+        "valor": 500.0,
+        "descricao": "cafe",
+        "data": "2025-06-29T20:11:03.105059400",
+        "tipo": "DESPESA_OUTRAS"
+      },
+      {
+        "valor": 50.0,
+        "descricao": "papel higienico",
+        "data": "2025-06-29T21:19:49.111457600",
+        "tipo": "DESPESA_OUTRAS"
+      },
+      {
+        "valor": 350.0,
+        "descricao": "Troca da correia dentada",
+        "data": "2025-06-29T22:16:22.936725200",
+        "tipo": "RECEITA_SERVICO"
+      },
+      {
+        "valor": 42.0,
+        "descricao": "Produto: Oleo 15w30 - Quantidade: 1",
+        "data": "2025-06-29T22:22:20.081048500",
+        "tipo": "RECEITA_VENDA_PECA"
+      },
+      {
+        "valor": 210.0,
+        "descricao": "Produto: Oleo 15w30 - Quantidade: 5",
+        "data": "2025-06-29T22:36:50.297264",
+        "tipo": "RECEITA_VENDA_PECA"
+      },
+      {
+        "valor": 16.0,
+        "descricao": "Taxa de cancelamento da OS #7",
+        "data": "2025-06-29T22:51:05.785798300",
+        "tipo": "RECEITA_CANCELAMENTO"
+      },
+      {
+        "valor": 50.0,
+        "descricao": "Venda de 2x vela",
+        "data": "2025-06-29T23:09:45.831680400",
+        "tipo": "RECEITA_VENDA_PECA"
       }
     ],
     "dataRelatorio": "2025-06-29"
@@ -20,5 +92,16 @@
       }
     ],
     "dataRelatorio": "2025-06-28"
+  },
+  {
+    "listaDeTransacoes": [
+      {
+        "valor": 80.0,
+        "descricao": "Receita do agendamento OS #7: Diagnostico Inicial",
+        "data": "2025-06-29T22:50:27.068538",
+        "tipo": "RECEITA_SERVICO"
+      }
+    ],
+    "dataRelatorio": "2025-07-12"
   }
 ]
